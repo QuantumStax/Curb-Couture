@@ -8,12 +8,17 @@ export default {
     extend: {
       colors: {
         "primary": "#FEFAF0",
-        "banner": "#E8E59B"
+        "secondary": "#C4C197",
+        "banner": "#E8E59B",
+        "text-main": "#403F2B"
       },
       fontFamily: {
         "poppins": ['Poppins', 'serif'],
         "itim": ['Itim', 'serif'],
         "fraunces": ['Fraunces', 'serif']
+      },
+      fontSize: {
+        "hero-head": "12rem"
       }
     },
   },
