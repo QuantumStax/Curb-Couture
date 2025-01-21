@@ -9,6 +9,7 @@ export default {
       colors: {
         "primary": "#FEFAF0",
         "secondary": "#C4C197",
+        "tertiary": "#DDDDCC",
         "banner": "#E8E59B",
         "text-main": "#403F2B"
       },
