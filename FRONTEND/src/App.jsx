@@ -3,7 +3,7 @@ import Cupon from "./assets/components/cupon";
 import HeaderTopDeals from "./assets/components/headerTopDeals";
 import Hero from "./assets/components/hero";
 import Navbar from "./assets/components/navbar";
-import ProductCard from "./assets/components/productCard";
+import RecentAdditions from "./assets/components/recentAdditions";
 import "./assets/styles/index.css";
 function App() {
   return (
@@ -17,7 +17,7 @@ function App() {
         <Categories />
       </section>
       <Cupon />
-      <ProductCard
+      {/* <ProductCard
         offer="-14%"
         badge="hot"
         imgSrc="/images/categories/shirts_folded.jpg"
@@ -26,7 +26,10 @@ function App() {
         price="₹1299"
         discount="₹1500"
         rating="4.5"
-      />
+      /> */}
+      <section className="bg-tertiary">
+        <RecentAdditions />
+      </section>
     </main>
   );
 }

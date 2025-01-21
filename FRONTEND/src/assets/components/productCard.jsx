@@ -5,7 +5,7 @@ import StarOutlinedIcon from "@mui/icons-material/StarOutlined";
 
 const ProductCard = memo(({ offer, badge, imgSrc, brand, title, price, discount, rating }) => {
   return (
-    <article className="relative mx-2 px-2 py-3 w-[21rem]" role="contentinfo" aria-label={`Product card for ${title}`}>
+    <article className="relative mx-2 px-2 py-3 w-[21rem] shadow-md rounded-md cursor-pointer" role="contentinfo" aria-label={`Product card for ${title}`}>
       <div>
         {/* Product Image */}
         <img
@@ -17,7 +17,7 @@ const ProductCard = memo(({ offer, badge, imgSrc, brand, title, price, discount,
         {/* Offer Badge */}
         {offer && (
           <div
-            className="absolute top-3 left-3 w-[5rem] font-semibold flex items-center justify-center rounded-md bg-red-500 text-primary py-0.5"
+            className="absolute top-4 left-3 w-[5rem] font-semibold flex items-center justify-center rounded-md bg-red-500 text-primary py-0.5"
             aria-label={`${offer} offer`}
           >
             <p>{offer}</p>
