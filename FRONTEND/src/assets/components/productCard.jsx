@@ -1,55 +1,76 @@
+/* eslint-disable react/display-name */
 /* eslint-disable react/prop-types */
-// import GradeOutlinedIcon from "@mui/icons-material/GradeOutlined";
-import StarOutlinedIcon from '@mui/icons-material/StarOutlined';
-const ProductCard = ({
-  offer,
-  badge,
-  imgSrc,
-  brand,
-  title,
-  price,
-  discount,
-  rating,
-}) => {
+import { memo } from "react";
+import StarOutlinedIcon from "@mui/icons-material/StarOutlined";
+
+const ProductCard = memo(({ offer, badge, imgSrc, brand, title, price, discount, rating }) => {
   return (
-    <div className="relative mx-2 px-2 py-3 w-[21rem]">
+    <article className="relative mx-2 px-2 py-3 w-[21rem]" role="contentinfo" aria-label={`Product card for ${title}`}>
       <div>
+        {/* Product Image */}
         <img
           src={imgSrc}
-          alt={title}
-          className="w-[20rem] h-[20rem] rounded-md object-center shadow-md"
+          alt={`${title} by ${brand}`}
+          className="w-[20rem] h-[20rem] rounded-md object-center shadow-md hover:scale-105 transition-transform duration-500 cursor-pointer"
+          loading="lazy"
         />
-        <div className="absolute top-3 left-3 w-[5rem] font-semibold flex items-center justify-center rounded-md bg-red-500 text-primary py-0.5">
-          <p>{offer}</p>
-        </div>
-        <div className="absolute top-12 left-3 bg-blue-600 w-[5rem] py-0.5 flex items-center justify-center uppercase font-bold text-primary rounded-md">
-          <p>{badge}</p>
-        </div>
+        {/* Offer Badge */}
+        {offer && (
+          <div
+            className="absolute top-3 left-3 w-[5rem] font-semibold flex items-center justify-center rounded-md bg-red-500 text-primary py-0.5"
+            aria-label={`${offer} offer`}
+          >
+            <p>{offer}</p>
+          </div>
+        )}
+        {/* Category Badge */}
+        {badge && (
+          <div
+            className="absolute top-12 left-3 bg-blue-600 w-[5rem] py-0.5 flex items-center justify-center uppercase font-bold text-primary rounded-md"
+            aria-label={`Badge: ${badge}`}
+          >
+            <p>{badge}</p>
+          </div>
+        )}
       </div>
+
+      {/* Product Details */}
       <div className="mt-2">
-        <p className="opacity-65 uppercase">{brand}</p>
-        <p className="text-xl">{title}</p>
+        {/* Brand */}
+        <p className="opacity-65 uppercase text-sm">{brand}</p>
+
+        {/* Title */}
+        <h2 className="text-xl font-medium" aria-label={`Product title: ${title}`}>
+          {title}
+        </h2>
+
+        {/* Price and Discount */}
         <div className="flex gap-3 items-center">
-          <p className="text-lg font-semibold">{price}</p>
-          <span className="line-through opacity-60">{discount}</span>
-        </div>
-        <div>
-          <p className="">
-            {rating}
-            <span>
-              <StarOutlinedIcon
-                style={{
-                  fontSize: "1.3rem",
-                  transform: "translateY(-0.1rem)",
-                  color: "#FFD700"
-                }}
-              />
-            </span>
+          <p className="text-lg font-semibold text-green-600" aria-label={`Price: ${price}`}>
+            {price}
           </p>
+          {discount && (
+            <span
+              className="line-through opacity-60 text-sm"
+              aria-label={`Original price: ${discount}`}
+            >
+              {discount}
+            </span>
+          )}
+        </div>
+
+        {/* Star Rating */}
+        <div className="flex items-center mt-1" role="img" aria-label={`Rating: ${rating} out of 5 stars`}>
+          <p className="text-base font-medium">{rating}</p>
+          <StarOutlinedIcon
+            className="ml-1 text-yellow-400"
+            style={{ fontSize: "1.3rem", transform: "translateY(-0.1rem)" }}
+            aria-hidden="true"
+          />
         </div>
       </div>
-    </div>
+    </article>
   );
-};
+});
 
 export default ProductCard;
