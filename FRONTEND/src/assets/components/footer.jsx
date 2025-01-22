@@ -34,7 +34,7 @@ const Footer = () => {
                 id="confirm"
                 className="w-4 h-4 cursor-pointer hover:scale-110 transition-transform duration-200"
               />
-              <label htmlFor="confirm" className="opacity-60 ml-2">
+              <label htmlFor="confirm" className="opacity-60 ml-2 cursor-pointer">
                 Yes, Subscribe me to your newsletter
               </label>
             </div>
