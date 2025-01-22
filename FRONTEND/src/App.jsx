@@ -1,8 +1,11 @@
 import Categories from "./assets/components/categories";
 import Cupon from "./assets/components/cupon";
+// import Features from "./assets/components/features";
 import HeaderTopDeals from "./assets/components/headerTopDeals";
 import Hero from "./assets/components/hero";
+import JustLaunced from "./assets/components/justLaunched";
 import Navbar from "./assets/components/navbar";
+import OurCollection from "./assets/components/ourCollection";
 import RecentAdditions from "./assets/components/recentAdditions";
 import "./assets/styles/index.css";
 function App() {
@@ -15,20 +18,20 @@ function App() {
       </header>
       <section aria-label="categories">
         <Categories />
+        {/* change style to box type */}
       </section>
       <Cupon />
-      {/* <ProductCard
-        offer="-14%"
-        badge="hot"
-        imgSrc="/images/categories/shirts_folded.jpg"
-        brand="Peter England"
-        title="Peter England Premium Shirt"
-        price="₹1299"
-        discount="₹1500"
-        rating="4.5"
-      /> */}
-      <section className="bg-tertiary">
+      <section className="bg-primary">
         <RecentAdditions />
+      </section>
+      {/* <section className="bg-primary">
+        <Features />
+      </section> */}
+      <section className="bg-primary">
+        <OurCollection />
+      </section>
+      <section className="bg-primary">
+        <JustLaunced/>
       </section>
     </main>
   );

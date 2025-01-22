@@ -11,7 +11,7 @@ const CategoryItem = memo(({ item, isHovered, onMouseEnter, onMouseLeave }) => (
     <img
       src={item.img}
       alt={`Category: ${item.name}`}
-      className={`shadow-lg h-[15rem] w-[12rem] transition-transform duration-500 ${
+      className={`shadow-lg h-[15rem] w-[12rem] transition-transform duration-500 rounded-lg ${
         isHovered ? "scale-105" : ""
       }`}
     />
@@ -30,11 +30,11 @@ const CategoryItem = memo(({ item, isHovered, onMouseEnter, onMouseLeave }) => (
 const Categories = () => {
   const categories = [
     {
-      img: "/images/categories/t_shirts_hanging.jpg",
+      img: "/images/collection/oversized/mythical-dragon-oversized-t-shirt-462640.webp",
       name: "T-shirts",
     },
     {
-      img: "/images/categories/shirts.jpg",
+      img: "/images/collection/retro/retro-shirt-225762.webp",
       name: "Shirts",
     },
     {
