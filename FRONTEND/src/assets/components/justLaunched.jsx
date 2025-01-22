@@ -17,7 +17,7 @@
 
 const ShirtsBanner = () => {
   return (
-    <div className="relative bg-[#fff7e6] py-10 mx-20 rounded-lg h-[25rem]">
+    <div className="relative py-10 mx-20 rounded-lg h-[25rem]">
       {/* Red Background Section */}
       <div className="h-full flex items-center bg-[#d82a20] p-8 rounded-lg overflow-hidden relative">
         {/* Shirt Image */}

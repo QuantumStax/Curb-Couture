@@ -8,6 +8,7 @@ export default {
         secondary: "#C4C197",
         tertiary: "#DDDDCC",
         banner: "#E8E59B",
+        brand: "#FFFCE6",
         "text-main": "#403F2B",
         "cupon-bg": "#FCE2E1",
       },
