@@ -1,6 +1,7 @@
 import BestSellers from "./assets/components/bestSellers";
 import Categories from "./assets/components/categories";
 import Cupon from "./assets/components/cupon";
+import Footer from "./assets/components/footer";
 // import Features from "./assets/components/features";
 import HeaderTopDeals from "./assets/components/headerTopDeals";
 import Hero from "./assets/components/hero";
@@ -37,6 +38,9 @@ function App() {
       </section>
       <section className="bg-brand">
         <OurBrand />
+      </section>
+      <section className="bg-banner">
+        <Footer />
       </section>
     </main>
   );
