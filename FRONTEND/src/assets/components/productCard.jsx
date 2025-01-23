@@ -36,8 +36,6 @@ const ProductCard = memo(({ offer, badge, imgSrc, brand, title, price, discount,
 
       {/* Product Details */}
       <div className="mt-2">
-        {/* Brand */}
-        <p className="opacity-65 uppercase text-sm">{brand}</p>
 
         {/* Title */}
         <h2 className="text-xl font-medium" aria-label={`Product title: ${title}`}>
