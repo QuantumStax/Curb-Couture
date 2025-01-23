@@ -5,6 +5,7 @@ import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
 import FavoriteIcon from "@mui/icons-material/Favorite";
 import ShoppingCartOutlinedIcon from "@mui/icons-material/ShoppingCartOutlined";
 import React from "react";
+import { Link } from "react-router-dom";
 const Navbar = () => {
   const navItems = [
     {
@@ -86,14 +87,15 @@ const Navbar = () => {
       </a>
       <div className="flex items-center gap-5 text-base font-semibold translate-x-12">
         {navItems.map((item, i) => (
-          <li
-            key={i}
-            className="list-none flex items-center gap-1 nav-hover-btn"
-            aria-label={item.name}
-          >
-            {item.name}
-            <div>{item.icon}</div>
-          </li>
+          <Link key={i} to={item.link} className="">
+            <li
+              className="list-none flex items-center gap-1 nav-hover-btn"
+              aria-label={item.name}
+            >
+              {item.name}
+              <div>{item.icon}</div>
+            </li>
+          </Link>
         ))}
       </div>
       <div className="flex items-center gap-5">
