@@ -82,7 +82,7 @@ const HeroSlider = () => {
       ))}
 
       {/* Progress Bar */}
-      <div className="absolute bottom-4 left-0 right-0 flex justify-center gap-2 z-50">
+      <div className="absolute bottom-4 left-0 right-0 flex justify-center gap-2 z-40">
         {slides.map((_, index) => (
           <div
             key={index}
@@ -98,13 +98,13 @@ const HeroSlider = () => {
 
       {/* Navigation Arrows */}
       <button
-        className="absolute left-4 top-1/2 transform -translate-y-1/2 p-3 bg-opacity-50 text-white rounded-full hover:bg-opacity-75 z-50"
+        className="absolute left-4 top-1/2 transform -translate-y-1/2 p-3 bg-opacity-50 text-white rounded-full hover:bg-opacity-75 z-40"
         onClick={handlePrev}
       >
         <ArrowBackIosIcon fontSize="large" />
       </button>
       <button
-        className="absolute right-4 top-1/2 transform -translate-y-1/2 p-3 bg-opacity-50 text-white rounded-full hover:bg-opacity-75 z-50"
+        className="absolute right-4 top-1/2 transform -translate-y-1/2 p-3 bg-opacity-50 text-white rounded-full hover:bg-opacity-75 z-40"
         onClick={handleNext}
       >
         <ArrowForwardIosIcon fontSize="large" />
