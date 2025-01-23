@@ -17,29 +17,23 @@ const Nav = () => {
 
   useEffect(() => {
     if (isOpen) {
-      // Disable scrolling when the navbar is open
       document.body.style.overflow = "hidden";
 
-      // Make the navbar visible before starting the animation
       navRef.current.style.display = "block";
 
-      // Slide in animation
       gsap.fromTo(
         navRef.current,
-        { x: "-100%" }, // Start position
-        { x: "0%", duration: 0.5, ease: "power2.out" } // End position
+        { x: "-100%" },
+        { x: "0%", duration: 0.5, ease: "power2.out" }
       );
     } else {
-      // Slide out animation
       gsap.to(navRef.current, {
         x: "-100%",
         duration: 0.5,
         ease: "power2.in",
         onComplete: () => {
-          // Hide the navbar after the animation completes
           navRef.current.style.display = "none";
 
-          // Enable scrolling
           document.body.style.overflow = "auto";
         },
       });
@@ -117,7 +111,6 @@ const Nav = () => {
         ))}
       </div>
 
-      {/* Sliding NavItemComponent */}
       <div
         ref={navRef}
         className="fixed inset-0 w-screen h-screen bg-black z-50"
