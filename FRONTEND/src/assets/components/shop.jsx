@@ -19,9 +19,9 @@ const Shop = ({itemArray, image, heading}) => {
           name="keywords"
           content="shop, products, deals, offers, catalog, online shopping, top brands"
         />
-        <meta name="author" content="Your Company Name" />
+        <meta name="author" content="Curb Coture" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <meta property="og:title" content="Shop - Your Favorite Products" />
+        <meta property="og:title" content="Shop - T-shirts, Oversized, Baggy, Shirts, Pants, Jeans for both men and women" />
         <meta
           property="og:description"
           content="Browse through our catalog and find the best deals on your favorite items."

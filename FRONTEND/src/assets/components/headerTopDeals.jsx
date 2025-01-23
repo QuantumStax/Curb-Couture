@@ -5,7 +5,7 @@ const HeaderTopDeals = () => {
     <div
       role="banner"
       aria-label="Top Deals"
-      className="bg-banner py-2 flex items-center justify-center"
+      className="bg-primary py-2 flex items-center justify-center"
     >
       <p className="text-center font-medium">
         Free shipping on all international orders over{" "}
