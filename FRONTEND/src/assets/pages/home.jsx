@@ -2,11 +2,13 @@ import { lazy, Suspense } from "react";
 import Cupon from "../components/cupon";
 import Footer from "../components/footer";
 import HeaderTopDeals from "../components/headerTopDeals";
-import Hero from "../components/hero";
+// import Hero from "../components/hero";
 // import Navbar from "../components/navbar";
 import OurBrand from "../components/ourBrand";
 import Categories from "../components/categories";
 import Nav from "../components/nav2";
+import HeroSlider from "../components/hero2";
+// import Hero3GSAP from "../components/hero3GSAP";
 
 // Lazy-loaded components
 const RecentAdditions = lazy(() => import("../components/recentAdditions"));
@@ -20,7 +22,7 @@ function Home() {
       <header aria-label="Site Header">
         <HeaderTopDeals />
         <Nav />
-        <Hero />
+        <HeroSlider />
       </header>
       <section aria-labelledby="categories-heading">
         <h2 id="categories-heading" className="sr-only">
