@@ -5,7 +5,7 @@ import ProductCard from "../components/productCard";
 import KeyboardArrowLeftOutlinedIcon from "@mui/icons-material/KeyboardArrowLeftOutlined";
 import KeyboardArrowRightOutlinedIcon from "@mui/icons-material/KeyboardArrowRightOutlined";
 
-const Carousel = ({mainHead, subPara, itemList}) => {
+const Carousel = ({ mainHead, subPara, itemList }) => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const itemsPerSlide = 4;
 
@@ -22,12 +22,13 @@ const Carousel = ({mainHead, subPara, itemList}) => {
   };
 
   return (
-    <div className="relative overflow-hidden">
+    <section
+      className="relative overflow-hidden"
+      aria-labelledby="carousel-heading"
+    >
       <div role="heading" className="mx-20 my-10">
         <h1 className="text-4xl font-semibold">{mainHead}</h1>
-        <p className="text-gray-600">
-          {subPara}
-        </p>
+        <p className="text-gray-600">{subPara}</p>
       </div>
       <div className="relative">
         {/* Card Container */}
@@ -61,6 +62,7 @@ const Carousel = ({mainHead, subPara, itemList}) => {
               currentIndex === 0 ? "opacity-50 cursor-not-allowed" : ""
             }`}
             disabled={currentIndex === 0}
+            aria-label="Previous slide"
           >
             <KeyboardArrowLeftOutlinedIcon />
           </button>
@@ -78,12 +80,13 @@ const Carousel = ({mainHead, subPara, itemList}) => {
               currentIndex >=
               Math.ceil(recentCollection.length / itemsPerSlide) - 1
             }
+            aria-label="Next slide"
           >
             <KeyboardArrowRightOutlinedIcon />
           </button>
         </div>
       </div>
-    </div>
+    </section>
   );
 };
 
