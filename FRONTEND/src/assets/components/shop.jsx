@@ -1,16 +1,16 @@
+/* eslint-disable react/prop-types */
 import { Helmet } from "react-helmet";
 import Navbar from "../components/navbar";
 import ShopCatalog from "./catalog";
 import ShopActionsMenu from "./shopActionsMenu";
 import ShopHero from "./shopHero";
-import items from "../utils/catalog";
 
-const Shop = () => {
+const Shop = ({itemArray, image, heading}) => {
   return (
     <>
       {/* SEO Optimization */}
       <Helmet>
-        <title>Shop - Your Favorite Products at Best Prices</title>
+        <title>Shop - Your Favorite Products at Best Prices</title>b
         <meta
           name="description"
           content="Discover the best products in our shop catalog. Find amazing deals, top brands, and exclusive offers tailored just for you."
@@ -27,10 +27,10 @@ const Shop = () => {
           content="Browse through our catalog and find the best deals on your favorite items."
         />
         <meta property="og:type" content="website" />
-        <meta property="og:url" content="https://yourwebsite.com/shop" />
+        <meta property="og:url" content="https://curbcoture.com/shop" />
         <meta
           property="og:image"
-          content="https://yourwebsite.com/hero-image.jpg"
+          content="https://curbcoture.com/hero-image.jpg"
         />
       </Helmet>
 
@@ -39,13 +39,16 @@ const Shop = () => {
         <Navbar />
 
         {/* Hero */}
-        <ShopHero />
+        <ShopHero
+          image={image}
+          heading={heading}
+        />
 
         {/* Actions Menu */}
         <ShopActionsMenu />
 
         {/* Catalog */}
-        <ShopCatalog items={items} />
+        <ShopCatalog items={itemArray} />
       </section>
     </>
   );

@@ -12,23 +12,33 @@ import AboutUs from "./assets/pages/aboutus";
 import TopDeals from "./assets/pages/topdeals";
 import FeaturedProducts from "./assets/pages/featuredProducts";
 import Shop from "./assets/components/shop";
+import items from "./assets/utils/catalog";
 function App() {
   return (
     <Router>
       <main>
         <Routes>
-          <Route path="/" element={<Home/>} />
-          <Route path="/about-us" element={<AboutUs/>} />
-          <Route path="/blogs" element={<Blogs/>} />
-          <Route path="/contact" element={<Contact/>} />
-          <Route path="/forgot-password" element={<ForgotPass/>} />
-          <Route path="/login" element={<Login/>} />
-          <Route path="/privacy-policy" element={<PrivacyPolicy/>} />
-          <Route path="/register" element={<Register/>} />
-          <Route path="/t-n-c" element={<TermsandConditions/>} />
-          <Route path="/top-deals" element={<TopDeals/>} />
-          <Route path="/featured-products" element={<FeaturedProducts/>} />
-          <Route path="/shop" element={<Shop/>} />
+          <Route path="/" element={<Home />} />
+          <Route path="/about-us" element={<AboutUs />} />
+          <Route path="/blogs" element={<Blogs />} />
+          <Route path="/contact" element={<Contact />} />
+          <Route path="/forgot-password" element={<ForgotPass />} />
+          <Route path="/login" element={<Login />} />
+          <Route path="/privacy-policy" element={<PrivacyPolicy />} />
+          <Route path="/register" element={<Register />} />
+          <Route path="/t-n-c" element={<TermsandConditions />} />
+          <Route path="/top-deals" element={<TopDeals />} />
+          <Route path="/featured-products" element={<FeaturedProducts />} />
+          <Route
+            path="/shop"
+            element={
+              <Shop
+                itemArray={items}
+                image="/images/just_launched/mythical-dragon-oversized-t-shirt-521913-removebg-preview.webp"
+                heading="Shop"
+              />
+            }
+          />
         </Routes>
       </main>
     </Router>
