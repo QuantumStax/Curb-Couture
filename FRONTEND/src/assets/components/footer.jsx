@@ -6,7 +6,7 @@ const Footer = () => {
   const year = new Date().getFullYear();
 
   return (
-    <div className="px-20 py-10">
+    <div className="px-20 py-10 bg-banner">
       <div className="flex gap-44 items-baseline">
         <div>
           <div className="w-[25rem]">
