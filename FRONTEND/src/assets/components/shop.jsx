@@ -1,11 +1,12 @@
 /* eslint-disable react/prop-types */
 import { Helmet } from "react-helmet";
-import Navbar from "../components/navbar";
 import ShopCatalog from "./catalog";
 import ShopActionsMenu from "./shopActionsMenu";
 import ShopHero from "./shopHero";
+import Nav from "./nav2";
+import HeaderTopDeals from "./headerTopDeals";
 
-const Shop = ({itemArray, image, heading}) => {
+const Shop = ({ itemArray, image, heading }) => {
   return (
     <>
       {/* SEO Optimization */}
@@ -21,7 +22,10 @@ const Shop = ({itemArray, image, heading}) => {
         />
         <meta name="author" content="Curb Coture" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <meta property="og:title" content="Shop - T-shirts, Oversized, Baggy, Shirts, Pants, Jeans for both men and women" />
+        <meta
+          property="og:title"
+          content="Shop - T-shirts, Oversized, Baggy, Shirts, Pants, Jeans for both men and women"
+        />
         <meta
           property="og:description"
           content="Browse through our catalog and find the best deals on your favorite items."
@@ -36,13 +40,11 @@ const Shop = ({itemArray, image, heading}) => {
 
       <section className="bg-primary">
         {/* Navbar */}
-        <Navbar />
+        <HeaderTopDeals />
+        <Nav />
 
         {/* Hero */}
-        <ShopHero
-          image={image}
-          heading={heading}
-        />
+        <ShopHero image={image} heading={heading} />
 
         {/* Actions Menu */}
         <ShopActionsMenu />
