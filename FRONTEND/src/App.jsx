@@ -11,9 +11,11 @@ import "./assets/styles/index.css";
 import AboutUs from "./assets/pages/aboutus";
 import TopDeals from "./assets/pages/topdeals";
 import FeaturedProducts from "./assets/pages/featuredProducts";
-import Shop from "./assets/components/shop";
-import items from "./assets/utils/catalog";
+// import Shop from "./assets/components/shop";
+// import items from "./assets/utils/catalog";
 import CustomScrollbarWrapper from "./assets/components/CustomScrollbarWrapper";
+import MensCollection from "./assets/pages/mensCollection";
+import WomensCollection from "./assets/pages/womensCollection";
 function App() {
   return (
     <Router>
@@ -30,8 +32,10 @@ function App() {
             <Route path="/register" element={<Register />} />
             <Route path="/t-n-c" element={<TermsandConditions />} />
             <Route path="/top-deals" element={<TopDeals />} />
-            <Route path="/featured-products" element={<FeaturedProducts />} />
-            <Route
+            <Route path="/featured" element={<FeaturedProducts />} />
+            <Route path="/mens-collection" element={<MensCollection />} />
+            <Route path="/womens-collection" element={<WomensCollection />} />
+            {/* <Route
               path="/shop"
               element={
                 <Shop
@@ -40,7 +44,7 @@ function App() {
                   heading="Shop"
                 />
               }
-            />
+            /> */}
           </Routes>
         </main>
       </CustomScrollbarWrapper>

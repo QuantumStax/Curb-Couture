@@ -1,7 +1,7 @@
 import Shop from "../components/shop";
 import items from "../utils/catalog";
 
-const FeaturedProducts = () => {
+const WomensCollection = () => {
   return (
     <section className="top-deals-section" aria-labelledby="top-deals-heading">
       <h2 id="top-deals-heading" className="sr-only">
@@ -10,7 +10,7 @@ const FeaturedProducts = () => {
       {items && items.length > 0 ? (
         <Shop
           itemArray={items}
-          heading="Featured"
+          heading="Womens"
           image="/images/just_launched/mythical-dragon-oversized-t-shirt-521913-removebg-preview.webp"
         />
       ) : (
@@ -22,4 +22,4 @@ const FeaturedProducts = () => {
   );
 };
 
-export default FeaturedProducts;
+export default WomensCollection;
