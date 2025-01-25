@@ -5,88 +5,108 @@ import Nav from "../components/nav2";
 import WhatsAppIcon from "@mui/icons-material/WhatsApp";
 import LocalPhoneIcon from "@mui/icons-material/LocalPhone";
 import { Link } from "react-router-dom";
+
 const Contact = () => {
   return (
-    <section>
-      <section>
+    <main>
+      {/* Top Section: Header and Hero */}
+      <header>
         <HeaderTopDeals />
         <Nav />
+        {/* Lazy load Hero if it's heavy */}
         <Hero />
-      </section>
-      <section className="flex bg-primary py-36">
-        <div className="px-[10rem] w-full">
-          <div className="mx-24 text-4xl">
-            <h1 className="font-semibold">Get in Touch</h1>
-          </div>
-          <div className="mx-24 my-5">
-            <form>
+      </header>
+
+      {/* Contact Form Section */}
+      <section className="flex flex-col lg:flex-row bg-primary py-36 px-8 lg:px-36">
+        {/* Left Section: Contact Form */}
+        <div className="w-full lg:w-2/3">
+          <h1 className="text-4xl font-semibold mb-6 text-slate-800">
+            Get in Touch
+          </h1>
+          <form className="space-y-6">
+            <div>
               <input
                 type="text"
                 name="name"
                 id="name"
-                className="bg-transparent border border-slate-950 w-[40rem] mt-6 p-2 h-[3rem] font-itim"
-                placeholder="Name"
+                className="w-full lg:w-[40rem] bg-transparent border border-slate-900 rounded-md p-2 text-sm font-itim"
+                placeholder="Your Name"
+                required
               />
-              <br />
+            </div>
+            <div>
               <input
                 type="email"
                 name="email"
                 id="email"
-                className="bg-transparent border border-slate-950 w-[40rem] mt-6 p-2 h-[3rem] font-itim"
-                placeholder="Email"
+                className="w-full lg:w-[40rem] bg-transparent border border-slate-900 rounded-md p-2 text-sm font-itim"
+                placeholder="Your Email"
+                required
               />
-              <br />
+            </div>
+            <div>
               <input
-                type="text"
+                type="tel"
                 name="number"
                 id="number"
-                className="bg-transparent border border-slate-950 w-[40rem] mt-6 p-2 h-[3rem] font-itim"
-                placeholder="Phone Number"
+                className="w-full lg:w-[40rem] bg-transparent border border-slate-900 rounded-md p-2 text-sm font-itim"
+                placeholder="Your Phone Number"
+                pattern="[0-9]{10}"
+                required
               />
+            </div>
+            <div>
               <textarea
                 name="message"
                 id="message"
-                placeholder="Message"
-                rows={5}
-                cols={80}
-                className="bg-transparent py-3 px-2 border w-[40rem] border-slate-950 mt-5 font-itim"
-              />
-              <br />
-              <div className="w-[7rem] h-[3rem] bg-black hover:bg-gray-800 transition-all duration-300 text-primary py-2.5 px-8 mt-5 rounded-xl cursor-pointer">
-                <input
-                  type="submit"
-                  value="SEND"
-                  className="h-full w-full cursor-pointer"
-                />
-              </div>
-            </form>
-          </div>
+                rows="5"
+                className="w-full lg:w-[40rem] bg-transparent border border-slate-900 rounded-md p-2 text-sm font-itim"
+                placeholder="Your Message"
+                required
+              ></textarea>
+            </div>
+            <button
+              type="submit"
+              className="bg-black text-primary hover:bg-gray-800 transition-all duration-300 py-2 px-6 rounded-lg"
+            >
+              SEND
+            </button>
+          </form>
         </div>
-        <div className="relative top-[5rem] w-[25rem] left-[-20rem]">
-          <Link className="flex ml-24 w-full mb-10 items-center gap-4">
+
+        {/* Right Section: Contact Information */}
+        <aside className="mt-12 lg:mt-0 lg:ml-12 w-full lg:w-1/3 space-y-8">
+          <div className="flex items-center gap-4">
             <WhatsAppIcon
-              style={{
-                fontSize: "3rem",
-                color: "#25D366",
-              }}
+              fontSize="large"
+              className="text-[#25D366]"
+              aria-label="WhatsApp Icon"
             />
-            <p className="hover:underline text-lg">Message us on whatsapp</p>
-          </Link>
-          <Link className="flex ml-24 w-full items-center gap-4">
+            <Link
+              to="#"
+              className="text-lg hover:underline text-slate-700"
+              aria-label="Message us on WhatsApp"
+            >
+              Message us on WhatsApp
+            </Link>
+          </div>
+          <div className="flex items-center gap-4">
             <LocalPhoneIcon
-              style={{
-                fontSize: "3rem",
-                color: "#000",
-              }}
+              fontSize="large"
+              className="text-black"
+              aria-label="Phone Icon"
             />
-            <p className="hover:underline text-lg">+91 8956746301</p>
-          </Link>
-        </div>
+            <p className="text-lg text-slate-700">+91 8956746301</p>
+          </div>
+        </aside>
       </section>
-      <section>
+
+      {/* Footer */}
+      <footer>
         <Footer />
-      </section>
-    </section>
+      </footer>
+    </main>
   );
 };
 
