@@ -3,10 +3,14 @@ import SortIcon from "@mui/icons-material/Sort";
 import Filter from "../pages/filter";
 import { useState, useRef, useEffect } from "react";
 import { gsap } from "gsap";
+import Sort from "../components/sort";
 
 const ShopActionsMenu = () => {
   const [isFilterOpen, setIsFilterOpen] = useState(false);
+  const [isSortOpen, setIsSortOpen] = useState(false);
+
   const filterRef = useRef(null);
+  const sortRef = useRef(null);
 
   const toggleFilter = () => {
     if (!isFilterOpen) {
@@ -29,9 +33,34 @@ const ShopActionsMenu = () => {
     setIsFilterOpen((prev) => !prev);
   };
 
+  const toggleSort = () => {
+    if (!isSortOpen) {
+      const contentHeight = sortRef.current.scrollHeight;
+      gsap.fromTo(
+        sortRef.current,
+        { height: 0, opacity: 0 },
+        { height: contentHeight, opacity: 1, duration: 0.5, ease: "power2.out" }
+      );
+    } else {
+      gsap.to(sortRef.current, {
+        height: 0,
+        opacity: 0,
+        duration: 0.5,
+        ease: "power2.out",
+        onComplete: () => {
+          gsap.set(sortRef.current, { display: "none" });
+        },
+      });
+    }
+    setIsSortOpen((prev) => !prev);
+  };
+
   useEffect(() => {
     if (filterRef.current) {
       gsap.set(filterRef.current, { x: "-100%", opacity: 0, display: "none" });
+    }
+    if (sortRef.current) {
+      gsap.set(sortRef.current, { height: 0, opacity: 0, display: "none" });
     }
   }, []);
 
@@ -39,7 +68,10 @@ const ShopActionsMenu = () => {
     if (isFilterOpen && filterRef.current) {
       gsap.set(filterRef.current, { display: "block" });
     }
-  }, [isFilterOpen]);
+    if (isSortOpen && sortRef.current) {
+      gsap.set(sortRef.current, { display: "block" });
+    }
+  }, [isFilterOpen, isSortOpen]);
 
   return (
     <div className="flex items-end gap-5 px-20 py-10 h-[15rem]">
@@ -67,29 +99,22 @@ const ShopActionsMenu = () => {
         <Filter toggleFilter={toggleFilter} />
       </div>
       {/* sort */}
-      <div className="relative rounded-lg bg-slate-200 hover:bg-slate-950 hover:text-primary transition-all duration-500 py-2 px-6 w-[10rem] h-[3rem] cursor-pointer hover:shadow-lg">
-        <div className="relative -left-3 top-0.5 opacity-75 hover:text-primary">
+      <div
+        className="relative rounded-lg bg-black text-white transition-all duration-500 py-2 px-6 w-[10rem] h-[3rem] hover:shadow-lg cursor-pointer"
+        onClick={toggleSort}
+      >
+        <div className="relative -left-3 top-0.5 opacity-75">
           <SortIcon />
         </div>
         <h1 className="absolute left-[50%] top-[50%] translate-x-[-50%] translate-y-[-50%] text-xl font-semibold">
           Sort
         </h1>
-      </div>
-      {/* back to home link */}
-      <div className="flex items-center gap-1 ml-20">
-        <a
-          href="/"
-          className="opacity-60 hover:opacity-100 hover:underline cursor-default"
+        <div
+          ref={sortRef}
+          className="absolute top-[3.5rem] left-[-1rem] w-[12rem] rounded-md z-40"
         >
-          Home
-        </a>
-        <p className="cursor-default">/</p>
-        <a
-          href="/"
-          className="opacity-60 hover:opacity-100 hover:underline cursor-default"
-        >
-          Categories
-        </a>
+          <Sort />
+        </div>
       </div>
     </div>
   );

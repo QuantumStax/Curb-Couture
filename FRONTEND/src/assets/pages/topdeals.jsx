@@ -1,10 +1,10 @@
-import PageTransitionWrapper from "../components/pageTransitionWrapper";
+// import PageTransitionWrapper from "../components/pageTransitionWrapper";
 import Shop from "../components/shop";
 import items from "../utils/catalog";
 
 const TopDeals = () => {
   return (
-    <PageTransitionWrapper>
+    // <PageTransitionWrapper>
       <section
         className="top-deals-section"
         aria-labelledby="top-deals-heading"
@@ -24,7 +24,7 @@ const TopDeals = () => {
           </p>
         )}
       </section>
-    </PageTransitionWrapper>
+    // </PageTransitionWrapper>
   );
 };
 
