@@ -16,6 +16,7 @@ import FeaturedProducts from "./assets/pages/featuredProducts";
 import CustomScrollbarWrapper from "./assets/components/CustomScrollbarWrapper";
 import MensCollection from "./assets/pages/mensCollection";
 import WomensCollection from "./assets/pages/womensCollection";
+import Filter from "./assets/pages/filter";
 function App() {
   return (
     <Router>
@@ -46,6 +47,7 @@ function App() {
               }
             /> */}
           </Routes>
+          {/* <Filter /> */}
         </main>
       </CustomScrollbarWrapper>
     </Router>
