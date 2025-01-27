@@ -28,7 +28,7 @@ function App() {
             <Route path="/blogs" element={<Blogs />} />
             <Route path="/contact" element={<Contact />} />
             <Route path="/forgot-password" element={<ForgotPass />} />
-            <Route path="/login" element={<Login />} />
+            <Route path="/my-account" element={<Login />} />
             <Route path="/privacy-policy" element={<PrivacyPolicy />} />
             <Route path="/register" element={<Register />} />
             <Route path="/t-n-c" element={<TermsandConditions />} />

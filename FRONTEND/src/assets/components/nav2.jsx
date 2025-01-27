@@ -10,6 +10,7 @@ import MenuOpenIcon from "@mui/icons-material/MenuOpen";
 import React, { useState, useRef, useEffect } from "react";
 import gsap from "gsap";
 import NavItemComponent from "./navItemComponent";
+import { Link } from "react-router-dom";
 
 const Nav = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -54,6 +55,7 @@ const Nav = () => {
           fontSize: "1.7rem",
         },
       }),
+      path: "/my-account",
     },
     {
       icon: React.createElement(FavoriteBorderIcon, {
@@ -66,6 +68,7 @@ const Nav = () => {
           fontSize: "1.7rem",
         },
       }),
+      path: "/wishlist",
     },
     {
       icon: React.createElement(ShoppingCartOutlinedIcon, {
@@ -73,6 +76,7 @@ const Nav = () => {
           fontSize: "1.7rem",
         },
       }),
+      path: "/cart",
     },
   ];
 
@@ -101,13 +105,14 @@ const Nav = () => {
       </div>
       <div className="flex items-center gap-5">
         {actionIcons.map((icon, i) => (
-          <div
-            key={i}
-            aria-label={icon.icon}
-            className="cursor-pointer opacity-75 hover:opacity-100"
-          >
-            {icon.icon}
-          </div>
+          <Link key={i} to={icon.path}>
+            <div
+              aria-label={icon.icon}
+              className="cursor-pointer opacity-75 hover:opacity-100"
+            >
+              {icon.icon}
+            </div>
+          </Link>
         ))}
       </div>
 
