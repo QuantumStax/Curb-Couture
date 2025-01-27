@@ -7,16 +7,15 @@ import PrivacyPolicy from "./assets/pages/privacyPolicy";
 import Register from "./assets/pages/register";
 import TermsandConditions from "./assets/pages/tnc";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import "./assets/styles/index.css";
 import AboutUs from "./assets/pages/aboutus";
 import TopDeals from "./assets/pages/topdeals";
 import FeaturedProducts from "./assets/pages/featuredProducts";
-// import Shop from "./assets/components/shop";
-// import items from "./assets/utils/catalog";
 import CustomScrollbarWrapper from "./assets/components/CustomScrollbarWrapper";
 import MensCollection from "./assets/pages/mensCollection";
 import WomensCollection from "./assets/pages/womensCollection";
-// import Filter from "./assets/pages/filter";
+import WishList from "./assets/pages/wishlist";
+import Cart from "./assets/pages/cart";
+import "./assets/styles/index.css";
 function App() {
   return (
     <Router>
@@ -36,18 +35,9 @@ function App() {
             <Route path="/featured" element={<FeaturedProducts />} />
             <Route path="/mens-collection" element={<MensCollection />} />
             <Route path="/womens-collection" element={<WomensCollection />} />
-            {/* <Route
-              path="/shop"
-              element={
-                <Shop
-                  itemArray={items}
-                  image="/images/just_launched/mythical-dragon-oversized-t-shirt-521913-removebg-preview.webp"
-                  heading="Shop"
-                />
-              }
-            /> */}
+            <Route path="/wishlist" element={<WishList />} />
+            <Route path="/my-cart" element={<Cart />} />
           </Routes>
-          {/* <Filter /> */}
         </main>
       </CustomScrollbarWrapper>
     </Router>

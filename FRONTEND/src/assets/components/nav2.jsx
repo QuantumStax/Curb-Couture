@@ -76,7 +76,7 @@ const Nav = () => {
           fontSize: "1.7rem",
         },
       }),
-      path: "/cart",
+      path: "/my-cart",
     },
   ];
 
