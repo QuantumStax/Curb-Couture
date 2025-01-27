@@ -44,23 +44,28 @@ const Login = () => {
               <button className="bg-black text-primary text-lg py-2 px-4 rounded-md w-[10rem] mt-4">
                 Login
               </button>
-              <div className="relative top-2 left-12 hover:text-blue-700 hover:underline">
+              <div className="relative top-2 left-10 hover:text-primary hover:bg-black border border-slate-950 py-2 px-6 rounded-md w-[12rem] transition-all duration-500">
                 <Link to="/forgot-password">
                   <p className="text-lg">Forgot Password</p>
                 </Link>
               </div>
             </div>
             <div className="relative top-6 text-center text-lg">
-              <Link to="/register" className="relative left-7 flex items-center">
+              <Link
+                to="/register"
+                className="relative left-7 flex items-center"
+              >
                 <p className="mr-2">Dont have an Account? </p>
-                <p className="hover:text-blue-700 hover:underline">Create an Account</p>
+                <p className="hover:text-blue-700 hover:underline">
+                  Create an Account
+                </p>
               </Link>
             </div>
           </form>
         </div>
       </section>
       <section>
-        <Footer/>
+        <Footer />
       </section>
     </section>
   );
