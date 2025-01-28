@@ -271,7 +271,7 @@ const ProductView = () => {
                   ) : (
                     ""
                   )}
-                  <div className="relative left-[50rem] opacity-50">
+                  <div className="relative left-[65rem] opacity-50">
                     <p>{review.date}</p>
                   </div>
                 </div>
@@ -288,6 +288,7 @@ const ProductView = () => {
                     className="h-[10rem] rounded-lg"
                   />
                 </div>
+                <hr className="h-[0.1rem] bg-black opacity-30 mt-2" />
               </div>
             ))}
           </div>
