@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState, useCallback } from "react";
 import { gsap } from "gsap";
 
-const ImageSlider = () => {
+const HeroSlider2 = () => {
   const sliderRef = useRef(null);
   const [currentIndex, setCurrentIndex] = useState(0);
   const images = [
@@ -51,15 +51,15 @@ const ImageSlider = () => {
   }, [nextSlide]);
 
   return (
-    <div className="relative w-full overflow-hidden">
+    <div className="relative w-full h-[86vh] overflow-hidden">
       <div ref={sliderRef} className="flex transition-transform duration-500 ease-out">
         {images.map((image, index) => (
           <div
             key={index}
-            className="flex-shrink-0 w-full h-[400px] flex items-center justify-center bg-cover bg-center"
+            className="flex-shrink-0 w-full h-[86vh] flex items-center justify-center bg-cover bg-center"
             style={{ backgroundImage: `url(${image.src})` }}
           >
-            <div className="text-center bg-black bg-opacity-50 p-6 rounded-lg">
+            <div className="flex flex-col items-center justify-center bg-black h-full w-full bg-opacity-50 p-6 rounded-lg">
               <h2 className="text-3xl font-bold text-white mb-4">{image.heading}</h2>
               <p className="text-white mb-4">{image.text}</p>
               <button className="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600">
@@ -98,4 +98,4 @@ const ImageSlider = () => {
   );
 };
 
-export default ImageSlider;
+export default HeroSlider2;

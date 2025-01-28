@@ -7,8 +7,8 @@ import HeaderTopDeals from "../components/headerTopDeals";
 import OurBrand from "../components/ourBrand";
 import Categories from "../components/categories";
 import Nav from "../components/nav2";
-import HeroSlider from "../components/hero2";
-// import Hero3GSAP from "../components/hero3GSAP";
+// import HeroSlider from "../components/hero2";
+import HeroSlider2 from "../components/hero3";
 
 // Lazy-loaded components
 const RecentAdditions = lazy(() => import("../components/recentAdditions"));
@@ -22,7 +22,7 @@ function Home() {
       <header aria-label="Site Header">
         <HeaderTopDeals />
         <Nav />
-        <HeroSlider />
+        <HeroSlider2 />
       </header>
       <section aria-labelledby="categories-heading">
         <h2 id="categories-heading" className="sr-only">

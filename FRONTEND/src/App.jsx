@@ -16,6 +16,7 @@ import WomensCollection from "./assets/pages/womensCollection";
 import WishList from "./assets/pages/wishlist";
 import Cart from "./assets/pages/cart";
 import "./assets/styles/index.css";
+import ProductView from "./assets/components/productView";
 function App() {
   return (
     <Router>
@@ -37,6 +38,7 @@ function App() {
             <Route path="/womens-collection" element={<WomensCollection />} />
             <Route path="/wishlist" element={<WishList />} />
             <Route path="/my-cart" element={<Cart />} />
+            <Route path="/view" element={<ProductView />} />
           </Routes>
         </main>
       </CustomScrollbarWrapper>
