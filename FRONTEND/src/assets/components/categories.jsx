@@ -55,7 +55,7 @@ const Categories = () => {
 
   return (
     <section className="py-10 px-5 sm:px-10 md:px-20 bg-primary">
-      <h2 className="text-2xl sm:text-3xl" role="heading">
+      <h2 className="text-2xl sm:text-3xl font-semibold" role="heading">
         Product Categories
       </h2>
       <div className="flex flex-wrap justify-center sm:justify-between gap-5 mt-10">

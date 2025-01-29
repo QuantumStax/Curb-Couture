@@ -7,7 +7,7 @@ const ShirtsBanner = () => {
         <img
           src="/images/just_launched/mythical-dragon-oversized-t-shirt-521913-removebg-preview.webp"
           alt="Shirt"
-          className="absolute inset-0 w-full h-full object-cover rounded-lg opacity-100 z-[10]"
+          className="absolute inset-0 w-full h-full object-contain lg:left-[-25rem] rounded-lg opacity-100 z-[10]"
         />
 
         {/* Text Section */}

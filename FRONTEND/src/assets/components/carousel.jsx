@@ -39,7 +39,7 @@ const Carousel = ({ mainHead, subPara, itemList }) => {
       className="relative overflow-hidden"
       aria-labelledby="carousel-heading"
     >
-      <div role="heading" className="mx-4 md:mx-10 lg:mx-20 my-10">
+      <div role="heading" className="mx-2 md:mx-10 lg:mx-5 my-10">
         <h1 className="text-2xl md:text-3xl lg:text-4xl font-semibold">
           {mainHead}
         </h1>
