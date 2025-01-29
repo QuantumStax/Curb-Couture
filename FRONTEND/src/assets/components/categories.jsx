@@ -11,13 +11,13 @@ const CategoryItem = memo(({ item, isHovered, onMouseEnter, onMouseLeave }) => (
     <img
       src={item.img}
       alt={`Category: ${item.name}`}
-      className={`shadow-lg h-[15rem] w-[12rem] transition-transform duration-500 rounded-lg ${
+      className={`shadow-lg h-[12rem] w-[10rem] sm:h-[14rem] sm:w-[11rem] md:h-[15rem] md:w-[12rem] lg:h-[16rem] lg:w-[13rem] transition-transform duration-500 rounded-lg ${
         isHovered ? "scale-105" : ""
       }`}
     />
     <div className="mt-4">
       <p
-        className={`text-base font-semibold transition-all duration-500 ${
+        className={`text-sm sm:text-base font-semibold transition-all duration-500 ${
           isHovered ? "nav-hover-btn" : ""
         }`}
       >
@@ -54,11 +54,11 @@ const Categories = () => {
   const [hoveredIndex, setHoveredIndex] = useState(null);
 
   return (
-    <section className="py-10 px-20 bg-primary">
-      <h2 className="text-3xl" role="heading">
+    <section className="py-10 px-5 sm:px-10 md:px-20 bg-primary">
+      <h2 className="text-2xl sm:text-3xl" role="heading">
         Product Categories
       </h2>
-      <div className="flex items-center justify-between gap-5 mt-10">
+      <div className="flex flex-wrap justify-center sm:justify-between gap-5 mt-10">
         {categories.map((item, i) => (
           <CategoryItem
             key={i}

@@ -19,9 +19,7 @@ const Nav = () => {
   useEffect(() => {
     if (isOpen) {
       document.body.style.overflow = "hidden";
-
       navRef.current.style.display = "block";
-
       gsap.fromTo(
         navRef.current,
         { x: "-100%" },
@@ -34,7 +32,6 @@ const Nav = () => {
         ease: "power2.in",
         onComplete: () => {
           navRef.current.style.display = "none";
-
           document.body.style.overflow = "auto";
         },
       });
@@ -42,94 +39,59 @@ const Nav = () => {
   }, [isOpen]);
 
   const actionIcons = [
+    { icon: <SearchIcon style={{ fontSize: "1.4rem" }} /> },
+    { icon: <PersonOutlineOutlinedIcon style={{ fontSize: "1.4rem" }} />, path: "/my-account" },
     {
-      icon: React.createElement(SearchIcon, {
-        style: {
-          fontSize: "1.7rem",
-        },
-      }),
-    },
-    {
-      icon: React.createElement(PersonOutlineOutlinedIcon, {
-        style: {
-          fontSize: "1.7rem",
-        },
-      }),
-      path: "/my-account",
-    },
-    {
-      icon: React.createElement(FavoriteBorderIcon, {
-        style: {
-          fontSize: "1.7rem",
-        },
-      }),
-      icon2: React.createElement(FavoriteIcon, {
-        style: {
-          fontSize: "1.7rem",
-        },
-      }),
+      icon: <FavoriteBorderIcon style={{ fontSize: "1.4rem" }} />,
+      icon2: <FavoriteIcon style={{ fontSize: "1.4rem" }} />,
       path: "/wishlist",
     },
-    {
-      icon: React.createElement(ShoppingCartOutlinedIcon, {
-        style: {
-          fontSize: "1.7rem",
-        },
-      }),
-      path: "/my-cart",
-    },
+    { icon: <ShoppingCartOutlinedIcon style={{ fontSize: "1.4rem" }} />, path: "/my-cart" },
   ];
 
   return (
     <nav
       role="navigation"
       aria-label="Primary Navigation"
-      className="flex items-center justify-between bg-banner px-20 py-2 relative"
+      className="flex items-center justify-between bg-banner px-5 md:px-10 lg:px-20 py-2 relative"
     >
+      {/* Menu Icon for Mobile */}
       <div
         className="text-slate-950 p-2 cursor-pointer hover:opacity-60"
         onClick={() => setIsOpen((prev) => !prev)}
       >
-        <MenuIcon
-          style={{
-            fontSize: "2rem",
-          }}
-        />
+        <MenuIcon className="text-2xl sm:text-xl md:text-2xl" />
       </div>
+      
+      {/* Logo */}
       <div>
         <a href="/" aria-label="Home">
-          <p className="text-4xl font-fraunces font-bold translate-x-[3rem]">
+          <p className="text-xl sm:text-2xl md:text-3xl font-fraunces font-bold text-center md:text-left">
             Curb Coture
           </p>
         </a>
       </div>
-      <div className="flex items-center gap-5">
+      
+      {/* Action Icons */}
+      <div className="flex items-center gap-3 sm:gap-4 md:gap-5">
         {actionIcons.map((icon, i) => (
-          <Link key={i} to={icon.path}>
-            <div
-              aria-label={icon.icon}
-              className="cursor-pointer opacity-75 hover:opacity-100"
-            >
-              {icon.icon}
-            </div>
+          <Link key={i} to={icon.path} className="cursor-pointer opacity-75 hover:opacity-100">
+            {icon.icon}
           </Link>
         ))}
       </div>
 
+      {/* Mobile Menu */}
       <div
         ref={navRef}
         className="fixed inset-0 w-screen h-screen bg-black z-50"
         style={{ display: "none" }}
       >
         <div
-          className="text-primary relative top-[3.3rem] left-[5.5rem] cursor-pointer"
+          className="text-primary relative top-10 left-10 cursor-pointer"
           onClick={() => setIsOpen((prev) => !prev)}
         >
-          <MenuOpenIcon
-            style={{
-              fontSize: "2.5rem",
-            }}
-          />
+          <MenuOpenIcon className="text-3xl sm:text-2xl md:text-3xl" />
         </div>
         <NavItemComponent />
       </div>
