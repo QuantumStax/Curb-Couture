@@ -32,7 +32,7 @@ const OurCollection = () => {
           The 2023 Collection is an answer to the real-world situation
         </p>
       </div>
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-2 gap-6">
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-2 gap-1">
         {collection.map((item, i) => (
           <div
             className="relative h-[15rem] sm:h-[20rem] m-2 cursor-pointer hover:scale-[1.02] transition-all duration-500"
