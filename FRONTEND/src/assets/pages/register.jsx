@@ -78,7 +78,7 @@ const Register = () => {
             <div className="mt-6 flex justify-center">
               <button
                 type="submit"
-                className="bg-black text-primary text-base md:text-lg py-2 px-4 rounded-md w-full sm:w-auto"
+                className="bg-black text-primary text-base md:text-lg py-2 px-4 rounded-md w-full"
               >
                 Create Account
               </button>

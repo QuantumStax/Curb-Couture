@@ -23,7 +23,7 @@ const Login = () => {
                 id="email"
                 type="email"
                 placeholder="johndoe@gmail.com"
-                className="bg-transparent border border-slate-950 w-full px-3 py-2 mt-2 rounded-md focus:outline-none focus:ring-2 focus:ring-black"
+                className="bg-transparent border border-slate-950 w-full px-3 py-2 mt-2 rounded-md focus:outline-none focus:ring-1 focus:ring-black"
               />
             </div>
             <div className="mt-4">
@@ -35,7 +35,7 @@ const Login = () => {
                   id="password"
                   type="password"
                   placeholder="Enter Your Password"
-                  className="bg-transparent border border-slate-950 w-full px-3 py-2 rounded-md focus:outline-none focus:ring-2 focus:ring-black"
+                  className="bg-transparent border border-slate-950 w-full px-3 py-2 rounded-md focus:outline-none focus:ring-1 focus:ring-black"
                 />
                 <div className="relative left-[-2rem] opacity-70 cursor-pointer hover:opacity-100">
                   <VisibilityIcon />
@@ -43,10 +43,10 @@ const Login = () => {
               </div>
             </div>
             <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between mt-6">
-              <button className="bg-black text-primary text-base md:text-lg py-2 px-4 rounded-md w-full sm:w-auto">
+              <button className="bg-black text-primary text-base md:text-lg py-2 px-4 rounded-md w-full">
                 Login
               </button>
-              <div className="mt-4 sm:mt-0 sm:ml-4 hover:text-primary hover:bg-black border border-slate-950 py-2 px-4 rounded-md w-full sm:w-auto text-center transition-all duration-500">
+              <div className="mt-4 sm:mt-0 sm:ml-4 hover:text-primary hover:bg-black border border-slate-950 py-2 px-4 rounded-md w-full text-center transition-all duration-500">
                 <Link to="/register">
                   <p className="text-sm md:text-base">Create an Account</p>
                 </Link>
