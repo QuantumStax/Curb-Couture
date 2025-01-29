@@ -1,4 +1,3 @@
-import HeaderTopDeals from "../components/headerTopDeals";
 import Footer from "../components/footer";
 import Hero from "../components/hero";
 import Nav from "../components/nav2";
@@ -11,7 +10,6 @@ const Contact = () => {
     <main>
       {/* Top Section: Header and Hero */}
       <header>
-        <HeaderTopDeals />
         <Nav />
         {/* Lazy load Hero if it's heavy */}
         <Hero />

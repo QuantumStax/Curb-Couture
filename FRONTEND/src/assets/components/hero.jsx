@@ -31,7 +31,8 @@ const Hero = () => {
   }, []);
 
   return (
-    <div className="relative flex items-center justify-center h-[36.1rem] w-full">
+    <div className="relative flex items-center lg:justify-center md:justify-center h-[36.1rem] w-full sm:h-[28rem]">
+      {/* Background Image */}
       <div
         className="absolute inset-0 pointer-events-none"
         style={{
@@ -43,23 +44,36 @@ const Hero = () => {
         }}
       ></div>
 
-      <div className="relative text-secondary">
+      {/* Content */}
+      <div className="relative text-secondary px-5 w-full">
+        {/* Heading */}
         <h1
-          className="text-hero-head font-fraunces flex space-x-1 overflow-hidden"
+          className="font-fraunces flex justify-center md:justify-center space-x-1 overflow-hidden text-center"
           ref={textRef}
         >
           {"Curb Coture".split("").map((char, index) => (
-            <span key={index} className="letter inline-block">
+            <span
+              key={index}
+              className="letter inline-block text-5xl lg:text-9xl md:text-7xl sm:text-4xl"
+            >
               {char === " " ? "\u00A0" : char}
             </span>
           ))}
         </h1>
-        <p className="text-3xl text-center" id="slogan">
+
+        {/* Slogan */}
+        <p
+          className="text-3xl md:text-2xl sm:text-xl text-center mt-3"
+          id="slogan"
+        >
           Redesigning Modern Elegance
         </p>
 
-        <div className="flex flex-col justify-center rounded-3xl text-center w-[10rem] h-[3rem] translate-x-[25rem] mt-10 bg-primary text-text-main text-lg hover:bg-secondary transition-all duration-500 cursor-pointer font-semibold">
-          <h3>Explore</h3>
+        {/* Explore Button */}
+        <div className="flex justify-center mt-10">
+          <div className="flex items-center justify-center rounded-3xl text-center w-[10rem] h-[3rem] bg-primary text-text-main text-lg md:w-[8rem] md:h-[2.5rem] sm:w-[7rem] sm:h-[2.5rem] sm:text-base hover:bg-secondary transition-all duration-500 cursor-pointer font-semibold">
+            <h3>Explore</h3>
+          </div>
         </div>
       </div>
     </div>

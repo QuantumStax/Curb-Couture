@@ -7,7 +7,7 @@ const ForgorPass = () => {
       <section>
         <Nav />
       </section>
-      <section className="flex flex-col items-center bg-primary px-20 py-24">
+      <section className="flex flex-col items-center bg-primary px-20 md:pb-[19.5rem] py-24">
         <h1 className="text-4xl font-semibold mb-12">Recover Password</h1>
         <div>
           <form>
@@ -18,7 +18,7 @@ const ForgorPass = () => {
               name="reg-mail"
               id="reg-mail"
               placeholder="johndoe@gmail.com"
-              className="bg-transparent border border-slate-950 w-[25rem] px-3 py-2 mt-3"
+              className="bg-transparent border border-slate-950 lg:w-[25rem] md:w-[30rem] w-[22rem] sm:w-[20rem] px-3 py-2 mt-3"
             />
           </form>
           <div className="mt-2">
@@ -28,7 +28,7 @@ const ForgorPass = () => {
         </div>
       </section>
       <section>
-        <Footer/>
+        <Footer />
       </section>
     </section>
   );
