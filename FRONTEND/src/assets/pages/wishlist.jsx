@@ -1,4 +1,3 @@
-import Footer from "../components/footer";
 import Shop from "../components/shop";
 import items from "../utils/catalog";
 
@@ -18,9 +17,6 @@ const WishList = () => {
           </p>
         )}
       </div>
-      <section>
-        <Footer />
-      </section>
     </section>
   );
 };
