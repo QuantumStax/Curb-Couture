@@ -5,6 +5,7 @@ import ShopActionsMenu from "./shopActionsMenu";
 import ShopHero from "./shopHero";
 import Nav from "./nav2";
 import HeaderTopDeals from "./headerTopDeals";
+import Footer from "../components/footer"
 
 const Shop = ({ itemArray, image, heading }) => {
   return (
@@ -51,6 +52,10 @@ const Shop = ({ itemArray, image, heading }) => {
 
         {/* Catalog */}
         <ShopCatalog items={itemArray} />
+        
+        <section>
+          <Footer/>
+        </section>
       </section>
     </>
   );

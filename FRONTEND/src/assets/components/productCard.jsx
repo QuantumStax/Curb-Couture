@@ -5,13 +5,13 @@ import StarOutlinedIcon from "@mui/icons-material/StarOutlined";
 
 const ProductCard = memo(({ offer, badge, imgSrc, brand, title, price, discount, rating }) => {
   return (
-    <article className="relative mx-2 px-2 py-3 w-[21rem] hover:shadow-md hover:scale-[1.02] rounded-md cursor-pointer transition-all duration-500" role="contentinfo" aria-label={`Product card for ${title}`}>
+    <article className="relative mx-2 px-2 py-3 w-[21rem] lg:w-[21rem] md:w-[15rem] hover:shadow-md hover:scale-[1.02] rounded-md cursor-pointer transition-all duration-500" role="contentinfo" aria-label={`Product card for ${title}`}>
       <div>
         {/* Product Image */}
         <img
           src={imgSrc}
           alt={`${title} by ${brand}`}
-          className="w-[20rem] h-[20rem] rounded-md object-center shadow-md cursor-pointer"
+          className="w-[20rem] h-[20rem] md:h-[15rem] lg:h-[20rem] rounded-md object-center shadow-md cursor-pointer"
           loading="lazy"
         />
         {/* Offer Badge */}

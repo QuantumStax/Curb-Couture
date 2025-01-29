@@ -17,9 +17,9 @@ const ShopCatalog = ({ items }) => {
   };
 
   return (
-    <div className="p-8">
+    <div className="relative lg:left-0 left-[-2rem]  lg:p-8 pb-5">
       {/* Product Grid */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 ml-16">
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:gap-6 md:gap-[2rem] ml-16">
         {displayedItems.map((item) => (
           <ProductCard
             key={item.id}
@@ -37,7 +37,7 @@ const ShopCatalog = ({ items }) => {
 
       {/* Pagination */}
       {totalPages > 1 && (
-        <div className="flex justify-center mt-6 items-center space-x-2">
+        <div className="relative left-[30%] lg:left-[50%] lg:translate-x-[-50%] w-fit flex justify-center mt-6 items-center space-x-2">
           <button
             onClick={() => handlePageChange(currentPage - 1)}
             className={`${
