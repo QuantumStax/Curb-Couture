@@ -1,6 +1,5 @@
 /* eslint-disable react/prop-types */
 import { useState, useEffect } from "react";
-// import { recentCollection } from "../utils/recentCollection";
 import ProductCard from "../components/productCard";
 import KeyboardArrowLeftOutlinedIcon from "@mui/icons-material/KeyboardArrowLeftOutlined";
 import KeyboardArrowRightOutlinedIcon from "@mui/icons-material/KeyboardArrowRightOutlined";
@@ -13,7 +12,7 @@ const Carousel = ({ mainHead, subPara, itemList }) => {
     const handleResize = () => {
       const width = window.innerWidth;
       if (width >= 1024) setItemsPerSlide(4); // lg
-      else if (width >= 768) setItemsPerSlide(3); // md
+      else if (width >= 768) setItemsPerSlide(2); // md
       else if (width >= 640) setItemsPerSlide(2); // sm
       else setItemsPerSlide(1); // mobile
     };
@@ -57,7 +56,7 @@ const Carousel = ({ mainHead, subPara, itemList }) => {
           {itemList.map((item, i) => (
             <div
               key={i}
-              className="w-full sm:w-1/2 md:w-1/3 lg:w-1/4 p-2 sm:p-4"
+              className="w-full sm:w-1/2 md:w-1/2 lg:w-1/4 p-2 sm:p-4"
             >
               <ProductCard
                 offer={item.offer}
