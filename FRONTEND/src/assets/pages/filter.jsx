@@ -4,7 +4,7 @@ import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import { useState, useRef } from "react";
 import { gsap } from "gsap";
 
-const Filter = ({toggleFilter}) => {
+const Filter = ({ toggleFilter }) => {
   const filterItems = [
     { head: "price" },
     {
@@ -73,8 +73,11 @@ const Filter = ({toggleFilter}) => {
   };
 
   return (
-    <aside className="fixed top-0 left-0 w-[25rem] h-[100vh] p-6 bg-black text-primary">
-      <div className="flex items-center justify-between" onClick={() => toggleFilter()}>
+    <aside className="fixed top-0 left-0 lg:w-[25rem] md:w-[25rem] w-[20rem] h-[100vh] p-6 bg-black text-primary">
+      <div
+        className="flex items-center justify-between"
+        onClick={() => toggleFilter()}
+      >
         <h1 className="text-3xl uppercase font-semibold opacity-70">Filter</h1>
         <CloseIcon
           style={{

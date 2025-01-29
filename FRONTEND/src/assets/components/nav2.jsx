@@ -40,13 +40,19 @@ const Nav = () => {
 
   const actionIcons = [
     { icon: <SearchIcon style={{ fontSize: "1.4rem" }} /> },
-    { icon: <PersonOutlineOutlinedIcon style={{ fontSize: "1.4rem" }} />, path: "/my-account" },
+    {
+      icon: <PersonOutlineOutlinedIcon style={{ fontSize: "1.4rem" }} />,
+      path: "/my-account",
+    },
     {
       icon: <FavoriteBorderIcon style={{ fontSize: "1.4rem" }} />,
       icon2: <FavoriteIcon style={{ fontSize: "1.4rem" }} />,
       path: "/wishlist",
     },
-    { icon: <ShoppingCartOutlinedIcon style={{ fontSize: "1.4rem" }} />, path: "/my-cart" },
+    {
+      icon: <ShoppingCartOutlinedIcon style={{ fontSize: "1.4rem" }} />,
+      path: "/my-cart",
+    },
   ];
 
   return (
@@ -62,20 +68,24 @@ const Nav = () => {
       >
         <MenuIcon className="text-2xl sm:text-xl md:text-2xl" />
       </div>
-      
+
       {/* Logo */}
       <div>
         <a href="/" aria-label="Home">
-          <p className="text-xl sm:text-2xl md:text-3xl font-fraunces font-bold text-center md:text-left">
+          <p className="text-xl sm:text-2xl md:text-3xl font-fraunces font-bold text-center md:text-left lg:translate-x-[3.5rem]">
             Curb Coture
           </p>
         </a>
       </div>
-      
+
       {/* Action Icons */}
       <div className="flex items-center gap-3 sm:gap-4 md:gap-5">
         {actionIcons.map((icon, i) => (
-          <Link key={i} to={icon.path} className="cursor-pointer opacity-75 hover:opacity-100">
+          <Link
+            key={i}
+            to={icon.path}
+            className="cursor-pointer opacity-75 hover:opacity-100"
+          >
             {icon.icon}
           </Link>
         ))}

@@ -74,10 +74,10 @@ const ShopActionsMenu = () => {
   }, [isFilterOpen, isSortOpen]);
 
   return (
-    <div className="flex items-end gap-5 px-20 py-10 h-[15rem]">
+    <div className="flex items-end lg:gap-5 gap-2 lg:px-20 px-5 lg:py-22 py-16 h-[15rem]">
       {/* filter */}
       <div
-        className="relative rounded-lg bg-slate-950 text-primary py-2 px-6 w-[10rem] h-[3rem] cursor-pointer hover:shadow-lg"
+        className="relative rounded-lg bg-slate-950 text-primary py-2 px-6 lg:w-[10rem] w-[10rem] h-[3rem] cursor-pointer hover:shadow-lg"
         onClick={toggleFilter}
       >
         <div className="relative -left-3 top-0.5 opacity-75">
@@ -94,7 +94,7 @@ const ShopActionsMenu = () => {
       {/* Filter Component */}
       <div
         ref={filterRef}
-        className="fixed top-0 left-0 h-full w-[25rem] bg-black text-white z-50 shadow-lg"
+        className="fixed top-0 left-0 h-full lg:w-[25rem] w-[22rem] md:w-[25rem] bg-black text-white z-50 shadow-lg"
       >
         <Filter toggleFilter={toggleFilter} />
       </div>
@@ -111,7 +111,7 @@ const ShopActionsMenu = () => {
         </h1>
         <div
           ref={sortRef}
-          className="absolute top-[3.5rem] left-[-1rem] w-[12rem] rounded-md z-40"
+          className="absolute top-[3.5rem] lg:left-[-1rem] left-[-0.5rem] lg:w-[12rem] md:w-[12rem] w-[10rem] rounded-md z-40"
         >
           <Sort />
         </div>
