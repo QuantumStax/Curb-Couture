@@ -42,6 +42,7 @@ function App() {
             <Route path="/wishlist" element={<WishList />} />
             <Route path="/my-cart" element={<Cart />} />
             <Route path="/view" element={<ProductView />} />
+            <Route path="/view/:id" element={<ProductView/>}/>
           </Routes>
           {isModalOpen ? <SearchModal setIsModalOpen={setIsModalOpen} /> : ""}
         </main>

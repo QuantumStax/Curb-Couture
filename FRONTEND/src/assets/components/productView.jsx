@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 import { useState, useRef, useEffect } from "react";
 import { gsap } from "gsap";
 import Footer from "./footer";
@@ -7,8 +8,10 @@ import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import AccessTimeIcon from "@mui/icons-material/AccessTime";
 import UndoIcon from "@mui/icons-material/Undo";
 import VerifiedIcon from "@mui/icons-material/Verified";
+import { useParams } from "react-router-dom";
 
 const ProductView = () => {
+  const { id } = useParams();
   const [showOffers, setShowOffers] = useState(false);
   const offersRef = useRef(null);
   const scales = ["s", "m", "l", "xl", "xxl", "xxxl"];

@@ -1,5 +1,6 @@
 import { useState } from "react";
 import ProductCard from "./productCard";
+import { Link } from "react-router-dom";
 
 /* eslint-disable react/prop-types */
 const ShopCatalog = ({ items }) => {
@@ -21,17 +22,19 @@ const ShopCatalog = ({ items }) => {
       {/* Product Grid */}
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:gap-6 md:gap-[2rem] ml-16">
         {displayedItems.map((item) => (
-          <ProductCard
-            key={item.id}
-            offer={item.offer}
-            badge={item.badge}
-            imgSrc={item.image}
-            brand={item.brand}
-            title={item.name}
-            price={item.price}
-            discount={item.discount}
-            rating={item.rating}
-          />
+          <Link key={item.id} to={`/view/${item.id}`}>
+            <ProductCard
+              key={item.id}
+              offer={item.offer}
+              badge={item.badge}
+              imgSrc={item.image}
+              brand={item.brand}
+              title={item.name}
+              price={item.price}
+              discount={item.discount}
+              rating={item.rating}
+            />
+          </Link>
         ))}
       </div>
 
