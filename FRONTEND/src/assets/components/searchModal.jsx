@@ -53,11 +53,11 @@ const SearchModal = ({ setIsModalOpen }) => {
           <input
             type="search"
             name="search"
-            className="flex-1 h-12 px-4 bg-transparent border-none focus:outline-none text-lg"
+            className="flex-1 h-12 px-4 bg-transparent border-none focus:outline-none text-lg z-50"
             placeholder="Search"
           />
           <button
-            className="text-gray-500 hover:text-gray-800 transition-opacity duration-200"
+            className="text-gray-500 hover:text-gray-800 transition-opacity duration-200 z-50"
             onClick={() => setIsResult(false)}
           >
             <CloseIcon />
@@ -87,7 +87,7 @@ const SearchModal = ({ setIsModalOpen }) => {
             ))}
           </div>
         ) : (
-          <div className="flex flex-col items-center justify-center h-full opacity-60">
+          <div className="flex flex-col items-center justify-center translate-y-[-5rem] h-full opacity-60">
             <p className="text-xl font-medium text-gray-700">No Result!</p>
             <p className="text-lg text-gray-500">Search for an Item</p>
           </div>
