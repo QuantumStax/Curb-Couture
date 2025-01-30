@@ -17,13 +17,16 @@ import WishList from "./assets/pages/wishlist";
 import Cart from "./assets/pages/cart";
 import "./assets/styles/index.css";
 import ProductView from "./assets/components/productView";
+import SearchModal from "./assets/components/searchModal";
+import { useState } from "react";
 function App() {
+  const [isModalOpen, setIsModalOpen] = useState(true);
   return (
     <Router>
       <CustomScrollbarWrapper>
         <main>
           <Routes>
-            <Route path="/" element={<Home />} />
+            <Route path="/" element={<Home setIsModalOpen={setIsModalOpen} />} />
             <Route path="/about-us" element={<AboutUs />} />
             <Route path="/blogs" element={<Blogs />} />
             <Route path="/contact" element={<Contact />} />
@@ -40,6 +43,7 @@ function App() {
             <Route path="/my-cart" element={<Cart />} />
             <Route path="/view" element={<ProductView />} />
           </Routes>
+          {isModalOpen ? <SearchModal setIsModalOpen={setIsModalOpen} /> : ""}
         </main>
       </CustomScrollbarWrapper>
     </Router>

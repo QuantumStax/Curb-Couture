@@ -1,3 +1,4 @@
+/* eslint-disable react/prop-types */
 import { lazy, Suspense } from "react";
 import Cupon from "../components/cupon";
 import Footer from "../components/footer";
@@ -7,7 +8,6 @@ import HeaderTopDeals from "../components/headerTopDeals";
 import OurBrand from "../components/ourBrand";
 import Categories from "../components/categories";
 import Nav from "../components/nav2";
-// import HeroSlider from "../components/hero2";
 import HeroSlider2 from "../components/hero3";
 
 // Lazy-loaded components
@@ -16,12 +16,12 @@ const OurCollection = lazy(() => import("../components/ourCollection"));
 const JustLaunced = lazy(() => import("../components/justLaunched"));
 const BestSellers = lazy(() => import("../components/bestSellers"));
 
-function Home() {
+function Home({ setIsModalOpen }) {
   return (
     <section>
       <header aria-label="Site Header">
         <HeaderTopDeals />
-        <Nav />
+        <Nav setIsModalOpen={setIsModalOpen} />
         <HeroSlider2 />
       </header>
       <section aria-labelledby="categories-heading">

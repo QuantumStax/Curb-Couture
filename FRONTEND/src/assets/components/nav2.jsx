@@ -1,3 +1,4 @@
+/* eslint-disable react/prop-types */
 /* eslint-disable no-unused-vars */
 import LocalOfferIcon from "@mui/icons-material/LocalOffer";
 import SearchIcon from "@mui/icons-material/Search";
@@ -12,7 +13,7 @@ import gsap from "gsap";
 import NavItemComponent from "./navItemComponent";
 import { Link } from "react-router-dom";
 
-const Nav = () => {
+const Nav = ({setIsModalOpen}) => {
   const [isOpen, setIsOpen] = useState(false);
   const navRef = useRef(null);
 
@@ -39,7 +40,6 @@ const Nav = () => {
   }, [isOpen]);
 
   const actionIcons = [
-    { icon: <SearchIcon style={{ fontSize: "1.4rem" }} /> },
     {
       icon: <PersonOutlineOutlinedIcon style={{ fontSize: "1.4rem" }} />,
       path: "/my-account",
@@ -80,14 +80,22 @@ const Nav = () => {
 
       {/* Action Icons */}
       <div className="flex items-center gap-3 sm:gap-4 md:gap-5">
+        <div onClick={() => setIsModalOpen(true)} className="cursor-pointer">
+          <SearchIcon
+            style={{
+              fontSize: "1.5rem",
+            }}
+          />
+        </div>
         {actionIcons.map((icon, i) => (
-          <Link
-            key={i}
-            to={icon.path}
-            className="cursor-pointer opacity-75 hover:opacity-100"
-          >
-            {icon.icon}
-          </Link>
+          <div key={i}>
+            <Link
+              to={icon.path}
+              className="cursor-pointer opacity-75 hover:opacity-100"
+            >
+              {icon.icon}
+            </Link>
+          </div>
         ))}
       </div>
 
