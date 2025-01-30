@@ -31,10 +31,12 @@ const SearchModal = ({ setIsModalOpen }) => {
       price: "$876",
     },
   ];
+
   return (
-    <section className="absolute top-0 flex flex-col items-center justify-center backdrop-brightness-50 backdrop-blur-sm backdrop-filter w-full h-[100vh]">
+    <section className="fixed inset-0 flex flex-col items-center justify-center z-50 backdrop-brightness-50 backdrop-blur-sm">
+      {/* Close Button */}
       <div
-        className="relative left-[45rem] top-[-3rem] text-primary cursor-pointer"
+        className="absolute top-2 right-5 lg:top-8 lg:right-10 text-primary cursor-pointer"
         onClick={() => setIsModalOpen(false)}
       >
         <CloseIcon
@@ -43,44 +45,51 @@ const SearchModal = ({ setIsModalOpen }) => {
           }}
         />
       </div>
-      <section className="bg-primary py-10 px-20 w-[80rem] h-[35rem]">
-        <div className="w-full">
+
+      {/* Modal Content */}
+      <section className="bg-white w-[90%] lg:w-[60rem] h-[90vh] lg:h-[75vh] rounded-xl overflow-hidden shadow-lg">
+        {/* Search Input */}
+        <div className="flex items-center p-5 border-b border-gray-200">
           <input
             type="search"
             name="search"
-            className="w-[94%] h-[2.5rem] px-5 py-5 bg-transparent border-b border-b-black focus:outline-none text-xl"
+            className="flex-1 h-12 px-4 bg-transparent border-none focus:outline-none text-lg"
             placeholder="Search"
           />
           <button
-            className="relative left-[-2.4rem] opacity-70 hover:opacity-100 h-[3rem] w-[3rem]"
+            className="text-gray-500 hover:text-gray-800 transition-opacity duration-200"
             onClick={() => setIsResult(false)}
           >
             <CloseIcon />
           </button>
         </div>
+
+        {/* Search Results */}
         {isResult ? (
-          <div className="mt-10 grid grid-cols-2 overflow-y-auto gap-2">
+          <div className="grid gap-4 p-5 lg:grid-cols-2 overflow-y-auto max-h-[70vh]">
             {resultItems.map((result, i) => (
               <div
                 key={i}
-                className="flex gap-5 items-start w-fit p-2 hover:shadow-lg cursor-pointer"
+                className="flex gap-4 items-center bg-gray-100 p-4 rounded-lg shadow-sm hover:shadow-md cursor-pointer transition-shadow duration-200"
               >
                 <img
                   src={result.img}
                   alt={result.name}
-                  className="w-[8rem] h-[8rem] rounded-lg"
+                  className="w-20 h-20 object-cover rounded-lg"
                 />
                 <div>
-                  <h1 className="text-2xl font-semibold">{result.name}</h1>
-                  <p className="text-xl">{result.price}</p>
+                  <h1 className="text-lg font-medium text-gray-800">
+                    {result.name}
+                  </h1>
+                  <p className="text-gray-600">{result.price}</p>
                 </div>
               </div>
             ))}
           </div>
         ) : (
-          <div className="flex flex-col items-center relative top-[50%] translate-y-[-50%] opacity-50">
-            <p>No Result!</p>
-            <p>Search for an Item</p>
+          <div className="flex flex-col items-center justify-center h-full opacity-60">
+            <p className="text-xl font-medium text-gray-700">No Result!</p>
+            <p className="text-lg text-gray-500">Search for an Item</p>
           </div>
         )}
       </section>
