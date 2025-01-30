@@ -20,7 +20,7 @@ import ProductView from "./assets/components/productView";
 import SearchModal from "./assets/components/searchModal";
 import { useState } from "react";
 function App() {
-  const [isModalOpen, setIsModalOpen] = useState(true);
+  const [isModalOpen, setIsModalOpen] = useState(false);
   return (
     <Router>
       <CustomScrollbarWrapper>

@@ -2,9 +2,6 @@
 import { lazy, Suspense } from "react";
 import Cupon from "../components/cupon";
 import Footer from "../components/footer";
-import HeaderTopDeals from "../components/headerTopDeals";
-// import Hero from "../components/hero";
-// import Navbar from "../components/navbar";
 import OurBrand from "../components/ourBrand";
 import Categories from "../components/categories";
 import Nav from "../components/nav2";
@@ -20,7 +17,6 @@ function Home({ setIsModalOpen }) {
   return (
     <section>
       <header aria-label="Site Header">
-        <HeaderTopDeals />
         <Nav setIsModalOpen={setIsModalOpen} />
         <HeroSlider2 />
       </header>
