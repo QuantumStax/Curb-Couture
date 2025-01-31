@@ -1,8 +1,46 @@
+/* eslint-disable no-unused-vars */
 import { Link } from "react-router-dom";
 import Footer from "../components/footer";
 import Nav from "../components/nav2";
+import axios from "axios";
+import { useState } from "react";
 
 const Register = () => {
+  const [formData, setFormData] = useState({
+    firstname: "",
+    lastname: "",
+    email: "",
+    phoneNumber: "",
+    password: "",
+  });
+
+  const [isError, setIsError] = useState(null);
+  const [message, setMessage] = useState("");
+  const [showMessage, setShowMessage] = useState(false);
+
+  function handleInputChange(e) {
+    setFormData({ ...formData, [e.target.name]: e.target.value });
+  }
+
+  async function handleSubmit(e) {
+    e.preventDefault();
+
+    try {
+      await axios.post("http://localhost:3000/register", formData, {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+      setIsError(false);
+      setMessage("User Registered.");
+      setShowMessage(true);
+    } catch (error) {
+      setIsError(true);
+      setMessage("An error occurred!");
+      setShowMessage(true);
+    }
+  }
+
   return (
     <section>
       <section>
@@ -13,30 +51,33 @@ const Register = () => {
           Create an Account
         </h1>
         <div className="w-full max-w-[30rem]">
-          <form>
+          <form onSubmit={handleSubmit}>
             <div className="mt-4">
-              <label
-                htmlFor="first-name"
-                className="block text-sm md:text-base"
-              >
+              <label htmlFor="firstname" className="block text-sm md:text-base">
                 First Name
               </label>
               <input
                 type="text"
-                name="first-name"
+                name="firstname"
                 placeholder="John"
                 className="bg-transparent border border-slate-950 w-full px-3 py-2 mt-2 rounded-md focus:outline-none focus:ring-2 focus:ring-black"
+                autoComplete="off"
+                required
+                onChange={handleInputChange}
               />
             </div>
             <div className="mt-4">
-              <label htmlFor="last-name" className="block text-sm md:text-base">
+              <label htmlFor="lastname" className="block text-sm md:text-base">
                 Last Name
               </label>
               <input
                 type="text"
-                name="last-name"
+                name="lastname"
                 placeholder="Doe"
                 className="bg-transparent border border-slate-950 w-full px-3 py-2 mt-2 rounded-md focus:outline-none focus:ring-2 focus:ring-black"
+                autoComplete="off"
+                required
+                onChange={handleInputChange}
               />
             </div>
             <div className="mt-4">
@@ -48,20 +89,39 @@ const Register = () => {
                 name="email"
                 placeholder="johndoe123@gmail.com"
                 className="bg-transparent border border-slate-950 w-full px-3 py-2 mt-2 rounded-md focus:outline-none focus:ring-2 focus:ring-black"
+                autoComplete="off"
+                required
+                onChange={handleInputChange}
               />
             </div>
             <div className="mt-4">
               <label
-                htmlFor="phone-number"
+                htmlFor="phoneNumber"
                 className="block text-sm md:text-base"
               >
                 Phone Number
               </label>
               <input
                 type="text"
-                name="phone-number"
+                name="phoneNumber"
                 placeholder="+91 1234567890"
                 className="bg-transparent border border-slate-950 w-full px-3 py-2 mt-2 rounded-md focus:outline-none focus:ring-2 focus:ring-black"
+                autoComplete="off"
+                required
+                onChange={handleInputChange}
+              />
+            </div>
+            <div className="mt-4">
+              <label htmlFor="dob" className="block text-sm md:text-base">
+                Date of Birth
+              </label>
+              <input
+                type="date"
+                name="dob"
+                className="bg-transparent border border-slate-950 w-full px-3 py-2 mt-2 rounded-md focus:outline-none focus:ring-2 focus:ring-black"
+                autoComplete="off"
+                required
+                onChange={handleInputChange}
               />
             </div>
             <div className="mt-4">
@@ -73,8 +133,20 @@ const Register = () => {
                 name="password"
                 placeholder="Make sure to use special characters (!, @, # ..)"
                 className="bg-transparent border border-slate-950 w-full px-3 py-2 mt-2 rounded-md focus:outline-none focus:ring-2 focus:ring-black"
+                autoComplete="off"
+                required
+                onChange={handleInputChange}
               />
             </div>
+            {showMessage && (
+              <div className="text-center my-5">
+                {isError ? (
+                  <p>Error Registering user⚠️</p>
+                ) : (
+                  <p>User Registered✅</p>
+                )}
+              </div>
+            )}
             <div className="mt-6 flex justify-center">
               <button
                 type="submit"
