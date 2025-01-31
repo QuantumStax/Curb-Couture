@@ -26,7 +26,14 @@ function App() {
       <CustomScrollbarWrapper>
         <main>
           <Routes>
-            <Route path="/" element={<Home setIsModalOpen={setIsModalOpen} />} />
+            <Route
+              path="/"
+              element={<Home setIsModalOpen={setIsModalOpen} />}
+            />
+            <Route
+              path="/home/:email"
+              element={<Home setIsModalOpen={setIsModalOpen} />}
+            />
             <Route path="/about-us" element={<AboutUs />} />
             <Route path="/blogs" element={<Blogs />} />
             <Route path="/contact" element={<Contact />} />
@@ -42,7 +49,7 @@ function App() {
             <Route path="/wishlist" element={<WishList />} />
             <Route path="/my-cart" element={<Cart />} />
             <Route path="/view" element={<ProductView />} />
-            <Route path="/view/:id" element={<ProductView/>}/>
+            <Route path="/view/:id" element={<ProductView />} />
           </Routes>
           {isModalOpen ? <SearchModal setIsModalOpen={setIsModalOpen} /> : ""}
         </main>

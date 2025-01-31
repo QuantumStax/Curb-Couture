@@ -80,6 +80,41 @@ app.post("/register", async (req, res) => {
   }
 });
 
+app.post("/login", async (req, res) => {
+  const { email, password } = req.body;
+
+  try {
+    const user = await pg.query(
+      "SELECT id, email, password FROM user_main WHERE email = $1",
+      [email]
+    );
+
+    if (user.rows.length === 0) {
+      return res.status(400).json({ message: "Invalid Username!!!" });
+    }
+
+    const match = await bcrypt.compare(password, user.rows[0].password);
+
+    if (!match) {
+      return res.status(400).send({ message: "Incorrect Password!!!" });
+    }
+
+    const token = jwt.sign(
+      {
+        email: user.rows[0].email,
+        firstname: user.rows[0].first_name,
+        lastname: user.rows[0].last_name,
+        user_id: user.rows[0].id,
+      },
+      SECRET_KEY
+    );
+
+    res.status(200).json({ message: "Login Successful✅", token, email });
+  } catch (error) {
+    res.status(500).json({ message: "Error Logging in⚠️. PLease try again" });
+  }
+});
+
 app.listen(port, () => {
   console.log(`Server running at port ${port}`);
 });

@@ -1,20 +1,64 @@
-import { Link } from "react-router-dom";
+/* eslint-disable no-unused-vars */
+import { Link, useNavigate } from "react-router-dom";
 import Nav from "../components/nav2";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import Footer from "../components/footer";
+import axios from "axios";
+import { useState } from "react";
 
 const Login = () => {
+  const navigate = useNavigate();
+
+  const [formData, setFormData] = useState({
+    email: "",
+    password: "",
+  });
+
+  const [isError, setIsError] = useState(null);
+  const [message, setMessage] = useState("");
+  const [showMessage, setShowMessage] = useState(false);
+
+  function handleInputChange(e) {
+    setFormData({ ...formData, [e.target.name]: e.target.value });
+  }
+
+  async function handleSubmit(e) {
+    e.preventDefault();
+
+    try {
+      const response = await axios.post(
+        "http://localhost:3000/login",
+        formData,
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
+
+      if (response.data.token) {
+        localStorage.setItem("token", response.data.token);
+        navigate(`/home/${formData.email}`);
+      }
+      setIsError(false);
+      setMessage("Login Successful✅");
+      setShowMessage(true);
+    } catch (error) {
+      setIsError(true);
+      setMessage("An error occurred⚠️");
+      setShowMessage(true);
+    }
+  }
+
   return (
     <section>
-      <section>
-        <Nav />
-      </section>
+      <Nav />
       <section className="flex flex-col items-center bg-primary px-6 md:px-20 py-16 md:py-24">
         <h1 className="text-3xl md:text-4xl font-semibold mb-10 md:mb-16 text-center">
           Login
         </h1>
         <div className="w-full max-w-[30rem]">
-          <form>
+          <form onSubmit={handleSubmit}>
             <div>
               <label htmlFor="email" className="block text-sm md:text-base">
                 Username
@@ -22,7 +66,9 @@ const Login = () => {
               <input
                 id="email"
                 type="email"
+                name="email"
                 placeholder="johndoe@gmail.com"
+                onChange={handleInputChange}
                 className="bg-transparent border border-slate-950 w-full px-3 py-2 mt-2 rounded-md focus:outline-none focus:ring-1 focus:ring-black"
               />
             </div>
@@ -34,7 +80,9 @@ const Login = () => {
                 <input
                   id="password"
                   type="password"
+                  name="password"
                   placeholder="Enter Your Password"
+                  onChange={handleInputChange}
                   className="bg-transparent border border-slate-950 w-full px-3 py-2 rounded-md focus:outline-none focus:ring-1 focus:ring-black"
                 />
                 <div className="relative left-[-2rem] opacity-70 cursor-pointer hover:opacity-100">
@@ -42,6 +90,13 @@ const Login = () => {
                 </div>
               </div>
             </div>
+            {showMessage && (
+              <div className="text-center my-5">
+                <p className={isError ? "text-red-500" : "text-green-500"}>
+                  {message}
+                </p>
+              </div>
+            )}
             <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between mt-6">
               <button className="bg-black text-primary text-base md:text-lg py-2 px-4 rounded-md w-full">
                 Login
@@ -66,9 +121,7 @@ const Login = () => {
           </form>
         </div>
       </section>
-      <section>
-        <Footer />
-      </section>
+      <Footer />
     </section>
   );
 };
