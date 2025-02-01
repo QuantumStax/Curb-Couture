@@ -115,6 +115,60 @@ app.post("/login", async (req, res) => {
   }
 });
 
+// post route for adding product to inventory
+app.post(
+  "/add-product",
+  // jwtTokenMiddleware,
+  upload.fields([
+    { name: "image1", maxCount: 1 },
+    { name: "image2", maxCount: 1 },
+    { name: "image3", maxCount: 1 },
+  ]),
+  async (req, res) => {
+
+    const { product_name, description, price, rating, category } = req.body;
+    const image1 = req.files["image1"] ? req.files["image1"][0].buffer : null;
+    const image2 = req.files["image2"] ? req.files["image2"][0].buffer : null;
+    const image3 = req.files["image3"] ? req.files["image3"][0].buffer : null;
+
+    if (!product_name || !description || !price || !rating || !category) {
+      return res.status(400).json({ message: "All fields are required" });
+    }
+
+    try {
+      const add_product_query = `
+        INSERT INTO product_main (name, description, price, rating, category)
+        VALUES ($1, $2, $3, $4, $5) RETURNING product_id
+      `;
+      const productResult = await pg.query(add_product_query, [
+        product_name,
+        description,
+        price,
+        rating,
+        category,
+      ]);
+      const product_id = productResult.rows[0].product_id;
+
+      // Insert images into product_images table
+      const add_product_img_query = `
+        INSERT INTO product_images (product_id, image_1, image_2, image_3)
+        VALUES ($1, $2, $3, $4)
+      `;
+      await pg.query(add_product_img_query, [
+        product_id,
+        image1,
+        image2,
+        image3,
+      ]);
+
+      res.status(201).json({ message: "Product added successfully ✅" });
+    } catch (error) {
+      console.error("Error adding product:", error);
+      res.status(500).send("Error adding product details");
+    }
+  }
+);
+
 app.listen(port, () => {
   console.log(`Server running at port ${port}`);
 });

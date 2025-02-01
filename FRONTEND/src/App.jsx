@@ -19,6 +19,7 @@ import "./assets/styles/index.css";
 import ProductView from "./assets/components/productView";
 import SearchModal from "./assets/components/searchModal";
 import { useState } from "react";
+import Admin from "./assets/pages/admin";
 function App() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   return (
@@ -34,6 +35,7 @@ function App() {
               path="/home/:email"
               element={<Home setIsModalOpen={setIsModalOpen} />}
             />
+            <Route path="/admin" element={<Admin/>}/>
             <Route path="/about-us" element={<AboutUs />} />
             <Route path="/blogs" element={<Blogs />} />
             <Route path="/contact" element={<Contact />} />
