@@ -16,9 +16,20 @@ const Admin = () => {
   const [roomImgs, setRoomImgs] = useState({});
   const [uploaded, setUploaded] = useState(null);
   const [showStatus, setShowStatus] = useState(null);
+  const [sizes, setSizes] = useState([]);
 
   function handleInputChange(e) {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
+    const { name, value } = e.target;
+    setFormData((prev) => ({ ...prev, [name]: value }));
+  }
+
+  function handleSizeChoice(e) {
+    const { name, checked } = e.target;
+    console.log(name, checked);
+    
+    setSizes((prevSizes) =>
+      checked ? [...prevSizes, name] : prevSizes.filter((size) => size !== name)
+    );
   }
 
   function handleFileChange(e) {
@@ -32,7 +43,9 @@ const Admin = () => {
   async function handleSubmit(e) {
     e.preventDefault();
     const data = new FormData();
+
     Object.keys(formData).forEach((key) => data.append(key, formData[key]));
+    data.append("sizes", JSON.stringify(sizes)); // Adding selected sizes
     Object.keys(roomImgs).forEach(
       (key) => roomImgs[key] && data.append(key, roomImgs[key])
     );
@@ -47,7 +60,9 @@ const Admin = () => {
       );
       setUploaded(true);
       setShowStatus(true);
-      setProduct((prevProducts) => [...prevProducts, response.data.product]);
+      setProduct((prev) => [...prev, response.data.product]);
+
+      // Resetting form
       setFormData({
         product_name: "",
         description: "",
@@ -56,6 +71,7 @@ const Admin = () => {
         category: "",
       });
       setRoomImgs({});
+      setSizes([]);
     } catch (err) {
       console.error("Error uploading product:", err);
       setUploaded(false);
@@ -85,6 +101,31 @@ const Admin = () => {
                 onChange={handleInputChange}
               />
             ))}
+
+            <div className="my-4 font-itim">
+              <h1 className="uppercase">Choose Size Variants:</h1>
+            </div>
+            <div className="flex items-center gap-4 my-4">
+              {["s", "m", "l", "xl", "xxl"].map((size) => (
+                <div key={size}>
+                  <input
+                    type="checkbox"
+                    name={size}
+                    id={size}
+                    className="h-5 w-5"
+                    onChange={handleSizeChoice}
+                    checked={sizes.includes(size)}
+                  />
+                  <label htmlFor={size} className="uppercase ml-2 text-lg">
+                    {size}
+                  </label>
+                </div>
+              ))}
+            </div>
+
+            <div className="my-4 font-itim">
+              <h1 className="uppercase">Choose Product Images:</h1>
+            </div>
             {["image1", "image2", "image3"].map((imgKey, index) => (
               <div key={imgKey}>
                 <label className="font-itim opacity-70 text-xl">
@@ -110,6 +151,7 @@ const Admin = () => {
                 )}
               </div>
             ))}
+
             {showStatus && (
               <p className={uploaded ? "text-green-500" : "text-red-500"}>
                 {uploaded
@@ -117,6 +159,7 @@ const Admin = () => {
                   : "Failed to add Product! Try again"}
               </p>
             )}
+
             <button
               type="submit"
               className="text-xl border border-slate-950 px-3 py-1 mt-4 rounded-md hover:shadow-md hover:bg-black hover:text-primary"
