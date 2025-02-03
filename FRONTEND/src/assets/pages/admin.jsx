@@ -43,7 +43,9 @@ const Admin = () => {
   async function handleSubmit(e) {
     e.preventDefault();
     const data = new FormData();
-
+    console.log(data);
+    console.log("Sizes : ", sizes);
+    
     Object.keys(formData).forEach((key) => data.append(key, formData[key]));
     data.append("sizes", JSON.stringify(sizes)); // Adding selected sizes
     Object.keys(roomImgs).forEach(
@@ -58,6 +60,8 @@ const Admin = () => {
           headers: { "Content-Type": "multipart/form-data" },
         }
       );
+      console.log("Response : ",response);
+      
       setUploaded(true);
       setShowStatus(true);
       setProduct((prev) => [...prev, response.data.product]);
@@ -92,7 +96,7 @@ const Admin = () => {
             {Object.keys(formData).map((key) => (
               <input
                 key={key}
-                type={key === "price" ? "number" : "text"}
+                type={key === "price" || key === "rating" ? "number" : "text"}
                 name={key}
                 required
                 className="font-itim text-xl border py-1 px-4 bg-transparent border-slate-950 mt-2 w-[80%]"

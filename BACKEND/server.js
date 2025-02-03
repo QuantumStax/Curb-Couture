@@ -125,8 +125,21 @@ app.post(
     { name: "image3", maxCount: 1 },
   ]),
   async (req, res) => {
+    const { product_name, description, price, rating, category, sizes } =
+      req.body;
+    console.log(req.body.sizes);
+    const parsedSizes = JSON.parse(sizes);
+    console.log(parsedSizes);
 
-    const { product_name, description, price, rating, category } = req.body;
+    const sizeVariants = {
+      s: parsedSizes.includes("s") ? true : false,
+      m: parsedSizes.includes("m") ? true : false,
+      l: parsedSizes.includes("l") ? true : false,
+      xl: parsedSizes.includes("xl") ? true : false,
+      xxl: parsedSizes.includes("xxl") ? true : false,
+      xxxl: parsedSizes.includes("xxxl") ? true : false,
+    };
+
     const image1 = req.files["image1"] ? req.files["image1"][0].buffer : null;
     const image2 = req.files["image2"] ? req.files["image2"][0].buffer : null;
     const image3 = req.files["image3"] ? req.files["image3"][0].buffer : null;
@@ -159,6 +172,20 @@ app.post(
         image1,
         image2,
         image3,
+      ]);
+
+      const add_product_size_query = `
+      INSERT INTO size_variants (product_id, s, m, l, xl, xxl, xxxl)
+      VALUES ($1, $2, $3, $4, $5, $6, $7)
+    `;
+      await pg.query(add_product_size_query, [
+        product_id,
+        sizeVariants.s,
+        sizeVariants.m,
+        sizeVariants.l,
+        sizeVariants.xl,
+        sizeVariants.xxl,
+        sizeVariants.xxxl,
       ]);
 
       res.status(201).json({ message: "Product added successfully ✅" });
