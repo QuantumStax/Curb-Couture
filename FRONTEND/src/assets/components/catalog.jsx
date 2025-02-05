@@ -21,13 +21,12 @@ const ShopCatalog = ({ items }) => {
     <div className="relative lg:left-0 left-[-2rem]  lg:p-8 pb-5">
       {/* Product Grid */}
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:gap-6 md:gap-[2rem] ml-16">
-        {displayedItems.map((item) => (
-          <Link key={item.id} to={`/view/${item.id}`}>
+        {displayedItems.map((item, i) => (
+          <Link key={i} to={`/view/${item.id}`}>
             <ProductCard
-              key={item.id}
               offer={item.offer}
               badge={item.badge}
-              imgSrc={item.image}
+              imgSrc={item.images?.length > 0 ? item.images[0] : "/images/placeholder.jpg"}
               brand={item.brand}
               title={item.name}
               price={item.price}

@@ -66,16 +66,6 @@ const AddProduct = () => {
     fetchColumns();
   }, []);
 
-
-  const getProducts = async () => {
-    try {
-      const res = await fetch("http://localhost:3000/get-products");
-      const data = await res.json();
-    } catch (error) {
-      console.error("Error fetching products:", error);
-    }
-  };
-
   async function handleSubmit(e) {
     e.preventDefault();
     const data = new FormData();
@@ -221,7 +211,6 @@ const AddProduct = () => {
         >
           Add Product to Inventory
         </button>
-        <button onClick={getProducts}>get products</button>
       </form>
     </div>
   );

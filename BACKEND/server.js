@@ -70,16 +70,42 @@ app.get("/get-column-names", async (req, res) => {
   }
 });
 
-app.get("/get-products", async(req, res) => {
+app.get("/get-products", async (req, res) => {
   try {
-    const gpQuery = `SELECT * FROM product_main`;
-    const result = await pg.query(gpQuery);
+    const gpQuery = `
+      SELECT 
+        pm.product_id, 
+        pm.name, 
+        pm.description, 
+        pm.price, 
+        pm.rating, 
+        pm.category, 
+        encode(pi.image_1, 'base64') AS image_1,
+        encode(pi.image_2, 'base64') AS image_2,
+        encode(pi.image_3, 'base64') AS image_3
+      FROM product_main pm
+      LEFT JOIN product_images pi ON pm.product_id = pi.product_id
+    `;
 
-    res.status(200).json({products: result.rows})
+    const result = await pg.query(gpQuery);
+    console.log("result : ", result);
+
+    const products = result.rows.map((product) => ({
+      ...product,
+      images: [
+        product.image_1 ? `data:image/jpeg;base64,${product.image_1}` : null,
+        product.image_2 ? `data:image/jpeg;base64,${product.image_2}` : null,
+        product.image_3 ? `data:image/jpeg;base64,${product.image_3}` : null,
+      ].filter((img) => img !== null),
+    }));
+    console.log("products", products);
+
+    res.status(200).json({ products });
   } catch (error) {
-    res.status(200).json({message: "Error fetching colors!"})
+    console.error("Error fetching products:", error);
+    res.status(500).json({ message: "Error fetching products!" });
   }
-})
+});
 
 app.post("/register", async (req, res) => {
   const { firstname, lastname, email, phoneNumber, password, dob } = req.body;
