@@ -49,6 +49,28 @@ const jwtTokenMiddleware = (req, res, next) => {
   });
 };
 
+// get coloumn names
+
+app.get("/get-column-names", async (req, res) => {
+  try {
+    const query = `SELECT column_name 
+      FROM information_schema.columns 
+      WHERE table_name = 'color_variants';
+    `;
+    const result = await pg.query(query);
+    const columnNames = result.rows.map((row) => row.column_name);
+
+    const filteredColumns = columnNames.filter(
+      (col) => col !== "color_id" && col !== "product_id"
+    );
+
+    res.status(200).json({ columns: filteredColumns });
+  } catch (error) {
+    console.log("Error fetching colors : ", error);
+    res.status(500).json({ message: "Error fetching colors!" });
+  }
+});
+
 app.post("/register", async (req, res) => {
   const { firstname, lastname, email, phoneNumber, password, dob } = req.body;
 
@@ -125,11 +147,20 @@ app.post(
     { name: "image3", maxCount: 1 },
   ]),
   async (req, res) => {
-    const { product_name, description, price, rating, category, sizes } =
-      req.body;
+    const {
+      product_name,
+      description,
+      price,
+      rating,
+      category,
+      sizes,
+      colors,
+    } = req.body;
     console.log(req.body.sizes);
+    console.log(req.body.colors);
     const parsedSizes = JSON.parse(sizes);
-    console.log(parsedSizes);
+    const parsedColors = JSON.parse(colors);
+    console.log(parsedColors);
 
     const sizeVariants = {
       s: parsedSizes.includes("s") ? true : false,
@@ -138,6 +169,17 @@ app.post(
       xl: parsedSizes.includes("xl") ? true : false,
       xxl: parsedSizes.includes("xxl") ? true : false,
       xxxl: parsedSizes.includes("xxxl") ? true : false,
+    };
+
+    const color_variants = {
+      green: parsedColors.includes("green") ? true : false,
+      blue: parsedColors.includes("blue") ? true : false,
+      red: parsedColors.includes("red") ? true : false,
+      black: parsedColors.includes("black") ? true : false,
+      grey: parsedColors.includes("grey") ? true : false,
+      neon: parsedColors.includes("neon") ? true : false,
+      orange: parsedColors.includes("orange") ? true : false,
+      yellow: parsedColors.includes("yellow") ? true : false,
     };
 
     const image1 = req.files["image1"] ? req.files["image1"][0].buffer : null;
@@ -186,6 +228,24 @@ app.post(
         sizeVariants.xl,
         sizeVariants.xxl,
         sizeVariants.xxxl,
+      ]);
+
+      // Insert color variants
+      const add_product_color_query = `
+        INSERT INTO color_variants (product_id, green, blue, red, black, grey, neon, orange, yellow)
+        VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)
+      `;
+      // green, blue, red, black, grey, neon, orange, yellow
+      await pg.query(add_product_color_query, [
+        product_id,
+        color_variants.green,
+        color_variants.blue,
+        color_variants.red,
+        color_variants.black,
+        color_variants.grey,
+        color_variants.neon,
+        color_variants.orange,
+        color_variants.yellow,
       ]);
 
       res.status(201).json({ message: "Product added successfully ✅" });

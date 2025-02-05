@@ -7,7 +7,7 @@ const Footer = () => {
   const year = new Date().getFullYear();
 
   return (
-    <div className="px-4 md:px-10 lg:px-20 py-10 bg-banner">
+    <div className="px-4 md:px-10 lg:px-20 py-10 bg-black text-primary">
       <div className="flex flex-col md:flex-row gap-8 md:gap-16 lg:gap-24 xl:gap-44 items-baseline">
         {/* Newsletter Section */}
         <div className="w-full md:max-w-[25rem]">
@@ -28,7 +28,7 @@ const Footer = () => {
             <div>
               <input
                 type="email"
-                className="w-full max-w-[25rem] h-8 md:h-[2rem] text-base md:text-lg my-3 bg-transparent border-b-2 border-slate-950 focus:outline-none"
+                className="w-full max-w-[25rem] h-8 md:h-[2rem] text-base md:text-lg my-3 bg-transparent border-b-2 border-gray-50 focus:outline-none"
               />
             </div>
             <div className="flex items-center">
@@ -46,7 +46,7 @@ const Footer = () => {
               </label>
             </div>
             <div>
-              <button className="border-2 border-slate-950 p-2 w-[7rem] hover:bg-slate-950 hover:text-primary transition-all duration-500 mt-3 uppercase text-sm md:text-base">
+              <button className="border-2 border-gray-50 p-2 w-[7rem] hover:bg-gray-50 hover:text-black transition-all duration-500 mt-3 uppercase text-sm md:text-base">
                 Subscribe
               </button>
             </div>
