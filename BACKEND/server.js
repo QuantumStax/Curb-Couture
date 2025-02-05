@@ -66,10 +66,20 @@ app.get("/get-column-names", async (req, res) => {
 
     res.status(200).json({ columns: filteredColumns });
   } catch (error) {
-    console.log("Error fetching colors : ", error);
     res.status(500).json({ message: "Error fetching colors!" });
   }
 });
+
+app.get("/get-products", async(req, res) => {
+  try {
+    const gpQuery = `SELECT * FROM product_main`;
+    const result = await pg.query(gpQuery);
+
+    res.status(200).json({products: result.rows})
+  } catch (error) {
+    res.status(200).json({message: "Error fetching colors!"})
+  }
+})
 
 app.post("/register", async (req, res) => {
   const { firstname, lastname, email, phoneNumber, password, dob } = req.body;
@@ -156,11 +166,8 @@ app.post(
       sizes,
       colors,
     } = req.body;
-    console.log(req.body.sizes);
-    console.log(req.body.colors);
     const parsedSizes = JSON.parse(sizes);
     const parsedColors = JSON.parse(colors);
-    console.log(parsedColors);
 
     const sizeVariants = {
       s: parsedSizes.includes("s") ? true : false,
