@@ -3,7 +3,7 @@ import { lazy, Suspense } from "react";
 import Cupon from "../components/cupon";
 import Footer from "../components/footer";
 import OurBrand from "../components/ourBrand";
-import Categories from "../components/categories";
+// import Categories from "../components/categories";
 import Nav from "../components/nav2";
 import HeroSlider2 from "../components/hero3";
 
@@ -20,12 +20,12 @@ function Home({ setIsModalOpen }) {
         <Nav setIsModalOpen={setIsModalOpen} />
         <HeroSlider2 />
       </header>
-      <section aria-labelledby="categories-heading">
+      {/* <section aria-labelledby="categories-heading">
         <h2 id="categories-heading" className="sr-only">
           Categories
         </h2>
         <Categories />
-      </section>
+      </section> */}
       <Cupon />
       <Suspense fallback={<div>Loading...</div>}>
         <section>

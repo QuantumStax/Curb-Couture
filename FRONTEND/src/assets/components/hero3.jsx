@@ -6,19 +6,19 @@ const HeroSlider2 = () => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const images = [
     {
-      src: "/images/collection/doodle/doodles-shirt-559986.webp",
+      src: "/images/hero/new_york_oversized_tshirt.webp",
       heading: "Welcome to Slide 1",
       text: "This is the first slide",
       buttonText: "Learn More",
     },
     {
-      src: "/images/collection/oversized/egyptian-oversized-t-shirt-302886.webp",
+      src: "/images/hero/obito_anime_oversized_tshirt.webp",
       heading: "Explore Slide 2",
       text: "This is the second slide",
       buttonText: "Discover",
     },
     {
-      src: "/images/collection/oversized/medusa-oversized-t-shirt-753500.webp",
+      src: "/images/hero/one_piece_anime_oversized_tshirt.webp",
       heading: "Enjoy Slide 3",
       text: "This is the third slide",
       buttonText: "Get Started",
@@ -51,16 +51,25 @@ const HeroSlider2 = () => {
   }, [nextSlide]);
 
   return (
-    <div className="relative w-full h-[86vh] overflow-hidden">
-      <div ref={sliderRef} className="flex transition-transform duration-500 ease-out">
+    <div className="relative w-full h-[92vh] overflow-hidden">
+      <div
+        ref={sliderRef}
+        className="flex transition-transform duration-500 ease-out"
+      >
         {images.map((image, index) => (
           <div
             key={index}
-            className="flex-shrink-0 w-full h-[86vh] flex items-center justify-center bg-cover bg-center"
-            style={{ backgroundImage: `url(${image.src})` }}
+            className="flex-shrink-0 w-full h-[92vh] flex items-center justify-center bg-cover bg-center"
+            style={{
+              backgroundImage: `url(${image.src})`,
+              backgroundPosition: "center",
+              backgroundSize: "cover",
+            }}
           >
             <div className="flex flex-col items-center justify-center bg-black h-full w-full bg-opacity-50 p-6 rounded-lg">
-              <h2 className="text-3xl font-bold text-white mb-4">{image.heading}</h2>
+              <h2 className="text-3xl font-bold text-white mb-4">
+                {image.heading}
+              </h2>
               <p className="text-white mb-4">{image.text}</p>
               <button className="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600">
                 {image.buttonText}
