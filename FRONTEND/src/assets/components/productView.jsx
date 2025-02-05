@@ -12,7 +12,37 @@ import { useParams } from "react-router-dom";
 
 const ProductView = () => {
   const { id } = useParams();
+
+  const [product, setProduct] = useState(null);
+  console.log(product);
+
+  const [loading, setLoading] = useState(true);
   const [showOffers, setShowOffers] = useState(false);
+  const [quantity, setQuantity] = useState(1);
+
+  const increaseQuantity = () => {
+    setQuantity((prevQuantity) => prevQuantity + 1);
+  };
+  
+  const decreaseQuantity = () => {
+    setQuantity((prevQuantity) => (prevQuantity > 1 ? prevQuantity - 1 : 1));
+  };
+
+  useEffect(() => {
+    const fetchProduct = async () => {
+      try {
+        const res = await fetch(`http://localhost:3000/get-product/${id}`);
+        const data = await res.json();
+        setProduct(data);
+        setLoading(false);
+      } catch (error) {
+        console.error("Error fetching product:", error);
+        setLoading(false);
+      }
+    };
+    fetchProduct();
+  }, [id]);
+
   const offersRef = useRef(null);
   const scales = ["s", "m", "l", "xl", "xxl", "xxxl"];
   const offers = [
@@ -118,59 +148,60 @@ const ProductView = () => {
         <div className="flex items-start gap-10">
           <div className="mt-10">
             <img
-              src="/images/collection/oversized/medusa-oversized-t-shirt-753500.webp"
-              alt="product-image"
+              src={
+                product?.images?.length > 0
+                  ? product.images[0]
+                  : "/images/placeholder.jpg"
+              }
+              alt={product?.name || "Product Image"}
               className="h-[40rem]"
             />
           </div>
           <div className="relative top-9 w-[40rem]">
-            <h1 className="text-3xl font-bold opacity-75">
-              Medusa Oversized T-shirt
-            </h1>
+            <h1 className="text-3xl font-bold opacity-75">{product?.name}</h1>
             <div className="flex items-center gap-2 mt-2">
               <div>⭐⭐⭐⭐⭐</div>
               <p>15 Reviews</p>
               <p className="font-semibold text-green-600 ml-2">Best Seller🔥</p>
             </div>
-            <p className="mt-2 opacity-70">
-              The Medusa Oversized T-shirt is a blend of comfort and culture.
-              Featuring a lightweight cotton design and detailed craftsmanship,
-              it’s ideal for expressing your unique ethnic flair.
-            </p>
+            <p className="mt-2 opacity-70">{product?.description}</p>
             <div className="my-2">
               <p className="text-red-700">Hurry! Only 5 Left</p>
             </div>
             <div className="flex items-center gap-3 mt-2 font-semibold">
-              <h1 className="text-3xl text-green-600">₹999</h1>
-              <p className="line-through text-2xl opacity-50">₹1290</p>
+              <h1 className="text-3xl text-green-600">₹{product?.price}</h1>
+              {/* <p className="line-through text-2xl opacity-50">₹1290</p> */}
             </div>
             <div className="flex gap-4 mt-4">
-              {scales.map((scale, i) => (
+              {product?.sizes.map((size, i) => (
                 <div
                   key={i}
                   className="border py-2 px-4 border-slate-950 cursor-pointer"
                 >
-                  <p className="uppercase">{scale}</p>
+                  <p className="uppercase">{size}</p>
                 </div>
               ))}
             </div>
             <div className="flex items-center gap-2 mt-2">
               <StraightenIcon />
               <p>
-                Please select according to the{" "}
+                Please select according to the <span></span>
                 <a href="%" className="font-semibold hover:underline">
                   Size Chart
                 </a>
               </p>
             </div>
             <div className="flex items-center gap-5 mt-4">
-              <button className="flex flex-col items-center justify-center pb-2 rounded-full h-10 w-10 text-3xl border border-slate-950">
+              <button
+                className="flex flex-col items-center justify-center pb-2 rounded-full h-10 w-10 text-3xl border border-slate-950"
+                onClick={() => decreaseQuantity()}
+              >
                 -
               </button>
               <div className="flex flex-col items-center justify-center h-10 w-16 border border-slate-800 rounded-md text-lg">
-                <p>1</p>
+                <p>{quantity}</p>
               </div>
-              <button className="flex flex-col items-center justify-center pb-2 rounded-full h-10 w-10 text-3xl border border-slate-950">
+              <button className="flex flex-col items-center justify-center pb-2 rounded-full h-10 w-10 text-3xl border border-slate-950" onClick={() => increaseQuantity()}>
                 +
               </button>
               <div className="flex flex-col items-center justify-center pb-1 ml-5 h-12 w-[9rem] text-xl rounded-md bg-black text-primary hover:scale-[1.02] hover:shadow-lg cursor-pointer">

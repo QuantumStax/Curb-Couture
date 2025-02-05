@@ -70,6 +70,89 @@ app.get("/get-column-names", async (req, res) => {
   }
 });
 
+// get product details by priduct_id
+
+app.get("/get-product/:product_id", async (req, res) => {
+  const { product_id } = req.params;
+
+  try {
+    const productQuery = `
+      SELECT 
+        pm.product_id, 
+        pm.name, 
+        pm.description, 
+        pm.price, 
+        pm.rating, 
+        pm.category, 
+        encode(pi.image_1, 'base64') AS image_1,
+        encode(pi.image_2, 'base64') AS image_2,
+        encode(pi.image_3, 'base64') AS image_3,
+        sv.s, sv.m, sv.l, sv.xl, sv.xxl, sv.xxxl,
+        cv.green, cv.blue, cv.red, cv.black, cv.grey, cv.neon, cv.orange, cv.yellow
+      FROM product_main pm
+      LEFT JOIN product_images pi ON pm.product_id = pi.product_id
+      LEFT JOIN size_variants sv ON pm.product_id = sv.product_id
+      LEFT JOIN color_variants cv ON pm.product_id = cv.product_id
+      WHERE pm.product_id = $1
+    `;
+
+    const result = await pg.query(productQuery, [product_id]);
+
+    if (result.rows.length === 0) {
+      return res.status(404).json({ message: "Product not found" });
+    }
+
+    const product = result.rows[0];
+
+    // Convert images into an array and remove null values
+    product.images = [
+      product.image_1 ? `data:image/jpeg;base64,${product.image_1}` : null,
+      product.image_2 ? `data:image/jpeg;base64,${product.image_2}` : null,
+      product.image_3 ? `data:image/jpeg;base64,${product.image_3}` : null,
+    ].filter((img) => img !== null);
+
+    // Convert sizes into an array
+    product.sizes = ["s", "m", "l", "xl", "xxl", "xxxl"].filter(
+      (size) => product[size]
+    );
+
+    // Convert colors into an array
+    product.colors = [
+      "green",
+      "blue",
+      "red",
+      "black",
+      "grey",
+      "neon",
+      "orange",
+      "yellow",
+    ].filter((color) => product[color]);
+
+    // Remove raw size & color columns
+    delete product.image_1;
+    delete product.image_2;
+    delete product.image_3;
+    ["s", "m", "l", "xl", "xxl", "xxxl"].forEach(
+      (size) => delete product[size]
+    );
+    [
+      "green",
+      "blue",
+      "red",
+      "black",
+      "grey",
+      "neon",
+      "orange",
+      "yellow",
+    ].forEach((color) => delete product[color]);
+
+    res.status(200).json(product);
+  } catch (error) {
+    console.error("Error fetching product:", error);
+    res.status(500).json({ message: "Error fetching product!" });
+  }
+});
+
 app.get("/get-products", async (req, res) => {
   try {
     const gpQuery = `

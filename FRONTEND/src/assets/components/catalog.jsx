@@ -22,7 +22,7 @@ const ShopCatalog = ({ items }) => {
       {/* Product Grid */}
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:gap-6 md:gap-[2rem] ml-16">
         {displayedItems.map((item, i) => (
-          <Link key={i} to={`/view/${item.id}`}>
+          <Link key={i} to={`/view/${item.product_id}`}>
             <ProductCard
               offer={item.offer}
               badge={item.badge}
