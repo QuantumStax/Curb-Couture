@@ -18,64 +18,94 @@ const AddProduct = () => {
   const [sizes, setSizes] = useState([]);
   const [colors, setColors] = useState([]);
   const [selectedColors, setSelectedColors] = useState([]);
+  const [selectedFabric, setSelectedFabric] = useState("");
+  const [selectedOccasion, setSelectedOccasion] = useState("");
+  const [selectedType, setSelectedType] = useState("");
+  const [selectedSleeve, setSelectedSleeve] = useState("");
+  const [description_1, setDescription_1] = useState("");
+  const [description_2, setDescription_2] = useState("");
 
-  function handleInputChange(e) {
+  console.log("selectedFabric : ", selectedFabric);
+  console.log("selectedOccasion : ", selectedOccasion);
+  console.log("selectedType : ", selectedType);
+  console.log("selectedSleeve : ", selectedSleeve);
+  
+
+  // Handle input changes
+  const handleInputChange = (e) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
-  }
+  };
 
-  function handleSizeChoice(e) {
+  const handleSizeChoice = (e) => {
     const { name, checked } = e.target;
     setSizes((prevSizes) =>
       checked ? [...prevSizes, name] : prevSizes.filter((size) => size !== name)
     );
+  };
+
+  const handleDesc_1_Change = (e) => {
+    setDescription_1(e.target.value)
   }
 
-  function handleColorChoice(e) {
+  const handleDesc_2_Change = (e) => {
+    setDescription_2(e.target.value)
+  }
+
+  const handleColorChoice = (e) => {
     const { name, checked } = e.target;
     setSelectedColors((prevColors) =>
       checked
         ? [...prevColors, name]
         : prevColors.filter((color) => color !== name)
     );
-  }
+  };
 
-  function handleFileChange(e) {
+  const handleFileChange = (e) => {
     const { name, files } = e.target;
     setRoomImgs((prev) => ({
       ...prev,
       [name]: files[0],
     }));
-  }
+  };
 
+  const handleDropdownChange = (setter) => (event) => {
+    setter(event.target.value);
+  };
+
+  // Fetch color options
   useEffect(() => {
     const fetchColumns = async () => {
       try {
         const res = await fetch("http://localhost:3000/get-column-names");
-        if (!res.ok) {
-          throw new Error(`HTTP error! Status: ${res.status}`);
-        }
-
+        if (!res.ok) throw new Error(`HTTP error! Status: ${res.status}`);
         const data = await res.json();
         setColors(data.columns);
       } catch (err) {
         console.error("Error fetching columns:", err);
       }
     };
-
     fetchColumns();
   }, []);
 
-  async function handleSubmit(e) {
+  // Submit form data
+  const handleSubmit = async (e) => {
     e.preventDefault();
     const data = new FormData();
 
     Object.keys(formData).forEach((key) => data.append(key, formData[key]));
-    data.append("sizes", JSON.stringify(sizes)); // Adding selected sizes
-    data.append("colors", JSON.stringify(selectedColors)); // Adding selected colors
-    Object.keys(roomImgs).forEach(
-      (key) => roomImgs[key] && data.append(key, roomImgs[key])
-    );
+    data.append("sizes", JSON.stringify(sizes));
+    data.append("colors", JSON.stringify(selectedColors));
+    data.append("fabric", selectedFabric);
+    data.append("occasion", selectedOccasion);
+    data.append("type", selectedType);
+    data.append("sleeve", selectedSleeve);
+    data.append("desc_1", description_1);
+    data.append("desc_2", description_2);
+
+    Object.keys(roomImgs).forEach((key) => {
+      if (roomImgs[key]) data.append(key, roomImgs[key]);
+    });
 
     try {
       const response = await axios.post(
@@ -90,7 +120,7 @@ const AddProduct = () => {
       setShowStatus(true);
       setProduct((prev) => [...prev, response.data.product]);
 
-      // Resetting form
+      // Reset form
       setFormData({
         product_name: "",
         description: "",
@@ -101,12 +131,18 @@ const AddProduct = () => {
       setRoomImgs({});
       setSizes([]);
       setSelectedColors([]);
+      setSelectedFabric("");
+      setSelectedOccasion("");
+      setSelectedType("");
+      setSelectedSleeve("");
+      setDescription_1("")
+      setDescription_2("")
     } catch (err) {
       console.error("Error uploading product:", err);
       setUploaded(false);
       setShowStatus(false);
     }
-  }
+  };
 
   return (
     <div className="border border-slate-950 w-[45rem] px-10 py-5 rounded-md">
@@ -115,6 +151,7 @@ const AddProduct = () => {
         All Fields are Required except image2 and image3
       </span>
       <form onSubmit={handleSubmit} className="w-full">
+        {/* Basic product details */}
         {Object.keys(formData).map((key) => (
           <input
             key={key}
@@ -128,90 +165,171 @@ const AddProduct = () => {
           />
         ))}
 
+        {/* Size variants */}
         <div className="my-4 font-itim">
           <h1 className="uppercase">Choose Size Variants:</h1>
-        </div>
-        <div className="flex items-center gap-4 my-4">
-          {["s", "m", "l", "xl", "xxl"].map((size) => (
-            <div key={size}>
-              <input
-                type="checkbox"
-                name={size}
-                id={size}
-                className="h-5 w-5"
-                onChange={handleSizeChoice}
-                checked={sizes.includes(size)}
-              />
-              <label htmlFor={size} className="uppercase ml-2 text-lg">
-                {size}
+          <div className="flex items-center gap-4 my-4">
+            {["s", "m", "l", "xl", "xxl"].map((size) => (
+              <label key={size} className="flex items-center">
+                <input
+                  type="checkbox"
+                  name={size}
+                  className="h-5 w-5"
+                  onChange={handleSizeChoice}
+                  checked={sizes.includes(size)}
+                />
+                <span className="uppercase ml-2 text-lg">{size}</span>
               </label>
-            </div>
-          ))}
+            ))}
+          </div>
         </div>
 
-        {/* color variants */}
+        {/* Color variants */}
         <div className="my-4 font-itim">
           <h1 className="uppercase">Choose Color Variants:</h1>
-        </div>
-        <div className="flex items-center gap-4 my-4 flex-wrap w-[35rem]">
-          {colors.map((color) => (
-            <div key={color}>
-              <input
-                type="checkbox"
-                name={color}
-                id={color}
-                className="h-5 w-5"
-                onChange={handleColorChoice}
-                checked={selectedColors.includes(color)}
-              />
-              <label htmlFor={color} className="uppercase ml-2 text-lg">
-                {color}
+          <div className="flex items-center gap-4 my-4 flex-wrap w-[35rem]">
+            {colors.map((color) => (
+              <label key={color} className="flex items-center">
+                <input
+                  type="checkbox"
+                  name={color}
+                  className="h-5 w-5"
+                  onChange={handleColorChoice}
+                  checked={selectedColors.includes(color)}
+                />
+                <span className="uppercase ml-2 text-lg">{color}</span>
               </label>
+            ))}
+          </div>
+        </div>
+
+        {/* Image uploads */}
+        <div className="my-4 font-itim">
+          <h1 className="uppercase">Choose Product Images:</h1>
+          {["image1", "image2", "image3"].map((imgKey, index) => (
+            <div key={imgKey} className="my-2">
+              <label className="font-itim opacity-70 text-xl">
+                Product Image - {index + 1}
+                {imgKey === "image1" && <span className="text-red-600">*</span>}
+                :
+              </label>
+              <input
+                type="file"
+                name={imgKey}
+                required={imgKey === "image1"}
+                onChange={handleFileChange}
+              />
+              {roomImgs[imgKey] && (
+                <img
+                  src={URL.createObjectURL(roomImgs[imgKey])}
+                  alt="Preview"
+                  className="w-20 h-20 mt-2"
+                />
+              )}
             </div>
           ))}
         </div>
 
+        {/* Additional product info */}
         <div className="my-4 font-itim">
-          <h1 className="uppercase">Choose Product Images:</h1>
+          <h1 className="uppercase">Provide Product Info</h1>
+          <textarea
+            name="desc_1"
+            cols="50"
+            rows="5"
+            placeholder="Input the product description here"
+            className="block my-2 border border-slate-950 p-2 bg-transparent"
+            onChange={handleDesc_1_Change}
+          />
+          <textarea
+            name="desc_2"
+            cols="50"
+            rows="5"
+            placeholder="Extra info to be entered here"
+            className="block my-2 border border-slate-950 p-2 bg-transparent"
+            onChange={handleDesc_2_Change}
+          />
         </div>
-        {["image1", "image2", "image3"].map((imgKey, index) => (
-          <div key={imgKey}>
-            <label className="font-itim opacity-70 text-xl">
-              Product Image - {index + 1}
-              {imgKey === "image1" && <span className="text-red-600">*</span>}:
-            </label>
-            <input
-              type="file"
-              name={imgKey}
-              required={imgKey === "image1"}
-              className="my-2 ml-2"
-              onChange={handleFileChange}
-            />
-            {roomImgs[imgKey] && (
-              <img
-                src={URL.createObjectURL(roomImgs[imgKey])}
-                alt="Preview"
-                className="w-20 h-20 mt-2"
-              />
-            )}
+
+        {/* Dropdowns */}
+        {[
+          {
+            label: "Fabric",
+            value: selectedFabric,
+            setter: setSelectedFabric,
+            options: ["Pure Cotton", "Cotton", "Polyester", "Satin", "Other"],
+          },
+          {
+            label: "Occasion",
+            value: selectedOccasion,
+            setter: setSelectedOccasion,
+            options: [
+              "Casual",
+              "Adventure",
+              "Urban Style",
+              "Night Out",
+              "Work",
+              "Loungewear",
+              "Seasonal",
+            ],
+          },
+          {
+            label: "Type",
+            value: selectedType,
+            setter: setSelectedType,
+            options: [
+              "Solid Colors",
+              "Graphic Prints",
+              "Floral Prints",
+              "Tie-Dye",
+              "Abstract",
+            ],
+          },
+          {
+            label: "Sleeve",
+            value: selectedSleeve,
+            setter: setSelectedSleeve,
+            options: [
+              "Short Sleeve",
+              "Long Sleeve",
+              "Sleeveless",
+              "Cap Sleeve",
+            ],
+          },
+        ].map(({ label, value, setter, options }) => (
+          <div key={label} className="my-2">
+            <label htmlFor={label.toLowerCase()} className="font-itim opacity-70 text-xl uppercase">{`Choose ${label}`}</label>
+            <select
+              name={label.toLowerCase()}
+              value={value}
+              onChange={handleDropdownChange(setter)}
+              className="block border border-slate-950 p-2 mt-1 focus:outline-none bg-transparent w-[20rem]"
+            >
+              <option value="">{`-- Select ${label} --`}</option>
+              {options.map((option) => (
+                <option key={option} value={option}>
+                  {option}
+                </option>
+              ))}
+            </select>
           </div>
         ))}
 
-        {showStatus && (
-          <p className={uploaded ? "text-green-500" : "text-red-500"}>
-            {uploaded
-              ? "Product added to inventory"
-              : "Failed to add Product! Try again"}
-          </p>
-        )}
-
         <button
           type="submit"
-          className="text-xl border border-slate-950 px-3 py-1 mt-4 rounded-md hover:shadow-md hover:bg-black hover:text-primary"
+          className="mt-5 py-2 px-4 bg-transparent border border-slate-950 w-[15rem] rounded-lg hover:bg-black hover:text-primary uppercase font-semibold"
         >
-          Add Product to Inventory
+          Add Product
         </button>
       </form>
+
+      {showStatus && (
+        <div className={`mt-4 p-2 ${uploaded ? "bg-green-300" : "bg-red-300"}`}>
+          {uploaded
+            ? "Product uploaded successfully!"
+            : "Failed to upload product."}
+        </div>
+      )}
     </div>
   );
 };

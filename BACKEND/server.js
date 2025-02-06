@@ -274,7 +274,21 @@ app.post(
       category,
       sizes,
       colors,
+      fabric,
+      occasion,
+      type,
+      sleeve,
+      desc_1,
+      desc_2
     } = req.body;
+
+    console.log("Fabric : ", fabric);
+    console.log("occasion : ", occasion);
+    console.log("type : ", type);
+    console.log("sleeve : ", sleeve);
+    console.log("desc_1 : ", desc_1);
+    console.log("desc_2 : ", desc_2);
+
     const parsedSizes = JSON.parse(sizes);
     const parsedColors = JSON.parse(colors);
 
@@ -363,6 +377,15 @@ app.post(
         color_variants.orange,
         color_variants.yellow,
       ]);
+
+      const add_info_query = `
+        INSERT INTO product_info (product_id, material, description, description_2, type, occation, sleeve_length)
+        VALUES ($1, $2, $3, $4, $5, $6, $7)
+      `;
+
+      await pg.query(add_info_query, [
+        product_id, fabric, desc_1, desc_2, type, occasion, sleeve
+      ])
 
       res.status(201).json({ message: "Product added successfully ✅" });
     } catch (error) {

@@ -35,7 +35,7 @@ const NavItemComponent = () => {
     },
   ];
   return (
-    <section className="text-primary relative top-[15%] left-[50%] w-[10rem] translate-x-[-5rem]">
+    <section className="text-banner relative top-[15%] left-[50%] w-[10rem] translate-x-[-5rem]">
       <div className="w-full">
         {navItems.map((item, i) => (
           <div key={i} className="w-full">

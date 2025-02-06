@@ -102,11 +102,11 @@ const Nav = ({setIsModalOpen}) => {
       {/* Mobile Menu */}
       <div
         ref={navRef}
-        className="fixed inset-0 w-screen h-screen bg-black z-50"
+        className="fixed inset-0 w-[30rem] h-screen bg-white z-50"
         style={{ display: "none" }}
       >
         <div
-          className="text-primary relative top-10 left-10 cursor-pointer"
+          className="text-banner relative top-6 left-20 cursor-pointer"
           onClick={() => setIsOpen((prev) => !prev)}
         >
           <MenuOpenIcon className="text-3xl sm:text-2xl md:text-3xl" />
