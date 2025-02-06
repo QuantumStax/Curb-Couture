@@ -77,7 +77,7 @@ const ShopActionsMenu = () => {
     <div className="flex items-end lg:gap-5 gap-2 lg:px-20 px-5 lg:py-22 py-16 h-[15rem]">
       {/* filter */}
       <div
-        className="relative rounded-lg bg-slate-950 text-primary py-2 px-6 lg:w-[10rem] w-[10rem] h-[3rem] cursor-pointer hover:shadow-lg"
+        className="relative rounded-lg bg-brand text-primary py-2 px-6 lg:w-[10rem] w-[10rem] h-[3rem] cursor-pointer hover:shadow-lg"
         onClick={toggleFilter}
       >
         <div className="relative -left-3 top-0.5 opacity-75">
@@ -94,13 +94,13 @@ const ShopActionsMenu = () => {
       {/* Filter Component */}
       <div
         ref={filterRef}
-        className="fixed top-0 left-0 h-full lg:w-[25rem] w-[22rem] md:w-[25rem] bg-black text-white z-50 shadow-lg"
+        className="fixed top-0 left-0 h-full lg:w-[25rem] w-[22rem] md:w-[25rem] bg-brand text-white z-50 shadow-lg"
       >
         <Filter toggleFilter={toggleFilter} />
       </div>
       {/* sort */}
       <div
-        className="relative rounded-lg bg-black text-white transition-all duration-500 py-2 px-6 w-[10rem] h-[3rem] hover:shadow-lg cursor-pointer"
+        className="relative rounded-lg bg-transparent text-brand border border-brand transition-all duration-500 py-2 px-6 w-[10rem] h-[3rem] hover:shadow-lg cursor-pointer"
         onClick={toggleSort}
       >
         <div className="relative -left-3 top-0.5 opacity-75">

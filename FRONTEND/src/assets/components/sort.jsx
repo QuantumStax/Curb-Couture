@@ -10,7 +10,7 @@ const Sort = () => {
 
   return (
     <section>
-      <div className="bg-black rounded-md p-3 text-primary">
+      <div className="bg-white rounded-md p-3 text-brand">
         {sortMenuItems.map((item, i) => (
           <div key={i} className="mt-2">
             <li className="list-none text-lg leading-loose cursor-pointer hover:underline">

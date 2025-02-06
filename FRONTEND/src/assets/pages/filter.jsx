@@ -73,7 +73,7 @@ const Filter = ({ toggleFilter }) => {
   };
 
   return (
-    <aside className="fixed top-0 left-0 lg:w-[25rem] md:w-[25rem] w-[20rem] h-[100vh] p-6 bg-black text-primary">
+    <aside className="fixed top-0 left-0 lg:w-[25rem] md:w-[25rem] w-[20rem] h-[100vh] p-6 bg-white text-banner">
       <div
         className="flex items-center justify-between"
         onClick={() => toggleFilter()}
