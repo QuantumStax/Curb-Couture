@@ -71,7 +71,6 @@ app.get("/get-column-names", async (req, res) => {
 });
 
 // get product details by priduct_id
-
 app.get("/get-product/:product_id", async (req, res) => {
   const { product_id } = req.params;
 
@@ -88,15 +87,19 @@ app.get("/get-product/:product_id", async (req, res) => {
         encode(pi.image_2, 'base64') AS image_2,
         encode(pi.image_3, 'base64') AS image_3,
         sv.s, sv.m, sv.l, sv.xl, sv.xxl, sv.xxxl,
-        cv.green, cv.blue, cv.red, cv.black, cv.grey, cv.neon, cv.orange, cv.yellow
+        cv.green, cv.blue, cv.red, cv.black, cv.grey, cv.neon, cv.orange, cv.yellow,
+        pi_info.material, pi_info.desc_1, pi_info.description_2, pi_info.type, pi_info.occation, pi_info.sleeve_length
       FROM product_main pm
       LEFT JOIN product_images pi ON pm.product_id = pi.product_id
       LEFT JOIN size_variants sv ON pm.product_id = sv.product_id
       LEFT JOIN color_variants cv ON pm.product_id = cv.product_id
+      LEFT JOIN product_info pi_info ON pm.product_id = pi_info.product_id
       WHERE pm.product_id = $1
     `;
 
     const result = await pg.query(productQuery, [product_id]);
+    console.log("result : ", result.rows[0]);
+    
 
     if (result.rows.length === 0) {
       return res.status(404).json({ message: "Product not found" });
@@ -279,15 +282,8 @@ app.post(
       type,
       sleeve,
       desc_1,
-      desc_2
+      desc_2,
     } = req.body;
-
-    console.log("Fabric : ", fabric);
-    console.log("occasion : ", occasion);
-    console.log("type : ", type);
-    console.log("sleeve : ", sleeve);
-    console.log("desc_1 : ", desc_1);
-    console.log("desc_2 : ", desc_2);
 
     const parsedSizes = JSON.parse(sizes);
     const parsedColors = JSON.parse(colors);
@@ -334,7 +330,6 @@ app.post(
       ]);
       const product_id = productResult.rows[0].product_id;
 
-      // Insert images into product_images table
       const add_product_img_query = `
         INSERT INTO product_images (product_id, image_1, image_2, image_3)
         VALUES ($1, $2, $3, $4)
@@ -347,9 +342,9 @@ app.post(
       ]);
 
       const add_product_size_query = `
-      INSERT INTO size_variants (product_id, s, m, l, xl, xxl, xxxl)
-      VALUES ($1, $2, $3, $4, $5, $6, $7)
-    `;
+        INSERT INTO size_variants (product_id, s, m, l, xl, xxl, xxxl)
+        VALUES ($1, $2, $3, $4, $5, $6, $7)
+      `;
       await pg.query(add_product_size_query, [
         product_id,
         sizeVariants.s,
@@ -379,13 +374,19 @@ app.post(
       ]);
 
       const add_info_query = `
-        INSERT INTO product_info (product_id, material, description, description_2, type, occation, sleeve_length)
+        INSERT INTO product_info (product_id, material, desc_1, description_2, type, occation, sleeve_length)
         VALUES ($1, $2, $3, $4, $5, $6, $7)
       `;
 
       await pg.query(add_info_query, [
-        product_id, fabric, desc_1, desc_2, type, occasion, sleeve
-      ])
+        product_id,
+        fabric,
+        desc_1,
+        desc_2,
+        type,
+        occasion,
+        sleeve,
+      ]);
 
       res.status(201).json({ message: "Product added successfully ✅" });
     } catch (error) {

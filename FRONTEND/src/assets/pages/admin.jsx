@@ -1,7 +1,4 @@
-/* eslint-disable no-unused-vars */
-import { useState } from "react";
 import Nav from "../components/nav2";
-import axios from "axios";
 import AddProduct from "../components/admin/addProduct";
 
 const Admin = () => {

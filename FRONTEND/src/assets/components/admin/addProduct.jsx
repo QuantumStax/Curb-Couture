@@ -25,12 +25,6 @@ const AddProduct = () => {
   const [description_1, setDescription_1] = useState("");
   const [description_2, setDescription_2] = useState("");
 
-  console.log("selectedFabric : ", selectedFabric);
-  console.log("selectedOccasion : ", selectedOccasion);
-  console.log("selectedType : ", selectedType);
-  console.log("selectedSleeve : ", selectedSleeve);
-  
-
   // Handle input changes
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -45,12 +39,12 @@ const AddProduct = () => {
   };
 
   const handleDesc_1_Change = (e) => {
-    setDescription_1(e.target.value)
-  }
+    setDescription_1(e.target.value);
+  };
 
   const handleDesc_2_Change = (e) => {
-    setDescription_2(e.target.value)
-  }
+    setDescription_2(e.target.value);
+  };
 
   const handleColorChoice = (e) => {
     const { name, checked } = e.target;
@@ -135,8 +129,8 @@ const AddProduct = () => {
       setSelectedOccasion("");
       setSelectedType("");
       setSelectedSleeve("");
-      setDescription_1("")
-      setDescription_2("")
+      setDescription_1("");
+      setDescription_2("");
     } catch (err) {
       console.error("Error uploading product:", err);
       setUploaded(false);
@@ -298,7 +292,10 @@ const AddProduct = () => {
           },
         ].map(({ label, value, setter, options }) => (
           <div key={label} className="my-2">
-            <label htmlFor={label.toLowerCase()} className="font-itim opacity-70 text-xl uppercase">{`Choose ${label}`}</label>
+            <label
+              htmlFor={label.toLowerCase()}
+              className="font-itim opacity-70 text-xl uppercase"
+            >{`Choose ${label}`}</label>
             <select
               name={label.toLowerCase()}
               value={value}
