@@ -20,12 +20,14 @@ import ProductView from "./assets/components/productView";
 import SearchModal from "./assets/components/searchModal";
 import { useState } from "react";
 import Admin from "./assets/pages/admin";
+import ScrollToTop from "./assets/components/ScrollToTop";
 function App() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   return (
     <Router>
       <CustomScrollbarWrapper>
         <main>
+          <ScrollToTop/>
           <Routes>
             <Route
               path="/"
