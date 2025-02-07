@@ -1,6 +1,5 @@
 import Footer from "../components/footer";
 import Hero from "../components/hero";
-import Nav from "../components/nav2";
 
 const Blogs = () => {
   const blogItems = [
@@ -37,7 +36,6 @@ const Blogs = () => {
   return (
     <section>
       <section>
-        <Nav />
         <Hero />
       </section>
       <section className="bg-primary px-6 sm:px-10 lg:px-24 py-10">

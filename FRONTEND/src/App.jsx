@@ -21,6 +21,7 @@ import SearchModal from "./assets/components/searchModal";
 import { useState } from "react";
 import Admin from "./assets/pages/admin";
 import ScrollToTop from "./assets/components/ScrollToTop";
+import Nav from "./assets/components/nav2";
 function App() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   return (
@@ -28,6 +29,7 @@ function App() {
       <CustomScrollbarWrapper>
         <main>
           <ScrollToTop/>
+          <Nav setIsModalOpen={setIsModalOpen}/>
           <Routes>
             <Route
               path="/"
@@ -42,7 +44,7 @@ function App() {
             <Route path="/blogs" element={<Blogs />} />
             <Route path="/contact" element={<Contact />} />
             <Route path="/forgot-password" element={<ForgotPass />} />
-            <Route path="/my-account" element={<Login />} />
+            <Route path="/login" element={<Login />} />
             <Route path="/privacy-policy" element={<PrivacyPolicy />} />
             <Route path="/register" element={<Register />} />
             <Route path="/t-n-c" element={<TermsandConditions />} />

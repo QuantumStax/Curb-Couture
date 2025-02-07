@@ -2,6 +2,7 @@
 import { Link, useNavigate } from "react-router-dom";
 import Nav from "../components/nav2";
 import VisibilityIcon from "@mui/icons-material/Visibility";
+import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
 import Footer from "../components/footer";
 import axios from "axios";
 import { useState } from "react";
@@ -17,6 +18,11 @@ const Login = () => {
   const [isError, setIsError] = useState(null);
   const [message, setMessage] = useState("");
   const [showMessage, setShowMessage] = useState(false);
+  const [isVisible, setIsVisible] = useState(false);
+
+  function toggleVisibility() {
+    setIsVisible(!isVisible);
+  }
 
   function handleInputChange(e) {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -52,7 +58,6 @@ const Login = () => {
 
   return (
     <section>
-      <Nav />
       <section className="flex flex-col items-center bg-primary px-6 md:px-20 py-16 md:py-24">
         <h1 className="text-3xl md:text-4xl font-semibold mb-10 md:mb-16 text-center">
           Login
@@ -72,24 +77,26 @@ const Login = () => {
                 className="bg-transparent border border-slate-950 w-full px-3 py-2 mt-2 rounded-md focus:outline-none focus:ring-1 focus:ring-black"
               />
             </div>
-            <div className="mt-4">
+            <div className="relative mt-4">
               <label htmlFor="password" className="block text-sm md:text-base">
                 Password
               </label>
-              <div className="flex items-center mt-2">
-                <input
-                  id="password"
-                  type="password"
-                  name="password"
-                  placeholder="Enter Your Password"
-                  onChange={handleInputChange}
-                  className="bg-transparent border border-slate-950 w-full px-3 py-2 rounded-md focus:outline-none focus:ring-1 focus:ring-black"
-                />
-                <div className="relative left-[-2rem] opacity-70 cursor-pointer hover:opacity-100">
-                  <VisibilityIcon />
-                </div>
+              <input
+                id="password"
+                type={isVisible ? "text" : "password"}
+                name="password"
+                placeholder="Enter Your Password"
+                onChange={handleInputChange}
+                className="bg-transparent border border-slate-950 w-full px-3 py-2 mt-2 rounded-md focus:outline-none focus:ring-1 focus:ring-black"
+              />
+              <div
+                onClick={toggleVisibility}
+                className="absolute top-[2.5rem] right-0 flex items-center pr-3 opacity-70 cursor-pointer hover:opacity-100"
+              >
+                {isVisible ? <VisibilityIcon /> : <VisibilityOffIcon />}
               </div>
             </div>
+
             {showMessage && (
               <div className="text-center my-5">
                 <p className={isError ? "text-red-500" : "text-green-500"}>

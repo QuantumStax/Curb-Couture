@@ -4,7 +4,7 @@ import ProductCard from "../components/productCard";
 import KeyboardArrowLeftOutlinedIcon from "@mui/icons-material/KeyboardArrowLeftOutlined";
 import KeyboardArrowRightOutlinedIcon from "@mui/icons-material/KeyboardArrowRightOutlined";
 
-const Carousel = ({ mainHead, subPara, itemList }) => {
+const Carousel = ({ mainHead, subPara, itemList, Icon }) => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [itemsPerSlide, setItemsPerSlide] = useState(4);
 
@@ -39,10 +39,18 @@ const Carousel = ({ mainHead, subPara, itemList }) => {
       className="relative overflow-hidden"
       aria-labelledby="carousel-heading"
     >
-      <div role="heading" className="mx-2 md:mx-10 lg:mx-5 my-10">
-        <h1 className="text-2xl md:text-3xl lg:text-4xl font-semibold">
-          {mainHead}
-        </h1>
+      <div
+        role="heading"
+        className="mx-2 md:mx-10 lg:mx-5 my-5 mt-10"
+      >
+        <div className="flex items-center gap-2">
+          <h1 className="text-2xl md:text-3xl lg:text-4xl font-semibold">
+            {mainHead}
+          </h1>
+          <div className="relative top-1">
+            {Icon && <Icon style={{ fontSize: "clamp(2rem, 2vw, 1.5rem)" }} />}
+          </div>
+        </div>
         <p className="text-gray-600 text-sm md:text-base">{subPara}</p>
       </div>
       <div className="relative">

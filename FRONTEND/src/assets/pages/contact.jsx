@@ -1,6 +1,5 @@
 import Footer from "../components/footer";
 import Hero from "../components/hero";
-import Nav from "../components/nav2";
 import WhatsAppIcon from "@mui/icons-material/WhatsApp";
 import LocalPhoneIcon from "@mui/icons-material/LocalPhone";
 import { Link } from "react-router-dom";
@@ -10,7 +9,6 @@ const Contact = () => {
     <main>
       {/* Top Section: Header and Hero */}
       <header>
-        <Nav />
         {/* Lazy load Hero if it's heavy */}
         <Hero />
       </header>

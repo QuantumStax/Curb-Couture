@@ -1,5 +1,5 @@
 /** @type {import('tailwindcss').Config} */
-import tailwindScrollbar from 'tailwind-scrollbar';
+import tailwindScrollbar from "tailwind-scrollbar";
 
 export default {
   content: ["./index.html", "./src/**/*.{js,ts,jsx,tsx}"],
@@ -23,6 +23,7 @@ export default {
         poppins: ["Poppins", "serif"],
         itim: ["Itim", "serif"],
         fraunces: ["Fraunces", "serif"],
+        Outfit: ["Outfit", "serif"],
       },
       fontSize: {
         "hero-head": "12rem",
@@ -46,7 +47,7 @@ export default {
 // tertiary = "FF6B6B" -> Buttons (Buy Now, Add to Cart), CTA elements - ligher redish
 // accent = "007AFF" -> Links, hover effects, secondary buttons - darker sky blue
 
-// Alex recomended 
+// Alex recomended
 
 // #F2EFE7 - white with tone
 // #9ACBD0 - green bluish tone

@@ -1,3 +1,4 @@
+/* eslint-disable react/prop-types */
 /* eslint-disable no-unused-vars */
 import { useState, useRef, useEffect } from "react";
 import { gsap } from "gsap";
@@ -10,7 +11,7 @@ import UndoIcon from "@mui/icons-material/Undo";
 import VerifiedIcon from "@mui/icons-material/Verified";
 import { useParams } from "react-router-dom";
 
-const ProductView = () => {
+const ProductView = ({setIsModalOpen}) => {
   const { id } = useParams();
 
   const [product, setProduct] = useState(null);
@@ -137,7 +138,7 @@ const ProductView = () => {
   return (
     <section>
       <section>
-        <Nav />
+        <Nav setIsModalOpen={setIsModalOpen}/>
       </section>
       <section className="px-20 py-16 bg-primary">
         <div className="flex items-center gap-2 opacity-70">

@@ -42,7 +42,7 @@ const Nav = ({setIsModalOpen}) => {
   const actionIcons = [
     {
       icon: <PersonOutlineOutlinedIcon style={{ fontSize: "1.4rem" }} />,
-      path: "/my-account",
+      path: "/login",
     },
     {
       icon: <FavoriteBorderIcon style={{ fontSize: "1.4rem" }} />,
@@ -72,7 +72,7 @@ const Nav = ({setIsModalOpen}) => {
       {/* Logo */}
       <div>
         <a href="/" aria-label="Home">
-          <p className="text-xl sm:text-2xl md:text-3xl font-fraunces font-bold text-center md:text-left lg:translate-x-[3.5rem]">
+          <p className="text-xl sm:text-2xl md:text-3xl font-Outfit font-bold text-center md:text-left lg:translate-x-[3.5rem]">
             Curb Coture
           </p>
         </a>

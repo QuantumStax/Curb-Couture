@@ -3,8 +3,7 @@ import { Helmet } from "react-helmet";
 import ShopCatalog from "./catalog";
 import ShopActionsMenu from "./shopActionsMenu";
 import ShopHero from "./shopHero";
-import Nav from "./nav2";
-import Footer from "../components/footer"
+import Footer from "../components/footer";
 
 const Shop = ({ itemArray, image, heading }) => {
   return (
@@ -39,9 +38,6 @@ const Shop = ({ itemArray, image, heading }) => {
       </Helmet>
 
       <section className="bg-primary">
-        {/* Navbar */}
-        <Nav />
-
         {/* Hero */}
         <ShopHero image={image} heading={heading} />
 
@@ -50,9 +46,9 @@ const Shop = ({ itemArray, image, heading }) => {
 
         {/* Catalog */}
         <ShopCatalog items={itemArray} />
-        
+
         <section>
-          <Footer/>
+          <Footer />
         </section>
       </section>
     </>

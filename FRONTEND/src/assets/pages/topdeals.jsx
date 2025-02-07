@@ -1,9 +1,10 @@
+/* eslint-disable react/prop-types */
 import { useEffect, useState } from "react";
 import Shop from "../components/shop";
 
-const TopDeals = () => {
+const TopDeals = ({ setIsModalOpen }) => {
   const [products, setProducts] = useState([]);
-  
+
   useEffect(() => {
     const getProducts = async () => {
       try {
@@ -28,6 +29,7 @@ const TopDeals = () => {
           itemArray={products}
           heading="Top Deals"
           image="\images\just_launched\mythical-dragon-oversized-t-shirt-521913-removebg-preview.webp"
+          setIsModalOpen={setIsModalOpen}
         />
       ) : (
         <p className="text-gray-500 text-center py-4">

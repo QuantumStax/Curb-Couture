@@ -43,8 +43,8 @@ const ShopHero = ({ image, heading }) => {
       </div>
 
       {/* Product Image on Large Screens */}
-      <div className="hidden lg:block absolute right-10 bottom-0 max-w-xs lg:max-w-md">
-        <img src={image} alt="Featured Product" className="relative top-16 w-full drop-shadow-lg" />
+      <div className="hidden lg:block absolute top-16 right-10 bottom-0 max-w-xs lg:max-w-md z-20">
+        <img src={image} alt="Featured Product" className="z-20 relative w-full drop-shadow-lg" />
       </div>
     </div>
   );

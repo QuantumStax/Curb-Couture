@@ -1,21 +1,30 @@
 const ShirtsBanner = () => {
   return (
-    <div className="relative py-8 sm:py-10 px-4 sm:px-10 md:mx-10 lg:mx-20 rounded-lg h-[20rem] sm:h-[22rem] md:h-[25rem] overflow-hidden">
-      {/* Red Background Section */}
-      <div className="h-full flex items-center justify-center bg-[#d82a20] p-6 sm:p-8 md:p-10 rounded-lg relative">
+    <div className="relative py-10 sm:py-12 px-6 sm:px-12 md:mx-10 lg:mx-20 rounded-lg h-[22rem] sm:h-[26rem] md:h-[30rem] overflow-hidden">
+      {/* Background with Gradient Overlay */}
+      <div
+        className="h-full flex flex-col sm:flex-row items-center justify-between bg-cover bg-center rounded-lg relative p-6 sm:p-10"
+        style={{
+          backgroundImage:
+            "linear-gradient(to right, rgba(44, 62, 80, 0.8), rgba(44, 62, 80, 0.4)), url('/images/backgrounds/fashion-bg.jpg')",
+        }}
+      >
         {/* Shirt Image */}
         <img
           src="/images/just_launched/mythical-dragon-oversized-t-shirt-521913-removebg-preview.webp"
           alt="Shirt"
-          className="absolute inset-0 w-full h-full object-contain lg:left-[-25rem] rounded-lg opacity-100 z-[10]"
+          className="max-w-[50%] sm:max-w-[40%] md:max-w-[35%] lg:max-w-[30%] drop-shadow-lg transform scale-110 sm:scale-125 md:scale-150"
         />
 
         {/* Text Section */}
-        <div className="text-center text-white z-50">
-          <h1 className="font-bold text-5xl sm:text-4xl md:text-5xl lg:text-6xl text-primary">
+        <div className="text-center sm:text-left text-primary z-10">
+          <h1 className="font-extrabold text-4xl sm:text-5xl md:text-6xl">
             Just Launched
           </h1>
-          <button className="mt-4 bg-yellow-400 hover:bg-yellow-500 text-black text-sm sm:text-lg font-semibold px-4 sm:px-6 py-2 sm:py-3 rounded-lg shadow-lg">
+          <p className="mt-2 text-lg sm:text-xl md:text-2xl opacity-90">
+            Explore the new collection now!
+          </p>
+          <button className="mt-6 bg-brand hover:bg-banner text-white text-lg sm:text-xl font-semibold px-6 py-3 rounded-lg shadow-lg transition-transform transform hover:scale-105">
             SHOP NOW
           </button>
         </div>

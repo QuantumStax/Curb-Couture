@@ -3,7 +3,7 @@
 import { memo } from "react";
 import StarOutlinedIcon from "@mui/icons-material/StarOutlined";
 
-const ProductCard = memo(({ offer, badge, imgSrc, brand, title, price, discount, rating }) => {
+const ProductCard = memo(({ imgSrc, brand, title, price, discount, rating }) => {
   return (
     <article className="relative mx-2 px-2 py-3 w-[21rem] lg:w-[21rem] md:w-[15rem] hover:shadow-md hover:scale-[1.02] rounded-md cursor-pointer transition-all duration-500" role="contentinfo" aria-label={`Product card for ${title}`}>
       <div className="w-full aspect-square flex items-center rounded-md justify-center">
@@ -15,23 +15,23 @@ const ProductCard = memo(({ offer, badge, imgSrc, brand, title, price, discount,
           loading="lazy"
         />
         {/* Offer Badge */}
-        {offer && (
+        {/* {offer && (
           <div
             className="absolute top-4 left-3 w-[5rem] font-semibold flex items-center justify-center rounded-md bg-red-500 text-primary py-0.5"
             aria-label={`${offer} offer`}
           >
             <p>{offer}</p>
           </div>
-        )}
+        )} */}
         {/* Category Badge */}
-        {badge && (
+        {/* {badge && (
           <div
             className="absolute top-12 left-3 bg-blue-600 w-[5rem] py-0.5 flex items-center justify-center uppercase font-bold text-primary rounded-md"
             aria-label={`Badge: ${badge}`}
           >
             <p>{badge}</p>
           </div>
-        )}
+        )} */}
       </div>
 
       {/* Product Details */}

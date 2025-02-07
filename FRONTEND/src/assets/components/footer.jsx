@@ -2,6 +2,7 @@ import InstagramIcon from "@mui/icons-material/Instagram";
 import FacebookIcon from "@mui/icons-material/Facebook";
 import XIcon from "@mui/icons-material/X";
 import LinkedInIcon from "@mui/icons-material/LinkedIn";
+import { Link } from "react-router-dom"
 
 const Footer = () => {
   const year = new Date().getFullYear();
@@ -62,14 +63,14 @@ const Footer = () => {
             </h1>
             <div className="mt-3 md:mt-5 space-y-2">
               <div className="hover:underline">
-                <a href="/contactus" className="text-sm md:text-base">
+                <Link to="/contact" className="text-sm md:text-base">
                   Contact Us
-                </a>
+                </Link>
               </div>
               <div className="hover:underline">
-                <a href="/contactus" className="text-sm md:text-base">
+                <Link to="/faq" className="text-sm md:text-base">
                   FAQ
-                </a>
+                </Link>
               </div>
             </div>
           </div>
@@ -79,24 +80,24 @@ const Footer = () => {
             <h1 className="uppercase font-bold text-lg md:text-xl">Company</h1>
             <div className="mt-3 md:mt-5 space-y-2">
               <div className="hover:underline">
-                <a href="/contactus" className="text-sm md:text-base">
+                <Link to="/about-us" className="text-sm md:text-base">
                   About Us
-                </a>
+                </Link>
               </div>
               <div className="hover:underline">
-                <a href="/contactus" className="text-sm md:text-base">
+                <Link to="/privacy-policy" className="text-sm md:text-base">
                   Privacy Policy
-                </a>
+                </Link>
               </div>
               <div className="hover:underline">
-                <a href="/contactus" className="text-sm md:text-base">
+                <Link to="/t-n-c" className="text-sm md:text-base">
                   Terms and Conditions
-                </a>
+                </Link>
               </div>
               <div className="hover:underline">
-                <a href="/contactus" className="text-sm md:text-base">
+                <Link to="/advertise" className="text-sm md:text-base">
                   Advertise your Product
-                </a>
+                </Link>
               </div>
             </div>
           </div>

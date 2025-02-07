@@ -1,23 +1,24 @@
+import CategoryIcon from "@mui/icons-material/Category";
 const OurCollection = () => {
   const collection = [
     {
-      img: "/images/collection/retro/retro-shirt-225762.webp",
-      category: "Retro",
+      img: "/images/categories/manfinity_homme_khaki_normal_tshirt.webp",
+      category: "Classics",
       items: 32,
     },
     {
-      img: "/images/collection/oversized/egyptian-oversized-t-shirt-302886.webp",
+      img: "/images/categories/new_york_green_font_tshirt.webp",
       category: "Oversized",
       items: 22,
     },
     {
-      img: "images/collection/doodle/doodles-shirt-559986.webp",
-      category: "Doodles",
+      img: "/images/categories/oversized_batik_anime_tshirt.webp",
+      category: "Custom Prints",
       items: 15,
     },
     {
-      img: "images/collection/specials/starry-night-385896.webp",
-      category: "Specials",
+      img: "/images/categories/oversized_hoodie_type_greatly_sweater.webp",
+      category: "Hoodies",
       items: 10,
     },
   ];
@@ -25,11 +26,18 @@ const OurCollection = () => {
   return (
     <div className="py-10 px-4 sm:px-6 md:px-8 lg:px-12 xl:px-20">
       <div className="mb-6">
-        <h1 className="text-3xl font-semibold sm:text-4xl md:text-5xl lg:text-4xl">
-          Our Collection
-        </h1>
+        <div className="flex items-center gap-2">
+          <h1 className="text-3xl font-semibold sm:text-4xl md:text-5xl lg:text-4xl">
+            Our Collection
+          </h1>
+          <div className="relative top-1">
+            <CategoryIcon style={{
+              fontSize: "2rem"
+            }}/>
+          </div>
+        </div>
         <p className="text-gray-600 mt-2 text-sm sm:text-base md:text-lg">
-          The 2023 Collection is an answer to the real-world situation
+          The 2025 Collection is an answer to the real-world Fashion
         </p>
       </div>
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-2 gap-1">

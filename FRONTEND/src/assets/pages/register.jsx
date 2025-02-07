@@ -1,7 +1,6 @@
 /* eslint-disable no-unused-vars */
 import { Link } from "react-router-dom";
 import Footer from "../components/footer";
-import Nav from "../components/nav2";
 import axios from "axios";
 import { useState } from "react";
 
@@ -43,9 +42,6 @@ const Register = () => {
 
   return (
     <section>
-      <section>
-        <Nav />
-      </section>
       <section className="flex flex-col items-center bg-primary px-6 md:px-20 py-16 md:py-24">
         <h1 className="text-3xl md:text-4xl font-semibold mb-10 md:mb-16 text-center">
           Create an Account
@@ -158,7 +154,7 @@ const Register = () => {
           </form>
           <div className="flex flex-col sm:flex-row gap-2 text-sm md:text-base mt-6 justify-center items-center">
             <p>Already have an account?</p>
-            <Link to="/my-account">
+            <Link to="/login">
               <p className="hover:text-blue-700 hover:underline">Login</p>
             </Link>
           </div>
