@@ -216,14 +216,23 @@ const AddProduct = () => {
       setShowStatus(true);
       setProduct((prev) => [...prev, response.data.product]);
       setDescription_1("");
+      setSelectedColors([]);
+      setSizes([]);
       setDescription_2("");
       setSelectedFabric("");
       setSelectedOccasion("");
       setSelectedSleeve("");
       setSelectedType("");
+      setFormData({
+        product_name: "",
+        description: "",
+        price: "",
+        rating: "",
+        category: "",
+      });
+      setRoomImgs({});
       // Clear status message after 5 seconds
       timeoutRef.current = setTimeout(() => setShowStatus(false), 5000);
-
     } catch (err) {
       console.error("Error uploading product:", err);
       setUploaded(false);
