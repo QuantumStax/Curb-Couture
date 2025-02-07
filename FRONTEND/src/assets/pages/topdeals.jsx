@@ -1,9 +1,12 @@
 /* eslint-disable react/prop-types */
 import { useEffect, useState } from "react";
 import Shop from "../components/shop";
+import Loader from "../components/loader"
+import ShopHero from "../components/shopHero";
 
 const TopDeals = ({ setIsModalOpen }) => {
   const [products, setProducts] = useState([]);
+  const [isLoading, setISLoading] = useState(true);
 
   useEffect(() => {
     const getProducts = async () => {
@@ -11,6 +14,7 @@ const TopDeals = ({ setIsModalOpen }) => {
         const res = await fetch("http://localhost:3000/get-products");
         const data = await res.json();
         setProducts(data.products);
+        setISLoading(false);
       } catch (error) {
         console.error("Error fetching products:", error);
       }
@@ -31,10 +35,17 @@ const TopDeals = ({ setIsModalOpen }) => {
           image="\images\just_launched\mythical-dragon-oversized-t-shirt-521913-removebg-preview.webp"
           setIsModalOpen={setIsModalOpen}
         />
+      ) : isLoading ? (
+        <div className="absolute left-[50%] top-[50%]">
+          <Loader/>
+        </div>
       ) : (
-        <p className="text-gray-500 text-center py-4">
-          No top deals available at the moment.
-        </p>
+        <div>
+          <ShopHero/>
+          <p className="text-gray-500 text-center py-4">
+            No top deals available at the moment.
+          </p>
+        </div>
       )}
     </section>
   );

@@ -137,9 +137,6 @@ const ProductView = ({setIsModalOpen}) => {
 
   return (
     <section>
-      <section>
-        <Nav setIsModalOpen={setIsModalOpen}/>
-      </section>
       <section className="px-20 py-16 bg-primary">
         <div className="flex items-center gap-2 opacity-70">
           <p className="hover:underline cursor-pointer">Home</p>
