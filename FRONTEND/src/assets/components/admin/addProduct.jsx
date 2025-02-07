@@ -215,12 +215,15 @@ const AddProduct = () => {
       setUploaded(true);
       setShowStatus(true);
       setProduct((prev) => [...prev, response.data.product]);
-
+      setDescription_1("");
+      setDescription_2("");
+      setSelectedFabric("");
+      setSelectedOccasion("");
+      setSelectedSleeve("");
+      setSelectedType("");
       // Clear status message after 5 seconds
       timeoutRef.current = setTimeout(() => setShowStatus(false), 5000);
 
-      // Reset form (existing code)
-      // ... (keep existing reset logic)
     } catch (err) {
       console.error("Error uploading product:", err);
       setUploaded(false);
