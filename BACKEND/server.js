@@ -6,18 +6,21 @@ import cors from "cors";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 
+dotenv.config();
+
 const app = express();
 const port = 3000;
 const { Pool } = pkg;
 
-dotenv.config();
-
+// Configure pool with performance-tuned settings
 const pg = new Pool({
   host: "localhost",
   port: process.env.DB_PORT,
   user: process.env.DB_USER_NAME,
   password: process.env.DB_PASS,
   database: process.env.DB_BASE,
+  max: 20, // maximum number of connections
+  idleTimeoutMillis: 30000, // close idle clients after 30 seconds
 });
 
 pg.connect()
@@ -49,31 +52,28 @@ const jwtTokenMiddleware = (req, res, next) => {
   });
 };
 
-// get coloumn names
-
+// get column names
 app.get("/get-column-names", async (req, res) => {
   try {
-    const query = `SELECT column_name 
+    const query = `
+      SELECT column_name 
       FROM information_schema.columns 
       WHERE table_name = 'color_variants';
     `;
     const result = await pg.query(query);
     const columnNames = result.rows.map((row) => row.column_name);
-
     const filteredColumns = columnNames.filter(
       (col) => col !== "color_id" && col !== "product_id"
     );
-
     res.status(200).json({ columns: filteredColumns });
   } catch (error) {
     res.status(500).json({ message: "Error fetching colors!" });
   }
 });
 
-// get product details by priduct_id
+// get product details by product_id
 app.get("/get-product/:product_id", async (req, res) => {
   const { product_id } = req.params;
-
   try {
     const productQuery = `
       SELECT 
@@ -96,15 +96,10 @@ app.get("/get-product/:product_id", async (req, res) => {
       LEFT JOIN product_info pi_info ON pm.product_id = pi_info.product_id
       WHERE pm.product_id = $1
     `;
-
     const result = await pg.query(productQuery, [product_id]);
-    console.log("result : ", result.rows[0]);
-    
-
     if (result.rows.length === 0) {
       return res.status(404).json({ message: "Product not found" });
     }
-
     const product = result.rows[0];
 
     // Convert images into an array and remove null values
@@ -115,12 +110,11 @@ app.get("/get-product/:product_id", async (req, res) => {
     ].filter((img) => img !== null);
 
     // Convert sizes into an array
-    product.sizes = ["s", "m", "l", "xl", "xxl", "xxxl"].filter(
-      (size) => product[size]
-    );
+    const sizesArray = ["s", "m", "l", "xl", "xxl", "xxxl"];
+    product.sizes = sizesArray.filter((size) => product[size]);
 
     // Convert colors into an array
-    product.colors = [
+    const colorsArray = [
       "green",
       "blue",
       "red",
@@ -129,25 +123,15 @@ app.get("/get-product/:product_id", async (req, res) => {
       "neon",
       "orange",
       "yellow",
-    ].filter((color) => product[color]);
+    ];
+    product.colors = colorsArray.filter((color) => product[color]);
 
-    // Remove raw size & color columns
+    // Remove raw size, color, and image columns
     delete product.image_1;
     delete product.image_2;
     delete product.image_3;
-    ["s", "m", "l", "xl", "xxl", "xxxl"].forEach(
-      (size) => delete product[size]
-    );
-    [
-      "green",
-      "blue",
-      "red",
-      "black",
-      "grey",
-      "neon",
-      "orange",
-      "yellow",
-    ].forEach((color) => delete product[color]);
+    sizesArray.forEach((size) => delete product[size]);
+    colorsArray.forEach((color) => delete product[color]);
 
     res.status(200).json(product);
   } catch (error) {
@@ -172,10 +156,7 @@ app.get("/get-products", async (req, res) => {
       FROM product_main pm
       LEFT JOIN product_images pi ON pm.product_id = pi.product_id
     `;
-
     const result = await pg.query(gpQuery);
-    console.log("result : ", result);
-
     const products = result.rows.map((product) => ({
       ...product,
       images: [
@@ -184,8 +165,6 @@ app.get("/get-products", async (req, res) => {
         product.image_3 ? `data:image/jpeg;base64,${product.image_3}` : null,
       ].filter((img) => img !== null),
     }));
-    console.log("products", products);
-
     res.status(200).json({ products });
   } catch (error) {
     console.error("Error fetching products:", error);
@@ -195,26 +174,21 @@ app.get("/get-products", async (req, res) => {
 
 app.post("/register", async (req, res) => {
   const { firstname, lastname, email, phoneNumber, password, dob } = req.body;
-
   try {
     const userExists = await pg.query(
       "SELECT email FROM user_main WHERE email = $1",
       [email]
     );
-
     if (userExists.rows.length > 0) {
       return res
         .status(400)
         .json({ error: "User Already Exists, Please Login!" });
     }
-
     const hashPass = await bcrypt.hash(password, 10);
-
     await pg.query(
       "INSERT INTO user_main (first_name, last_name, dob, phone_num, email, password, role) VALUES ($1, $2, $3, $4, $5, $6, 'customer')",
       [firstname, lastname, dob, phoneNumber, email, hashPass]
     );
-
     res.status(201).json({ message: "User registered successfully" });
   } catch (error) {
     console.error(error);
@@ -226,36 +200,32 @@ app.post("/register", async (req, res) => {
 
 app.post("/login", async (req, res) => {
   const { email, password } = req.body;
-
   try {
     const user = await pg.query(
       "SELECT id, email, password FROM user_main WHERE email = $1",
       [email]
     );
-
     if (user.rows.length === 0) {
       return res.status(400).json({ message: "Invalid Username!!!" });
     }
-
     const match = await bcrypt.compare(password, user.rows[0].password);
-
     if (!match) {
       return res.status(400).send({ message: "Incorrect Password!!!" });
     }
-
     const token = jwt.sign(
       {
         email: user.rows[0].email,
+        // Note: first_name and last_name are not selected in the query.
+        // If needed, adjust the SELECT statement accordingly.
         firstname: user.rows[0].first_name,
         lastname: user.rows[0].last_name,
         user_id: user.rows[0].id,
       },
       SECRET_KEY
     );
-
     res.status(200).json({ message: "Login Successful✅", token, email });
   } catch (error) {
-    res.status(500).json({ message: "Error Logging in⚠️. PLease try again" });
+    res.status(500).json({ message: "Error Logging in⚠️. Please try again" });
   }
 });
 
@@ -288,25 +258,28 @@ app.post(
     const parsedSizes = JSON.parse(sizes);
     const parsedColors = JSON.parse(colors);
 
-    const sizeVariants = {
-      s: parsedSizes.includes("s") ? true : false,
-      m: parsedSizes.includes("m") ? true : false,
-      l: parsedSizes.includes("l") ? true : false,
-      xl: parsedSizes.includes("xl") ? true : false,
-      xxl: parsedSizes.includes("xxl") ? true : false,
-      xxxl: parsedSizes.includes("xxxl") ? true : false,
-    };
+    // Use reusable arrays to avoid repetition
+    const sizesArray = ["s", "m", "l", "xl", "xxl", "xxxl"];
+    const colorsArray = [
+      "green",
+      "blue",
+      "red",
+      "black",
+      "grey",
+      "neon",
+      "orange",
+      "yellow",
+    ];
 
-    const color_variants = {
-      green: parsedColors.includes("green") ? true : false,
-      blue: parsedColors.includes("blue") ? true : false,
-      red: parsedColors.includes("red") ? true : false,
-      black: parsedColors.includes("black") ? true : false,
-      grey: parsedColors.includes("grey") ? true : false,
-      neon: parsedColors.includes("neon") ? true : false,
-      orange: parsedColors.includes("orange") ? true : false,
-      yellow: parsedColors.includes("yellow") ? true : false,
-    };
+    const sizeVariants = sizesArray.reduce((obj, size) => {
+      obj[size] = parsedSizes.includes(size);
+      return obj;
+    }, {});
+
+    const color_variants = colorsArray.reduce((obj, color) => {
+      obj[color] = parsedColors.includes(color);
+      return obj;
+    }, {});
 
     const image1 = req.files["image1"] ? req.files["image1"][0].buffer : null;
     const image2 = req.files["image2"] ? req.files["image2"][0].buffer : null;
@@ -316,12 +289,16 @@ app.post(
       return res.status(400).json({ message: "All fields are required" });
     }
 
+    // Use a transaction to group the multi-step product insertion
+    const client = await pg.connect();
     try {
+      await client.query("BEGIN");
+
       const add_product_query = `
         INSERT INTO product_main (name, description, price, rating, category)
         VALUES ($1, $2, $3, $4, $5) RETURNING product_id
       `;
-      const productResult = await pg.query(add_product_query, [
+      const productResult = await client.query(add_product_query, [
         product_name,
         description,
         price,
@@ -334,7 +311,7 @@ app.post(
         INSERT INTO product_images (product_id, image_1, image_2, image_3)
         VALUES ($1, $2, $3, $4)
       `;
-      await pg.query(add_product_img_query, [
+      await client.query(add_product_img_query, [
         product_id,
         image1,
         image2,
@@ -345,7 +322,7 @@ app.post(
         INSERT INTO size_variants (product_id, s, m, l, xl, xxl, xxxl)
         VALUES ($1, $2, $3, $4, $5, $6, $7)
       `;
-      await pg.query(add_product_size_query, [
+      await client.query(add_product_size_query, [
         product_id,
         sizeVariants.s,
         sizeVariants.m,
@@ -355,13 +332,11 @@ app.post(
         sizeVariants.xxxl,
       ]);
 
-      // Insert color variants
       const add_product_color_query = `
         INSERT INTO color_variants (product_id, green, blue, red, black, grey, neon, orange, yellow)
         VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)
       `;
-      // green, blue, red, black, grey, neon, orange, yellow
-      await pg.query(add_product_color_query, [
+      await client.query(add_product_color_query, [
         product_id,
         color_variants.green,
         color_variants.blue,
@@ -377,8 +352,7 @@ app.post(
         INSERT INTO product_info (product_id, material, desc_1, description_2, type, occation, sleeve_length)
         VALUES ($1, $2, $3, $4, $5, $6, $7)
       `;
-
-      await pg.query(add_info_query, [
+      await client.query(add_info_query, [
         product_id,
         fabric,
         desc_1,
@@ -388,10 +362,14 @@ app.post(
         sleeve,
       ]);
 
+      await client.query("COMMIT");
       res.status(201).json({ message: "Product added successfully ✅" });
     } catch (error) {
+      await client.query("ROLLBACK");
       console.error("Error adding product:", error);
       res.status(500).send("Error adding product details");
+    } finally {
+      client.release();
     }
   }
 );
