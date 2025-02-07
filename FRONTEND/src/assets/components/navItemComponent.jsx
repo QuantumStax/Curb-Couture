@@ -90,7 +90,7 @@ const NavItemComponent = ({ setIsOpen }) => {
     },
   ];
   return (
-    <section className="text-banner relative top-[15%] left-[50%] w-[15rem] translate-x-[-7rem]">
+    <section className="text-primary_2 relative top-[15%] left-[50%] w-[15rem] translate-x-[-7rem]">
       <div className="w-full">
         {navItems.map((item, i) => (
           <div key={i} className="w-full">

@@ -4,6 +4,7 @@ import Footer from "../components/footer";
 import OurBrand from "../components/ourBrand";
 // import Categories from "../components/categories";
 import HeroSlider2 from "../components/hero3";
+import Loader from "../components/loader"
 
 // Lazy-loaded components
 const RecentAdditions = lazy(() => import("../components/recentAdditions"));
@@ -24,7 +25,7 @@ function Home() {
         <Categories />
       </section> */}
       <Cupon />
-      <Suspense fallback={<div>Loading...</div>}>
+      <Suspense fallback={<div><Loader/></div>}>
         <section>
           <section className="bg-primary">
             <RecentAdditions />
@@ -40,7 +41,7 @@ function Home() {
           </section>
         </section>
       </Suspense>
-      <section className="bg-brand">
+      <section className="bg-banner_2">
         <OurBrand />
       </section>
       <section className="bg-banner">

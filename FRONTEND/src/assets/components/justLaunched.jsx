@@ -24,7 +24,7 @@ const ShirtsBanner = () => {
           <p className="mt-2 text-lg sm:text-xl md:text-2xl opacity-90">
             Explore the new collection now!
           </p>
-          <button className="mt-6 bg-brand hover:bg-banner text-white text-lg sm:text-xl font-semibold px-6 py-3 rounded-lg shadow-lg transition-transform transform hover:scale-105">
+          <button className="mt-6 bg-banner_2 hover:bg-secondary_2 hover:text-primary_2 text-secondary_2 text-lg sm:text-xl font-semibold px-6 py-3 rounded-lg shadow-lg transition-transform transform hover:scale-105">
             SHOP NOW
           </button>
         </div>

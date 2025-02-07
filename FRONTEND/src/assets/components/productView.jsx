@@ -168,14 +168,14 @@ const ProductView = () => {
                 <p className="text-red-700">Hurry! Only 5 Left</p>
               </div>
               <div className="flex items-center gap-3 mt-2 font-semibold">
-                <h1 className="text-3xl text-banner">₹{product?.price}</h1>
+                <h1 className="text-3xl text-green-600">₹{product?.price}</h1>
                 {/* <p className="line-through text-2xl opacity-50">₹1290</p> */}
               </div>
               <div className="flex gap-4 mt-4">
                 {product?.sizes.map((size, i) => (
                   <div
                     key={i}
-                    className="border py-2 px-4 border-slate-950 cursor-pointer hover:bg-brand hover:text-primary transition-all duration-300"
+                    className="border py-2 px-4 border-slate-950 cursor-pointer hover:bg-secondary_2 hover:text-primary_2 transition-all duration-300"
                   >
                     <p className="uppercase font-semibold">{size}</p>
                   </div>
@@ -206,11 +206,11 @@ const ProductView = () => {
                 >
                   +
                 </button>
-                <div className="flex flex-col items-center justify-center pb-1 ml-5 h-12 w-[9rem] text-xl rounded-md bg-brand text-primary hover:scale-[1.02] hover:shadow-lg cursor-pointer">
+                <div className="flex flex-col items-center justify-center pb-1 ml-5 h-12 w-[9rem] text-xl rounded-md bg-secondary_2 text-primary_2 hover:scale-[1.02] hover:shadow-lg cursor-pointer">
                   <button>Buy Now</button>
                 </div>
               </div>
-              <button className="flex flex-col items-center justify-center pb-1 mt-4 h-12 w-[23rem] text-xl rounded-md border-[2px] border-brand hover:scale-[1.02] hover:shadow-lg cursor-pointer">
+              <button className="flex flex-col items-center justify-center pb-1 mt-4 h-12 w-[23rem] text-xl rounded-md border-[2px] border-secondary_2 hover:scale-[1.02] hover:shadow-lg cursor-pointer">
                 Add to Cart
               </button>
               <div className="mt-5">

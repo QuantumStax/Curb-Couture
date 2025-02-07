@@ -32,7 +32,7 @@ const TopDeals = ({ setIsModalOpen }) => {
         <Shop
           itemArray={products}
           heading="Top Deals"
-          image="\images\just_launched\mythical-dragon-oversized-t-shirt-521913-removebg-preview.webp"
+          image="\images\collection\retro\top_deals_corrected_2.png"
           setIsModalOpen={setIsModalOpen}
         />
       ) : isLoading ? (

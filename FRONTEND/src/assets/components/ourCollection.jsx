@@ -51,7 +51,7 @@ const OurCollection = () => {
               alt={item.category}
               className="w-full h-full object-cover rounded-lg filter brightness-75"
             />
-            <div className="absolute bottom-6 sm:bottom-10 left-4 sm:left-6 z-50">
+            <div className="absolute bottom-6 sm:bottom-10 left-4 sm:left-6 z-20">
               <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-primary">
                 {item.category}
               </h1>

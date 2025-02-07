@@ -73,7 +73,7 @@ const Filter = ({ toggleFilter }) => {
   };
 
   return (
-    <aside className="fixed top-0 left-0 lg:w-[25rem] md:w-[25rem] w-[20rem] h-[100vh] p-6 bg-white text-banner">
+    <aside className="fixed top-0 left-0 lg:w-[25rem] md:w-[25rem] w-[20rem] h-[100vh] p-6 bg-secondary_2 text-primary_2">
       <div
         className="flex items-center justify-between"
         onClick={() => toggleFilter()}
@@ -157,7 +157,7 @@ const Filter = ({ toggleFilter }) => {
                   {item.value.map((val, i) => (
                     <div
                       key={i}
-                      className="border py-2 px-5 border-gray-700 cursor-pointer hover:bg-gray-900 rounded-md"
+                      className="border py-2 px-5 border-gray-400 cursor-pointer hover:bg-white hover:text-secondary_2 rounded-md"
                     >
                       <li className="list-none uppercase text-lg">{val}</li>
                     </div>
@@ -169,7 +169,7 @@ const Filter = ({ toggleFilter }) => {
                   {item.value.map((material, i) => (
                     <div
                       key={i}
-                      className="border py-2 px-5 border-gray-700 cursor-pointer hover:bg-gray-900 rounded-md"
+                      className="border py-2 px-5 border-gray-400 cursor-pointer hover:bg-white hover:text-secondary_2 rounded-md"
                     >
                       <li className="list-none uppercase text-lg">
                         {material}

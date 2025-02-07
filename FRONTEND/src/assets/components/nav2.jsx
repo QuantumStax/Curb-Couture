@@ -70,7 +70,7 @@ const Nav = ({ setIsModalOpen }) => {
     <nav
       role="navigation"
       aria-label="Primary Navigation"
-      className="flex items-center justify-between bg-banner px-5 md:px-10 lg:px-20 py-2 relative"
+      className="flex items-center justify-between bg-banner_2 px-5 md:px-10 lg:px-20 py-2 relative"
     >
       {/* Menu Icon for Mobile */}
       <div
@@ -113,11 +113,11 @@ const Nav = ({ setIsModalOpen }) => {
       {/* Mobile Menu */}
       <div
         ref={navRef}
-        className="fixed inset-0 lg:w-[30%] h-screen bg-white z-50"
+        className="fixed inset-0 lg:w-[30%] h-screen bg-secondary_2 z-50"
         style={{ display: "none" }}
       >
         <div
-          className="text-banner relative top-6 left-20 cursor-pointer"
+          className="text-primary_2 relative top-6 left-20 cursor-pointer"
           onClick={() => setIsOpen((prev) => !prev)}
         >
           <MenuOpenIcon className="text-3xl sm:text-2xl md:text-3xl" />

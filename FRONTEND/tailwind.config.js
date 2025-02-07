@@ -8,13 +8,18 @@ export default {
       colors: {
         // primary: "#FEFAF0",
         primary: "#ECF0F1",
+        primary_2: "#DADADA", //white
         secondary: "#C4C197",
+        secondary_2: "#343434", //gray
         // tertiary: "#DDDDCC",
         tertiary: "#2C3E50",
+        tertiary_2: "",
         // banner: "#E8E59B",
         banner: "#578E7E",
+        banner_2: "#E6F52E", //yellow hue
         // brand: "#FFFCE6",
         brand: "#48A6A7",
+        brand_2: "",
         "text-main": "#403F2B",
         // "cupon-bg": "#FCE2E1",
         "cupon-bg": "#9ACBD0",
@@ -60,3 +65,8 @@ export default {
 // #344CB7
 // #577BC1
 // #578E7E
+
+// Poster related colors - Alex
+// #E6F52E
+// #343434
+// #DADADA

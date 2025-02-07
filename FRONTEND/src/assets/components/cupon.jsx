@@ -7,7 +7,7 @@ const Cupon = ({
 }) => {
   return (
     <section
-      className="flex flex-col sm:flex-row items-center justify-center bg-cupon-bg text-lg sm:text-xl md:text-2xl py-3 sm:py-4 px-4 text-center"
+      className="flex flex-col sm:flex-row items-center justify-center bg-banner_2 text-lg sm:text-xl md:text-2xl py-3 sm:py-4 px-4 text-center"
       aria-labelledby="cupon-heading"
     >
       <div className="mr-1 mb-2 sm:mb-0" aria-label="Discount Icon">
