@@ -82,6 +82,7 @@ const ColorPicker = React.memo(
 // Static options for dropdowns
 const DROPDOWN_OPTIONS = {
   fabric: ["Pure Cotton", "Cotton", "Polyester", "Satin", "Other"],
+  category: ["T-Shirt", "oversized", "classic", "hoodies", "sweaters"],
   occasion: [
     "Casual",
     "Adventure",
@@ -108,7 +109,7 @@ const AddProduct = () => {
     description: "",
     price: "",
     rating: "",
-    category: "",
+    // category: "",
   });
   const [product, setProduct] = useState([]);
   const [roomImgs, setRoomImgs] = useState({});
@@ -117,6 +118,7 @@ const AddProduct = () => {
   const [sizes, setSizes] = useState([]);
   const [colors, setColors] = useState([]);
   const [selectedColors, setSelectedColors] = useState([]);
+  const [category, setCategory] = useState("");
   const [selectedFabric, setSelectedFabric] = useState("");
   const [selectedOccasion, setSelectedOccasion] = useState("");
   const [selectedType, setSelectedType] = useState("");
@@ -200,6 +202,7 @@ const AddProduct = () => {
     data.append("sleeve", selectedSleeve);
     data.append("desc_1", description_1);
     data.append("desc_2", description_2);
+    data.append("category", category);
     Object.keys(roomImgs).forEach((key) => {
       if (roomImgs[key]) data.append(key, roomImgs[key]);
     });
@@ -223,12 +226,13 @@ const AddProduct = () => {
       setSelectedOccasion("");
       setSelectedSleeve("");
       setSelectedType("");
+      setCategory("");
       setFormData({
         product_name: "",
         description: "",
         price: "",
         rating: "",
-        category: "",
+        // category: "",
       });
       setRoomImgs({});
       // Clear status message after 5 seconds
@@ -361,6 +365,7 @@ const AddProduct = () => {
             value={
               {
                 fabric: selectedFabric,
+                category: category,
                 occasion: selectedOccasion,
                 type: selectedType,
                 sleeve: selectedSleeve,
@@ -373,6 +378,7 @@ const AddProduct = () => {
                 occasion: setSelectedOccasion,
                 type: setSelectedType,
                 sleeve: setSelectedSleeve,
+                category: setCategory,
               }[key]
             )}
           />
