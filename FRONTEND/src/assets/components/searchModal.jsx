@@ -3,7 +3,7 @@ import { useState } from "react";
 import CloseIcon from "@mui/icons-material/Close";
 
 const SearchModal = ({ setIsModalOpen }) => {
-  const [isResult, setIsResult] = useState(true);
+  const [isResult, setIsResult] = useState(false);
   const resultItems = [
     {
       img: "/images/collection/specials/starry-night-385896.webp",

@@ -13,20 +13,28 @@ import gsap from "gsap";
 import NavItemComponent from "./navItemComponent";
 import { Link } from "react-router-dom";
 
-const Nav = ({setIsModalOpen}) => {
+const Nav = ({ setIsModalOpen }) => {
   const [isOpen, setIsOpen] = useState(false);
   const navRef = useRef(null);
 
   useEffect(() => {
+    const handleOutsideClick = (event) => {
+      if (navRef.current && !navRef.current.contains(event.target)) {
+        setIsOpen(false);
+      }
+    };
+
     if (isOpen) {
       document.body.style.overflow = "hidden";
       navRef.current.style.display = "block";
+      document.addEventListener("mousedown", handleOutsideClick);
       gsap.fromTo(
         navRef.current,
         { x: "-100%" },
         { x: "0%", duration: 0.5, ease: "power2.out" }
       );
     } else {
+      document.removeEventListener("mousedown", handleOutsideClick);
       gsap.to(navRef.current, {
         x: "-100%",
         duration: 0.5,
@@ -37,6 +45,9 @@ const Nav = ({setIsModalOpen}) => {
         },
       });
     }
+    return () => {
+      document.removeEventListener("mousedown", handleOutsideClick);
+    };
   }, [isOpen]);
 
   const actionIcons = [
@@ -102,7 +113,7 @@ const Nav = ({setIsModalOpen}) => {
       {/* Mobile Menu */}
       <div
         ref={navRef}
-        className="fixed inset-0 w-[30rem] h-screen bg-white z-50"
+        className="fixed inset-0 lg:w-[30%] h-screen bg-white z-50"
         style={{ display: "none" }}
       >
         <div
@@ -111,7 +122,7 @@ const Nav = ({setIsModalOpen}) => {
         >
           <MenuOpenIcon className="text-3xl sm:text-2xl md:text-3xl" />
         </div>
-        <NavItemComponent />
+        <NavItemComponent setIsOpen={setIsOpen} />
       </div>
     </nav>
   );

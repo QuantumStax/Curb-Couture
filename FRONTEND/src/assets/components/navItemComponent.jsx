@@ -1,14 +1,20 @@
+/* eslint-disable react/prop-types */
 import React from "react";
 import { Link } from "react-router-dom";
 import HomeIcon from "@mui/icons-material/Home";
-import LocalOfferIcon from '@mui/icons-material/LocalOffer';
-import StyleIcon from '@mui/icons-material/Style';
-import ZoomOutMapIcon from '@mui/icons-material/ZoomOutMap';
-import AcUnitIcon from '@mui/icons-material/AcUnit';
-import ContactMailIcon from '@mui/icons-material/ContactMail';
-import StarIcon from '@mui/icons-material/Star';
-import ArticleIcon from '@mui/icons-material/Article';
-const NavItemComponent = () => {
+import LocalOfferIcon from "@mui/icons-material/LocalOffer";
+import StyleIcon from "@mui/icons-material/Style";
+import ZoomOutMapIcon from "@mui/icons-material/ZoomOutMap";
+import AcUnitIcon from "@mui/icons-material/AcUnit";
+import ContactMailIcon from "@mui/icons-material/ContactMail";
+import StarIcon from "@mui/icons-material/Star";
+import ArticleIcon from "@mui/icons-material/Article";
+const NavItemComponent = ({ setIsOpen }) => {
+
+  const handleLinkClick = () => {
+    setIsOpen(false);
+  };
+
   const navItems = [
     {
       name: "Home",
@@ -88,14 +94,10 @@ const NavItemComponent = () => {
       <div className="w-full">
         {navItems.map((item, i) => (
           <div key={i} className="w-full">
-            <Link to={item.link}>
+            <Link to={item.link} onClick={handleLinkClick}>
               <li className="flex items-center gap-4 list-none text-3xl leading-loose cursor-pointer hover:underline">
-                <div>
-                  {item.icon}
-                </div>
-                <p>
-                  {item.name}
-                </p>
+                <div>{item.icon}</div>
+                <p>{item.name}</p>
               </li>
             </Link>
           </div>
