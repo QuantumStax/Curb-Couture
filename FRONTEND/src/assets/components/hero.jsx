@@ -1,5 +1,6 @@
 import { useEffect, useRef } from "react";
 import { gsap } from "gsap";
+import { Link } from "react-router-dom";
 
 const Hero = () => {
   const textRef = useRef(null);
@@ -37,7 +38,7 @@ const Hero = () => {
         className="absolute inset-0 pointer-events-none"
         style={{
           backgroundImage:
-            "url('/images/hero/burgess-milner-OYYE4g-I5ZQ-unsplash.jpg')",
+            "url('/images/categories/oversized_hoodie_type_greatly_sweater.webp')",
           backgroundPosition: "center",
           backgroundSize: "cover",
           filter: "brightness(40%)",
@@ -45,10 +46,10 @@ const Hero = () => {
       ></div>
 
       {/* Content */}
-      <div className="relative text-secondary px-5 w-full">
+      <div className="relative text-primary px-5 w-full">
         {/* Heading */}
         <h1
-          className="font-fraunces flex justify-center md:justify-center space-x-1 overflow-hidden text-center"
+          className="font-Outfit flex justify-center md:justify-center space-x-1 overflow-hidden text-center"
           ref={textRef}
         >
           {"Curb Coture".split("").map((char, index) => (
@@ -71,8 +72,10 @@ const Hero = () => {
 
         {/* Explore Button */}
         <div className="flex justify-center mt-10">
-          <div className="flex items-center justify-center rounded-3xl text-center w-[10rem] h-[3rem] bg-primary text-text-main text-lg md:w-[8rem] md:h-[2.5rem] sm:w-[7rem] sm:h-[2.5rem] sm:text-base hover:bg-secondary transition-all duration-500 cursor-pointer font-semibold">
-            <h3>Explore</h3>
+          <div className="flex items-center justify-center rounded-3xl text-center w-[10rem] h-[3rem] bg-brand text-primary text-lg md:w-[8rem] md:h-[2.5rem] sm:w-[7rem] sm:h-[2.5rem] sm:text-base hover:bg-banner transition-all duration-500 cursor-pointer font-semibold">
+            <Link to="/featured">
+              <h3>Explore</h3>
+            </Link>
           </div>
         </div>
       </div>
