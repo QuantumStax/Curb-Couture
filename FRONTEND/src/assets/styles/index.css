@@ -34,4 +34,25 @@
   .custom-scrollbar::-webkit-scrollbar-thumb:hover {
     background: #555 !important;
   }
+
+
+  .privacy-policy h1 {
+    @apply text-2xl font-semibold font-Outfit opacity-70 my-2
+  }
+
+  .privacy-policy h3 {
+    @apply text-xl
+  }
+
+  .privacy-policy span {
+    @apply text-xl
+  }
+
+  .privacy-policy li {
+    @apply list-disc ml-5
+  }
+
+  .privacy-policy p {
+    @apply text-lg
+  }
 }
