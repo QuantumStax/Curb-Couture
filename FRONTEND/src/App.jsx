@@ -8,7 +8,7 @@ import {
 } from "react-router-dom";
 import Home from "./assets/pages/home";
 import Blogs from "./assets/pages/blogs";
-import Contact from "./assets/pages/contact";
+// import Contact from "./assets/pages/contact";
 import ForgotPass from "./assets/pages/forgotPass";
 import Login from "./assets/pages/login";
 import PrivacyPolicy from "./assets/pages/privacyPolicy";
@@ -31,10 +31,40 @@ import Nav from "./assets/components/nav2";
 import ReviewModal from "./assets/components/reviewModal";
 import Account from "./assets/pages/account";
 
+function parseJwt(token) {
+  try {
+    const base64Url = token.split(".")[1];
+    const base64 = base64Url.replace(/-/g, "+").replace(/_/g, "/");
+    const jsonPayload = decodeURIComponent(
+      atob(base64)
+        .split("")
+        .map((c) => "%" + ("00" + c.charCodeAt(0).toString(16)).slice(-2))
+        .join("")
+    );
+    return JSON.parse(jsonPayload);
+  } catch (error) {
+    console.error("Failed to parse token:", error);
+    return null;
+  }
+}
+
 function ProtectedRoute({ children }) {
   const token = localStorage.getItem("token");
   if (!token) {
     return <Navigate to="/login" replace />;
+  }
+  return children;
+}
+
+function AdminRoute({ children }) {
+  const token = localStorage.getItem("token");
+  if (!token) {
+    return <Navigate to="/login" replace />;
+  }
+  const decoded = parseJwt(token);
+  if (!decoded || decoded.role !== "admin") {
+    // Redirect non-admin users to the home page
+    return <Navigate to="/" replace />;
   }
   return children;
 }
@@ -50,6 +80,26 @@ function App() {
           <ScrollToTop />
           <Nav setIsModalOpen={setIsModalOpen} />
           <Routes>
+            {/* Public Routes */}
+            <Route path="/login" element={<Login />} />
+            <Route path="/privacy-policy" element={<PrivacyPolicy />} />
+            <Route path="/register" element={<Register />} />
+            <Route path="/forgot-password" element={<ForgotPass />} />
+            <Route path="/t-n-c" element={<TermsandConditions />} />
+            <Route path="/about-us" element={<AboutUs />} />
+            <Route path="/blogs" element={<Blogs />} />
+            <Route path="/top-deals" element={<TopDeals />} />
+            <Route path="/featured" element={<FeaturedProducts />} />
+            <Route path="/mens-collection" element={<MensCollection />} />
+            <Route path="/womens-collection" element={<WomensCollection />} />
+            <Route path="/account" element={<Account />} />
+            <Route path="/view" element={<ProductView />} />
+            <Route
+              path="/view/:id"
+              element={<ProductView setIsReviewOpen={setIsReviewOpen} />}
+            />
+
+            {/* Protected Routes for authenticated users */}
             <Route
               path="/"
               element={<Home setIsModalOpen={setIsModalOpen} />}
@@ -62,20 +112,6 @@ function App() {
                 </ProtectedRoute>
               }
             />
-            <Route path="/admin" element={<Admin />} />
-            <Route path="/about-us" element={<AboutUs />} />
-            <Route path="/blogs" element={<Blogs />} />
-            <Route path="/contact" element={<Contact />} />
-            <Route path="/forgot-password" element={<ForgotPass />} />
-            <Route path="/login" element={<Login />} />
-            <Route path="/privacy-policy" element={<PrivacyPolicy />} />
-            <Route path="/register" element={<Register />} />
-            <Route path="/t-n-c" element={<TermsandConditions />} />
-            <Route path="/top-deals" element={<TopDeals />} />
-            <Route path="/featured" element={<FeaturedProducts />} />
-            <Route path="/mens-collection" element={<MensCollection />} />
-            <Route path="/womens-collection" element={<WomensCollection />} />
-            <Route path="/account" element={<Account />} />
             <Route
               path="/wishlist"
               element={
@@ -92,10 +128,15 @@ function App() {
                 </ProtectedRoute>
               }
             />
-            <Route path="/view" element={<ProductView />} />
+
+            {/* Admin Protected Route */}
             <Route
-              path="/view/:id"
-              element={<ProductView setIsReviewOpen={setIsReviewOpen} />}
+              path="/admin"
+              element={
+                <AdminRoute>
+                  <Admin />
+                </AdminRoute>
+              }
             />
           </Routes>
           {isModalOpen && <SearchModal setIsModalOpen={setIsModalOpen} />}
