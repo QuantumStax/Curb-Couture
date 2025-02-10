@@ -1,3 +1,5 @@
+/* eslint-disable react/prop-types */
+/* ProductView.jsx */
 import { useState, useRef, useEffect } from "react";
 import { gsap } from "gsap";
 import Footer from "./footer";
@@ -5,19 +7,19 @@ import StraightenIcon from "@mui/icons-material/Straighten";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import AccessTimeIcon from "@mui/icons-material/AccessTime";
 import UndoIcon from "@mui/icons-material/Undo";
-import VerifiedIcon from "@mui/icons-material/Verified";
+// Removed unused VerifiedIcon from reviews rendering (now using server-provided fields)
 import { useParams } from "react-router-dom";
 import Loader from "./loader";
+import axios from "axios";
 
-const ProductView = () => {
+const ProductView = ({ setIsReviewOpen }) => {
   const { id } = useParams();
 
   const [product, setProduct] = useState(null);
-  console.log(product);
-
   const [loading, setLoading] = useState(true);
   const [showOffers, setShowOffers] = useState(false);
   const [quantity, setQuantity] = useState(1);
+  const [reviews, setReviews] = useState([]);
 
   const increaseQuantity = () => {
     setQuantity((prevQuantity) => prevQuantity + 1);
@@ -27,6 +29,7 @@ const ProductView = () => {
     setQuantity((prevQuantity) => (prevQuantity > 1 ? prevQuantity - 1 : 1));
   };
 
+  // Fetch product details
   useEffect(() => {
     const fetchProduct = async () => {
       try {
@@ -42,6 +45,23 @@ const ProductView = () => {
     fetchProduct();
   }, [id]);
 
+  // Fetch reviews using axios
+  useEffect(() => {
+    const fetchReview = async () => {
+      try {
+        const result = await axios.get(`http://localhost:3000/review/${id}`);
+        console.log("result : ", result);
+        
+        const reviews = result.data.reviews
+        console.log("Reviews : ", reviews);
+        setReviews(reviews);
+      } catch(error) {
+        console.error("Error : ", error);
+      }
+    }
+    fetchReview();
+  }, [id]);
+
   const offersRef = useRef(null);
   const offers = [
     {
@@ -55,63 +75,6 @@ const ProductView = () => {
     {
       coupon: "FREESHIP",
       desc: "Free shipping on your first order!",
-    },
-  ];
-  const reviews = [
-    {
-      rating: "⭐⭐⭐⭐⭐",
-      name: "Gopikrishnan S",
-      varified: true,
-      district: "Alappuzha",
-      country: "IN",
-      head: "Great Product",
-      desc: "superb quality at this price point!",
-      date: "01/03/2024",
-      img: "/images/collection/oversized/medusa-oversized-t-shirt-753500.webp",
-    },
-    {
-      rating: "⭐⭐⭐⭐⭐",
-      name: "Gopikrishnan S",
-      varified: true,
-      district: "Alappuzha",
-      country: "IN",
-      head: "Great Product",
-      desc: "superb quality at this price point!",
-      date: "01/03/2024",
-      img: "/images/collection/oversized/medusa-oversized-t-shirt-753500.webp",
-    },
-    {
-      rating: "⭐⭐⭐⭐⭐",
-      name: "Gopikrishnan S",
-      varified: true,
-      district: "Alappuzha",
-      country: "IN",
-      head: "Great Product",
-      desc: "superb quality at this price point!",
-      date: "01/03/2024",
-      img: "/images/collection/oversized/medusa-oversized-t-shirt-753500.webp",
-    },
-    {
-      rating: "⭐⭐⭐⭐⭐",
-      name: "Gopikrishnan S",
-      varified: true,
-      district: "Alappuzha",
-      country: "IN",
-      head: "Great Product",
-      desc: "superb quality at this price point!",
-      date: "01/03/2024",
-      img: "/images/collection/oversized/medusa-oversized-t-shirt-753500.webp",
-    },
-    {
-      rating: "⭐⭐⭐⭐⭐",
-      name: "Gopikrishnan S",
-      varified: true,
-      district: "Alappuzha",
-      country: "IN",
-      head: "Great Product",
-      desc: "superb quality at this price point!",
-      date: "01/03/2024",
-      img: "/images/collection/oversized/medusa-oversized-t-shirt-753500.webp",
     },
   ];
 
@@ -169,7 +132,6 @@ const ProductView = () => {
               </div>
               <div className="flex items-center gap-3 mt-2 font-semibold">
                 <h1 className="text-3xl text-green-600">₹{product?.price}</h1>
-                {/* <p className="line-through text-2xl opacity-50">₹1290</p> */}
               </div>
               <div className="flex gap-4 mt-4">
                 {product?.sizes.map((size, i) => (
@@ -184,10 +146,11 @@ const ProductView = () => {
               <div className="flex items-center gap-2 mt-2">
                 <StraightenIcon />
                 <p>
-                  Please select according to the <span></span>
-                  <a href="%" className="font-semibold hover:underline">
+                  Please select according to the{" "}
+                  <a href="#" className="font-semibold hover:underline">
                     Size Chart
                   </a>
+                  {/* Changed: Updated href from "%" to "#" */}
                 </p>
               </div>
               <div className="flex items-center gap-5 mt-4">
@@ -289,41 +252,29 @@ const ProductView = () => {
           </div>
           {/* Product Review and Rating */}
           <div className="mt-10">
-            <h1 className="text-2xl uppercase font-semibold">Product Review</h1>
-            <hr className="w-[13rem] mt-1 h-[0.1rem] bg-black opacity-70" />
-            <div className="flex items-center gap-2 mt-4">
-              <h1 className="text-4xl text-green-600">4.4</h1>
-              <p className="text-xl">⭐</p>
-              <p>from 15 Reviews</p>
+            <div className="flex items-center gap-10">
+              <h1 className="text-2xl uppercase font-semibold">
+                Product Reviews
+              </h1>
+              <button
+                className="border border-secondary_2 py-2 px-4 hover:shadow-lg uppercase"
+                onClick={() => setIsReviewOpen(true)}
+              >
+                Write a Review
+              </button>
             </div>
+
+            <hr className="w-[13rem] mt-1 h-[0.1rem] bg-black opacity-70" />
+            {/* Changed: Updated review display to match the server data structure */}
             <div className="mt-5">
               {reviews.map((review, i) => (
                 <div key={i} className="mb-10">
-                  <p>{review.rating}</p>
-                  <div className="flex items-center gap-2 mt-2">
-                    <h1>{review.name}</h1>
-                    {review.varified ? (
-                      <VerifiedIcon style={{ color: "blue" }} />
-                    ) : (
-                      ""
-                    )}
-                    <div className="relative left-[65rem] opacity-50">
-                      <p>{review.date}</p>
-                    </div>
-                  </div>
-                  <div className="flex items-center gap-1 opacity-50">
-                    <p>{review.district},</p>
-                    <p>{review.country}</p>
-                  </div>
-                  <h1 className="font-bold my-2 text-xl">{review.head}</h1>
-                  <p className="mb-2">{review.desc}</p>
-                  <div>
-                    <img
-                      src={review.img}
-                      alt="img"
-                      className="h-[10rem] rounded-lg"
-                    />
-                  </div>
+                  <p className="text-xl font-bold">{review.rating}⭐</p>
+                  <h1 className="font-bold my-2 text-xl">{review.title}</h1>
+                  <p className="text-gray-500">
+                    {new Date(review.created_at).toLocaleDateString()}
+                  </p>
+                  <p className="mb-2">{review.review}</p>
                   <hr className="h-[0.1rem] bg-black opacity-30 mt-2" />
                 </div>
               ))}

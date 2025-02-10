@@ -1,17 +1,23 @@
+/* productRoutes.js */
 import express from "express";
 import {
   getColumnNames,
   getProductById,
   getProducts,
   addProduct,
+  submitReview, // Added: Import submitReview
+  getReviewsByProductId, // Added: Import getReviewsByProductId
   upload,
 } from "../controllers/productController.js";
+import jwtTokenMiddleware from "../middlewares/jwtTokenMiddleware.js";
 
 const router = express.Router();
 
 router.get("/get-column-names", getColumnNames);
 router.get("/get-product/:product_id", getProductById);
 router.get("/get-products", getProducts);
+router.get("/review/:id", getReviewsByProductId);
+router.post("/submitReview", jwtTokenMiddleware, submitReview);
 
 // Use multer middleware for file upload on this route
 router.post(

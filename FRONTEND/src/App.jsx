@@ -22,14 +22,16 @@ import { useState } from "react";
 import Admin from "./assets/pages/admin";
 import ScrollToTop from "./assets/components/ScrollToTop";
 import Nav from "./assets/components/nav2";
+import ReviewModal from "./assets/components/reviewModal";
 function App() {
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isReviewOpen, setIsReviewOpen] = useState(false);
   return (
     <Router>
       <CustomScrollbarWrapper>
         <main>
-          <ScrollToTop/>
-          <Nav setIsModalOpen={setIsModalOpen}/>
+          <ScrollToTop />
+          <Nav setIsModalOpen={setIsModalOpen} />
           <Routes>
             <Route
               path="/"
@@ -39,7 +41,7 @@ function App() {
               path="/home/:email"
               element={<Home setIsModalOpen={setIsModalOpen} />}
             />
-            <Route path="/admin" element={<Admin/>}/>
+            <Route path="/admin" element={<Admin />} />
             <Route path="/about-us" element={<AboutUs />} />
             <Route path="/blogs" element={<Blogs />} />
             <Route path="/contact" element={<Contact />} />
@@ -55,9 +57,17 @@ function App() {
             <Route path="/wishlist" element={<WishList />} />
             <Route path="/my-cart" element={<Cart />} />
             <Route path="/view" element={<ProductView />} />
-            <Route path="/view/:id" element={<ProductView />} />
+            <Route
+              path="/view/:id"
+              element={<ProductView setIsReviewOpen={setIsReviewOpen} />}
+            />
           </Routes>
           {isModalOpen ? <SearchModal setIsModalOpen={setIsModalOpen} /> : ""}
+          {isReviewOpen ? (
+            <ReviewModal setIsReviewOpen={setIsReviewOpen} />
+          ) : (
+            ""
+          )}
         </main>
       </CustomScrollbarWrapper>
     </Router>

@@ -1,3 +1,4 @@
+/* productController.js */
 import pool from "../config/db.js";
 import multer from "multer";
 
@@ -19,6 +20,7 @@ export const getColumnNames = async (req, res) => {
     );
     res.status(200).json({ columns: filteredColumns });
   } catch (error) {
+    console.error("Error fetching column names:", error); // Added error logging
     res.status(500).json({ message: "Error fetching colors!" });
   }
 };
@@ -254,5 +256,64 @@ export const addProduct = async (req, res) => {
     res.status(500).send("Error adding product details");
   } finally {
     client.release();
+  }
+};
+
+// Submit a product review
+export const submitReview = async (req, res) => {
+  const { product_id, rating, title, review, termsAccepted } = req.body;
+  console.log("product_id", product_id);
+  console.log("rating", rating);
+  console.log("title", title);
+  console.log("review", review);
+  console.log("termsAccepted", termsAccepted);
+  
+  // Changed: Extract user_id from req.user (assuming jwtTokenMiddleware sets req.user)
+  const { user_id } = req.user || {};
+  console.log("user id : ", user_id);
+  
+  if (!product_id || !rating || !title || !review) {
+    return res.status(400).json({ message: "Missing required fields" });
+  }
+
+  if (!user_id) {
+    console.log("Unauthorized user!!!");
+    return res.status(401).json({ message: "Unauthorized" }); // Added proper unauthorized response
+  }
+  try {
+    const query = `
+      INSERT INTO product_reviews 
+        (product_id, id, rating, title, review, tnc, created_at)
+      VALUES 
+        ($1, $2, $3, $4, $5, $6, NOW())
+      RETURNING *
+    `;
+    const values = [product_id, user_id, rating, title, review, termsAccepted];
+    const result = await pool.query(query, values);
+    res.status(201).json({
+      message: "Review submitted successfully",
+      review: result.rows[0],
+    });
+  } catch (error) {
+    console.error("Error submitting review:", error);
+    res.status(500).json({ message: "Error submitting review" });
+  }
+};
+
+// Get reviews for a given product by its ID
+export const getReviewsByProductId = async (req, res) => {
+  const { id } = req.params;
+  try {
+    const query = `
+      SELECT 
+        product_id, id, rating, title, review, tnc, created_at
+      FROM product_reviews
+      WHERE product_id = $1
+    `;
+    const result = await pool.query(query, [id]);
+    res.status(200).json({ reviews: result.rows });
+  } catch (error) {
+    console.error("Error fetching reviews:", error);
+    res.status(500).json({ message: "Error fetching reviews!" });
   }
 };

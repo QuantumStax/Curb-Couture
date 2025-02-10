@@ -11,13 +11,14 @@ const jwtTokenMiddleware = (req, res, next) => {
     return res.status(401).json({ error: "No token provided" });
   }
 
-  jwt.verify(token, SECRET_KEY, (err, decoded) => {
-    if (err) {
-      return res.status(401).json({ error: "Invalid token" });
-    }
+  try {
+    const decoded = jwt.verify(token, SECRET_KEY);
     req.user = decoded;
     next();
-  });
+  } catch (error) {
+    console.error("Error verifying token:", error);
+    res.status(401).json({ error: "Invalid token" });
+  }
 };
 
 export default jwtTokenMiddleware;
