@@ -60,7 +60,7 @@ export const login = async (req, res) => {
 
   try {
     const userQuery = `
-      SELECT id, email, password, first_name, last_name 
+      SELECT id, email, password, first_name, last_name, role 
       FROM user_main 
       WHERE email = $1
     `;
@@ -80,6 +80,7 @@ export const login = async (req, res) => {
       email: userData.email,
       firstname: userData.first_name,
       lastname: userData.last_name,
+      role: userData.role
     };
 
     const token = jwt.sign(payload, SECRET_KEY, { expiresIn: TOKEN_EXPIRY });

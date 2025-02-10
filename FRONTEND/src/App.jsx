@@ -31,10 +31,8 @@ import Nav from "./assets/components/nav2";
 import ReviewModal from "./assets/components/reviewModal";
 
 function ProtectedRoute({ children }) {
-  // Check if a token exists; in a real app, use more robust auth management
   const token = localStorage.getItem("token");
   if (!token) {
-    // Redirect to login if not authenticated
     return <Navigate to="/login" replace />;
   }
   return children;
@@ -49,9 +47,10 @@ function App() {
       <CustomScrollbarWrapper>
         <main>
           <ScrollToTop />
-          <Nav setIsModalOpen={setIsModalOpen} />
+          <ProtectedRoute>
+            <Nav setIsModalOpen={setIsModalOpen} />
+          </ProtectedRoute>
           <Routes>
-            {/* Protect the home routes */}
             <Route
               path="/"
               element={
@@ -81,8 +80,22 @@ function App() {
             <Route path="/featured" element={<FeaturedProducts />} />
             <Route path="/mens-collection" element={<MensCollection />} />
             <Route path="/womens-collection" element={<WomensCollection />} />
-            <Route path="/wishlist" element={<WishList />} />
-            <Route path="/my-cart" element={<Cart />} />
+            <Route
+              path="/wishlist"
+              element={
+                <ProtectedRoute>
+                  <WishList setIsModalOpen={setIsModalOpen} />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/my-cart"
+              element={
+                <ProtectedRoute>
+                  <Cart setIsModalOpen={setIsModalOpen} />
+                </ProtectedRoute>
+              }
+            />
             <Route path="/view" element={<ProductView />} />
             <Route
               path="/view/:id"

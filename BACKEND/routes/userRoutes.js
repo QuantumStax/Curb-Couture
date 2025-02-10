@@ -1,6 +1,7 @@
 import express from "express";
 import { body } from "express-validator";
 import { register, login } from "../controllers/userController.js";
+import jwtTokenMiddleware from "../middlewares/jwtTokenMiddleware.js";
 
 const router = express.Router();
 
