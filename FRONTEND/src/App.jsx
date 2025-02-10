@@ -29,6 +29,7 @@ import Admin from "./assets/pages/admin";
 import ScrollToTop from "./assets/components/ScrollToTop";
 import Nav from "./assets/components/nav2";
 import ReviewModal from "./assets/components/reviewModal";
+import Account from "./assets/pages/account";
 
 function ProtectedRoute({ children }) {
   const token = localStorage.getItem("token");
@@ -47,17 +48,11 @@ function App() {
       <CustomScrollbarWrapper>
         <main>
           <ScrollToTop />
-          <ProtectedRoute>
-            <Nav setIsModalOpen={setIsModalOpen} />
-          </ProtectedRoute>
+          <Nav setIsModalOpen={setIsModalOpen} />
           <Routes>
             <Route
               path="/"
-              element={
-                <ProtectedRoute>
-                  <Home setIsModalOpen={setIsModalOpen} />
-                </ProtectedRoute>
-              }
+              element={<Home setIsModalOpen={setIsModalOpen} />}
             />
             <Route
               path="/home/:email"
@@ -80,6 +75,7 @@ function App() {
             <Route path="/featured" element={<FeaturedProducts />} />
             <Route path="/mens-collection" element={<MensCollection />} />
             <Route path="/womens-collection" element={<WomensCollection />} />
+            <Route path="/account" element={<Account />} />
             <Route
               path="/wishlist"
               element={

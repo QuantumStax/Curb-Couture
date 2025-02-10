@@ -1,6 +1,5 @@
 /* eslint-disable react/prop-types */
 /* eslint-disable no-unused-vars */
-import LocalOfferIcon from "@mui/icons-material/LocalOffer";
 import SearchIcon from "@mui/icons-material/Search";
 import PersonOutlineOutlinedIcon from "@mui/icons-material/PersonOutlineOutlined";
 import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
@@ -53,7 +52,7 @@ const Nav = ({ setIsModalOpen }) => {
   const actionIcons = [
     {
       icon: <PersonOutlineOutlinedIcon style={{ fontSize: "1.4rem" }} />,
-      path: "/login",
+      path: "/account",
     },
     {
       icon: <FavoriteBorderIcon style={{ fontSize: "1.4rem" }} />,
