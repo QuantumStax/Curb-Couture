@@ -20,7 +20,6 @@ export const getColumnNames = async (req, res) => {
     );
     res.status(200).json({ columns: filteredColumns });
   } catch (error) {
-    console.error("Error fetching column names:", error); // Added error logging
     res.status(500).json({ message: "Error fetching colors!" });
   }
 };
@@ -88,7 +87,6 @@ export const getProductById = async (req, res) => {
 
     res.status(200).json(product);
   } catch (error) {
-    console.error("Error fetching product:", error);
     res.status(500).json({ message: "Error fetching product!" });
   }
 };
@@ -121,7 +119,6 @@ export const getProducts = async (req, res) => {
     }));
     res.status(200).json({ products });
   } catch (error) {
-    console.error("Error fetching products:", error);
     res.status(500).json({ message: "Error fetching products!" });
   }
 };
@@ -252,7 +249,6 @@ export const addProduct = async (req, res) => {
     res.status(201).json({ message: "Product added successfully ✅" });
   } catch (error) {
     await client.query("ROLLBACK");
-    console.error("Error adding product:", error);
     res.status(500).send("Error adding product details");
   } finally {
     client.release();
@@ -263,22 +259,14 @@ export const addProduct = async (req, res) => {
 export const submitReview = async (req, res) => {
   const {id} = req.params;
   const { rating, title, review, termsAccepted } = req.body;
-  console.log("product_id", id);
-  console.log("rating", rating);
-  console.log("title", title);
-  console.log("review", review);
-  console.log("termsAccepted", termsAccepted);
   
-  // Changed: Extract user_id from req.user (assuming jwtTokenMiddleware sets req.user)
   const { user_id } = req.user || {};
-  console.log("user id : ", user_id);
   
   if (!id || !rating || !title || !review) {
     return res.status(400).json({ message: "Missing required fields" });
   }
 
   if (!user_id) {
-    console.log("Unauthorized user!!!");
     return res.status(401).json({ message: "Unauthorized" });
   }
   try {
@@ -291,12 +279,11 @@ export const submitReview = async (req, res) => {
     `;
     const values = [id, user_id, rating, title, review, termsAccepted];
     const result = await pool.query(query, values);
-    res.status(201).json({
+    res.status(200).json({
       message: "Review submitted successfully",
       review: result.rows[0],
     });
   } catch (error) {
-    console.error("Error submitting review:", error);
     res.status(500).json({ message: "Error submitting review" });
   }
 };
@@ -314,7 +301,6 @@ export const getReviewsByProductId = async (req, res) => {
     const result = await pool.query(query, [id]);
     res.status(200).json({ reviews: result.rows });
   } catch (error) {
-    console.error("Error fetching reviews:", error);
     res.status(500).json({ message: "Error fetching reviews!" });
   }
 };

@@ -3,14 +3,11 @@ import CloseIcon from "@mui/icons-material/Close";
 import { useState } from "react";
 import StarIcon from "@mui/icons-material/Star";
 import axios from "axios";
-import { useParams } from "react-router-dom";
 
 const MAX_REVIEW_LENGTH = 200;
 const TOTAL_STARS = 5;
 
-const ReviewModal = ({ setIsReviewOpen }) => {
-
-  const {id} = useParams()
+const ReviewModal = ({ setIsReviewOpen, id }) => {
 
   const [rating, setRating] = useState(0);
   const [hoverRating, setHoverRating] = useState(0);
@@ -56,7 +53,7 @@ const ReviewModal = ({ setIsReviewOpen }) => {
         setReviewText("");
         setTermsAccepted(false);
       } else {
-        setStatusMessage("Submission failed. Please try again.");
+        setStatusMessage(response.message);
       }
     } catch (error) {
       console.error("Error submitting review:", error);

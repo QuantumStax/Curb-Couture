@@ -16,8 +16,8 @@ const router = express.Router();
 router.get("/get-column-names", jwtTokenMiddleware, getColumnNames);
 router.get("/get-product/:product_id", getProductById);
 router.get("/get-products", getProducts);
-router.get("/review/:id", jwtTokenMiddleware, getReviewsByProductId);
-router.post("/submitReview", jwtTokenMiddleware, submitReview);
+router.get("/review/:id", getReviewsByProductId);
+router.post("/submitReview/:id", jwtTokenMiddleware, submitReview);
 
 router.post(
   "/add-product",

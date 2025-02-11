@@ -1,4 +1,4 @@
-/* eslint-disable react/prop-types */
+/* eslint-disable no-unused-vars */
 /* ProductView.jsx */
 import { useState, useRef, useEffect } from "react";
 import { gsap } from "gsap";
@@ -11,13 +11,15 @@ import UndoIcon from "@mui/icons-material/Undo";
 import { useParams } from "react-router-dom";
 import Loader from "./loader";
 import axios from "axios";
+import ReviewModal from "./reviewModal";
 
-const ProductView = ({ setIsReviewOpen }) => {
+const ProductView = () => {
   const { id } = useParams();
 
   const [product, setProduct] = useState(null);
   const [loading, setLoading] = useState(true);
   const [showOffers, setShowOffers] = useState(false);
+  const [isReviewOpen, setIsReviewOpen] = useState(false);
   const [quantity, setQuantity] = useState(1);
   const [reviews, setReviews] = useState([]);
 
@@ -38,27 +40,23 @@ const ProductView = ({ setIsReviewOpen }) => {
         setProduct(data);
         setLoading(false);
       } catch (error) {
-        console.error("Error fetching product:", error);
         setLoading(false);
       }
     };
     fetchProduct();
   }, [id]);
 
-  // Fetch reviews using axios
   useEffect(() => {
     const fetchReview = async () => {
       try {
         const result = await axios.get(`http://localhost:3000/review/${id}`);
-        console.log("result : ", result);
-        
-        const reviews = result.data.reviews
-        console.log("Reviews : ", reviews);
+        const reviews = result.data.reviews;
         setReviews(reviews);
-      } catch(error) {
-        console.error("Error : ", error);
+      } catch (error) {
+        // 
+        setReviews([]);
       }
-    }
+    };
     fetchReview();
   }, [id]);
 
@@ -263,6 +261,8 @@ const ProductView = ({ setIsReviewOpen }) => {
                 Write a Review
               </button>
             </div>
+
+            {isReviewOpen && <ReviewModal setIsReviewOpen={setIsReviewOpen} id={id} />}
 
             <hr className="w-[13rem] mt-1 h-[0.1rem] bg-black opacity-70" />
             {/* Changed: Updated review display to match the server data structure */}

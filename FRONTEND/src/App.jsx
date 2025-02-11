@@ -28,7 +28,6 @@ import SearchModal from "./assets/components/searchModal";
 import Admin from "./assets/pages/admin";
 import ScrollToTop from "./assets/components/ScrollToTop";
 import Nav from "./assets/components/nav2";
-import ReviewModal from "./assets/components/reviewModal";
 import Account from "./assets/pages/account";
 
 function parseJwt(token) {
@@ -63,7 +62,6 @@ function AdminRoute({ children }) {
   }
   const decoded = parseJwt(token);
   if (!decoded || decoded.role !== "admin") {
-    // Redirect non-admin users to the home page
     return <Navigate to="/" replace />;
   }
   return children;
@@ -71,7 +69,7 @@ function AdminRoute({ children }) {
 
 function App() {
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [isReviewOpen, setIsReviewOpen] = useState(false);
+  
 
   return (
     <Router>
@@ -97,7 +95,7 @@ function App() {
             <Route path="/view" element={<ProductView />} />
             <Route
               path="/view/:id"
-              element={<ProductView setIsReviewOpen={setIsReviewOpen} />}
+              element={<ProductView />}
             />
 
             {/* Protected Routes for authenticated users */}
@@ -141,7 +139,6 @@ function App() {
             />
           </Routes>
           {isModalOpen && <SearchModal setIsModalOpen={setIsModalOpen} />}
-          {isReviewOpen && <ReviewModal setIsReviewOpen={setIsReviewOpen} />}
         </main>
       </CustomScrollbarWrapper>
     </Router>
