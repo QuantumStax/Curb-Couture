@@ -261,8 +261,9 @@ export const addProduct = async (req, res) => {
 
 // Submit a product review
 export const submitReview = async (req, res) => {
-  const { product_id, rating, title, review, termsAccepted } = req.body;
-  console.log("product_id", product_id);
+  const {id} = req.params;
+  const { rating, title, review, termsAccepted } = req.body;
+  console.log("product_id", id);
   console.log("rating", rating);
   console.log("title", title);
   console.log("review", review);
@@ -272,13 +273,13 @@ export const submitReview = async (req, res) => {
   const { user_id } = req.user || {};
   console.log("user id : ", user_id);
   
-  if (!product_id || !rating || !title || !review) {
+  if (!id || !rating || !title || !review) {
     return res.status(400).json({ message: "Missing required fields" });
   }
 
   if (!user_id) {
     console.log("Unauthorized user!!!");
-    return res.status(401).json({ message: "Unauthorized" }); // Added proper unauthorized response
+    return res.status(401).json({ message: "Unauthorized" });
   }
   try {
     const query = `
@@ -288,7 +289,7 @@ export const submitReview = async (req, res) => {
         ($1, $2, $3, $4, $5, $6, NOW())
       RETURNING *
     `;
-    const values = [product_id, user_id, rating, title, review, termsAccepted];
+    const values = [id, user_id, rating, title, review, termsAccepted];
     const result = await pool.query(query, values);
     res.status(201).json({
       message: "Review submitted successfully",

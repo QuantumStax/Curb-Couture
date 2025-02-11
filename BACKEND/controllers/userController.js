@@ -6,7 +6,7 @@ import { validationResult } from "express-validator";
 dotenv.config();
 
 const SECRET_KEY = process.env.SECRET_KEY;
-const TOKEN_EXPIRY = process.env.TOKEN_EXPIRY || "2h";
+const TOKEN_EXPIRY = process.env.TOKEN_EXPIRY || "3h";
 const SALT_ROUNDS = Number(process.env.SALT_ROUNDS) || 10;
 
 export const register = async (req, res) => {
@@ -97,6 +97,8 @@ export const login = async (req, res) => {
       expiresIn: TOKEN_EXPIRY,
       algorithm: "HS256",
     });
+
+    // TODO : request login if token expired
 
     res.status(200).json({ message: "Login Successful ✅", token });
   } catch (error) {

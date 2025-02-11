@@ -8,7 +8,7 @@ import {
 } from "react-router-dom";
 import Home from "./assets/pages/home";
 import Blogs from "./assets/pages/blogs";
-// import Contact from "./assets/pages/contact";
+import Contact from "./assets/pages/contact";
 import ForgotPass from "./assets/pages/forgotPass";
 import Login from "./assets/pages/login";
 import PrivacyPolicy from "./assets/pages/privacyPolicy";
@@ -93,6 +93,7 @@ function App() {
             <Route path="/mens-collection" element={<MensCollection />} />
             <Route path="/womens-collection" element={<WomensCollection />} />
             <Route path="/account" element={<Account />} />
+            <Route path="/contact" element={<Contact />} />
             <Route path="/view" element={<ProductView />} />
             <Route
               path="/view/:id"

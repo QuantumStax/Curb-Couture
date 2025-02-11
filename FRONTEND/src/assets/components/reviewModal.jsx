@@ -3,11 +3,15 @@ import CloseIcon from "@mui/icons-material/Close";
 import { useState } from "react";
 import StarIcon from "@mui/icons-material/Star";
 import axios from "axios";
+import { useParams } from "react-router-dom";
 
 const MAX_REVIEW_LENGTH = 200;
 const TOTAL_STARS = 5;
 
 const ReviewModal = ({ setIsReviewOpen }) => {
+
+  const {id} = useParams()
+
   const [rating, setRating] = useState(0);
   const [hoverRating, setHoverRating] = useState(0);
   const [reviewTitle, setReviewTitle] = useState("");
@@ -38,7 +42,7 @@ const ReviewModal = ({ setIsReviewOpen }) => {
     setStatusMessage("Submitting...");
 
     try {
-      const response = await axios.post("http://localhost:3000/submitReview", reviewData, {
+      const response = await axios.post(`http://localhost:3000/submitReview/${id}`, reviewData, {
         headers: {
           Authorization: `Bearer ${localStorage.getItem("token")}`,
           "Content-Type": "application/json",
