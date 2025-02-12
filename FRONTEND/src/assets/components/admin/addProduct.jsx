@@ -174,6 +174,7 @@ const AddProduct = () => {
       try {
         const res = await fetch("http://localhost:3000/get-column-names", {
           signal: abortController.signal,
+          credentials: "include",
         });
         if (!res.ok) throw new Error(`HTTP error! Status: ${res.status}`);
         const data = await res.json();
@@ -211,7 +212,7 @@ const AddProduct = () => {
       const response = await axios.post(
         "http://localhost:3000/add-product",
         data,
-        { headers: { "Content-Type": "multipart/form-data" } }
+        { headers: { "Content-Type": "multipart/form-data" }, withCredentials: true }
       );
 
       // State updates and reset

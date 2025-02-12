@@ -8,7 +8,6 @@ const MAX_REVIEW_LENGTH = 200;
 const TOTAL_STARS = 5;
 
 const ReviewModal = ({ setIsReviewOpen, id }) => {
-
   const [rating, setRating] = useState(0);
   const [hoverRating, setHoverRating] = useState(0);
   const [reviewTitle, setReviewTitle] = useState("");
@@ -39,13 +38,19 @@ const ReviewModal = ({ setIsReviewOpen, id }) => {
     setStatusMessage("Submitting...");
 
     try {
-      const response = await axios.post(`http://localhost:3000/submitReview/${id}`, reviewData, {
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem("token")}`,
-          "Content-Type": "application/json",
-        },
-      });
+      const response = await axios.post(
+        `http://localhost:3000/submitReview/${id}`,
+        reviewData,
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+          withCredentials: true,
+        }
+      );
 
+      console.log(response);
+      
       if (response.status === 200) {
         setStatusMessage("Review submitted successfully!");
         setRating(0);

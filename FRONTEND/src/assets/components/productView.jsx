@@ -1,5 +1,4 @@
 /* eslint-disable no-unused-vars */
-/* ProductView.jsx */
 import { useState, useRef, useEffect } from "react";
 import { gsap } from "gsap";
 import Footer from "./footer";
@@ -7,8 +6,7 @@ import StraightenIcon from "@mui/icons-material/Straighten";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import AccessTimeIcon from "@mui/icons-material/AccessTime";
 import UndoIcon from "@mui/icons-material/Undo";
-// Removed unused VerifiedIcon from reviews rendering (now using server-provided fields)
-import { useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import Loader from "./loader";
 import axios from "axios";
 import ReviewModal from "./reviewModal";
@@ -31,7 +29,6 @@ const ProductView = () => {
     setQuantity((prevQuantity) => (prevQuantity > 1 ? prevQuantity - 1 : 1));
   };
 
-  // Fetch product details
   useEffect(() => {
     const fetchProduct = async () => {
       try {
@@ -53,7 +50,7 @@ const ProductView = () => {
         const reviews = result.data.reviews;
         setReviews(reviews);
       } catch (error) {
-        // 
+        //
         setReviews([]);
       }
     };
@@ -125,9 +122,9 @@ const ProductView = () => {
                 <p> from 15 Reviews</p>
               </div>
               <p className="mt-2 opacity-70">{product?.description}</p>
-              <div className="my-2">
+              {/* <div className="my-2">
                 <p className="text-red-700">Hurry! Only 5 Left</p>
-              </div>
+              </div> */}
               <div className="flex items-center gap-3 mt-2 font-semibold">
                 <h1 className="text-3xl text-green-600">₹{product?.price}</h1>
               </div>
@@ -168,7 +165,9 @@ const ProductView = () => {
                   +
                 </button>
                 <div className="flex flex-col items-center justify-center pb-1 ml-5 h-12 w-[9rem] text-xl rounded-md bg-secondary_2 text-primary_2 hover:scale-[1.02] hover:shadow-lg cursor-pointer">
-                  <button>Buy Now</button>
+                  <Link to="/checkout">
+                    <button>Buy Now</button>
+                  </Link>
                 </div>
               </div>
               <button className="flex flex-col items-center justify-center pb-1 mt-4 h-12 w-[23rem] text-xl rounded-md border-[2px] border-secondary_2 hover:scale-[1.02] hover:shadow-lg cursor-pointer">
@@ -227,24 +226,31 @@ const ProductView = () => {
             <h1 className="text-2xl uppercase font-semibold">Product Info</h1>
             <hr className="w-[11rem] mt-1 h-[0.1rem] bg-black opacity-70" />
             <div className="text-lg mt-4">
-              <p>
-                The garments labelled as committed are products that have been
-                produced using sustainable fibres or processes, reducing their
-                environmental impact. Umino’s goal is to support the
-                implementation of practices more committed to the environment.
-              </p>
+              <p>{product?.desc_1}</p>
               <div className="mt-2">
-                <li>Name: Medusa Oversized T-Shirt</li>
-                <li>Fabric: Pure Cotton</li>
-                <li>Occation: Casual</li>
-                <li>Pattern: Screen Printed</li>
-                <li>Sleeve Length: Short Sleeve</li>
+                <li className="flex gap-2">
+                  <span className="font-semibold">Name : </span>
+                  <p>{product?.name}</p>
+                </li>
+                <li className="flex gap-2">
+                  <span className="font-semibold">Fabric : </span>
+                  <p>{product?.material}</p>
+                </li>
+                <li className="flex gap-2">
+                  <span className="font-semibold">Occation : </span>
+                  <p>{product?.occation}</p>
+                </li>
+                <li className="flex gap-2">
+                  <span className="font-semibold">Pattern : </span>
+                  <p>{product?.type}</p>
+                </li>
+                <li className="flex gap-2">
+                  <span className="font-semibold">Sleeve Length : </span>
+                  <p>{product?.sleeve_length}</p>
+                </li>
               </div>
               <p className="mt-2">
-                Made of cotton, you will love the high-quality fit and feel of
-                this Medusa Oversized tee. A fashionable weekend outfit starts
-                with this white top matched with chinos and your favourite pair
-                of sunglasses to cast an effortlessly cool image.
+                {product?.description}
               </p>
             </div>
           </div>
@@ -262,7 +268,9 @@ const ProductView = () => {
               </button>
             </div>
 
-            {isReviewOpen && <ReviewModal setIsReviewOpen={setIsReviewOpen} id={id} />}
+            {isReviewOpen && (
+              <ReviewModal setIsReviewOpen={setIsReviewOpen} id={id} />
+            )}
 
             <hr className="w-[13rem] mt-1 h-[0.1rem] bg-black opacity-70" />
             {/* Changed: Updated review display to match the server data structure */}
