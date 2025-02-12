@@ -1,11 +1,11 @@
 /* eslint-disable react/prop-types */
-import { useState } from "react";
 import {
   BrowserRouter as Router,
   Routes,
   Route,
   Navigate,
 } from "react-router-dom";
+import { AuthProvider, useAuth } from "./context/authContext";
 import Home from "./assets/pages/home";
 import Blogs from "./assets/pages/blogs";
 import Contact from "./assets/pages/contact";
@@ -29,119 +29,95 @@ import Admin from "./assets/pages/admin";
 import ScrollToTop from "./assets/components/ScrollToTop";
 import Nav from "./assets/components/nav2";
 import Account from "./assets/pages/account";
+import Hoodies from "./assets/pages/hoodies";
+import { useState } from "react";
 
-function parseJwt(token) {
-  try {
-    const base64Url = token.split(".")[1];
-    const base64 = base64Url.replace(/-/g, "+").replace(/_/g, "/");
-    const jsonPayload = decodeURIComponent(
-      atob(base64)
-        .split("")
-        .map((c) => "%" + ("00" + c.charCodeAt(0).toString(16)).slice(-2))
-        .join("")
-    );
-    return JSON.parse(jsonPayload);
-  } catch (error) {
-    console.error("Failed to parse token:", error);
-    return null;
-  }
-}
+const ProtectedRoute = ({ children }) => {
+  const { isAuthenticated, loading } = useAuth();
+  if (loading) return <div>Loading...</div>;
+  return isAuthenticated ? children : <Navigate to="/login" replace />;
+};
 
-function ProtectedRoute({ children }) {
-  const token = localStorage.getItem("token");
-  if (!token) {
-    return <Navigate to="/login" replace />;
-  }
-  return children;
-}
-
-function AdminRoute({ children }) {
-  const token = localStorage.getItem("token");
-  if (!token) {
-    return <Navigate to="/login" replace />;
-  }
-  const decoded = parseJwt(token);
-  if (!decoded || decoded.role !== "admin") {
-    return <Navigate to="/" replace />;
-  }
-  return children;
-}
+const AdminRoute = ({ children }) => {
+  const { isAuthenticated, isAdmin, loading } = useAuth();
+  if (loading) return <div>Loading...</div>;
+  return isAuthenticated && isAdmin ? children : <Navigate to="/" replace />;
+};
 
 function App() {
   const [isModalOpen, setIsModalOpen] = useState(false);
-  
 
   return (
-    <Router>
-      <CustomScrollbarWrapper>
-        <main>
-          <ScrollToTop />
-          <Nav setIsModalOpen={setIsModalOpen} />
-          <Routes>
-            {/* Public Routes */}
-            <Route path="/login" element={<Login />} />
-            <Route path="/privacy-policy" element={<PrivacyPolicy />} />
-            <Route path="/register" element={<Register />} />
-            <Route path="/forgot-password" element={<ForgotPass />} />
-            <Route path="/t-n-c" element={<TermsandConditions />} />
-            <Route path="/about-us" element={<AboutUs />} />
-            <Route path="/blogs" element={<Blogs />} />
-            <Route path="/top-deals" element={<TopDeals />} />
-            <Route path="/featured" element={<FeaturedProducts />} />
-            <Route path="/mens-collection" element={<MensCollection />} />
-            <Route path="/womens-collection" element={<WomensCollection />} />
-            <Route path="/account" element={<Account />} />
-            <Route path="/contact" element={<Contact />} />
-            <Route path="/view" element={<ProductView />} />
-            <Route
-              path="/view/:id"
-              element={<ProductView />}
-            />
+    <AuthProvider>
+      <Router>
+        <CustomScrollbarWrapper>
+          <main>
+            <ScrollToTop />
+            <Nav setIsModalOpen={setIsModalOpen} />
+            <Routes>
+              {/* Public Routes */}
+              <Route path="/login" element={<Login />} />
+              <Route path="/privacy-policy" element={<PrivacyPolicy />} />
+              <Route path="/register" element={<Register />} />
+              <Route path="/forgot-password" element={<ForgotPass />} />
+              <Route path="/t-n-c" element={<TermsandConditions />} />
+              <Route path="/about-us" element={<AboutUs />} />
+              <Route path="/blogs" element={<Blogs />} />
+              <Route path="/top-deals" element={<TopDeals />} />
+              <Route path="/hoodies" element={<Hoodies />} />
+              <Route path="/featured" element={<FeaturedProducts />} />
+              <Route path="/mens-collection" element={<MensCollection />} />
+              <Route path="/womens-collection" element={<WomensCollection />} />
+              <Route path="/account" element={<Account />} />
+              <Route path="/contact" element={<Contact />} />
+              <Route path="/view" element={<ProductView />} />
+              <Route path="/view/:id" element={<ProductView />} />
 
-            {/* Protected Routes for authenticated users */}
-            <Route
-              path="/"
-              element={<Home setIsModalOpen={setIsModalOpen} />}
-            />
-            <Route
-              path="/home/:email"
-              element={
-                <ProtectedRoute>
-                  <Home setIsModalOpen={setIsModalOpen} />
-                </ProtectedRoute>
-              }
-            />
-            <Route
-              path="/wishlist"
-              element={
-                <ProtectedRoute>
-                  <WishList setIsModalOpen={setIsModalOpen} />
-                </ProtectedRoute>
-              }
-            />
-            <Route
-              path="/my-cart"
-              element={
-                <ProtectedRoute>
-                  <Cart setIsModalOpen={setIsModalOpen} />
-                </ProtectedRoute>
-              }
-            />
+              {/* Protected Routes for authenticated users */}
+              <Route
+                path="/"
+                element={<Home setIsModalOpen={setIsModalOpen} />}
+              />
+              <Route
+                path="/home/:email"
+                element={
+                  <ProtectedRoute>
+                    <Home setIsModalOpen={setIsModalOpen} />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/wishlist"
+                element={
+                  <ProtectedRoute>
+                    <WishList setIsModalOpen={setIsModalOpen} />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/my-cart"
+                element={
+                  <ProtectedRoute>
+                    <Cart setIsModalOpen={setIsModalOpen} />
+                  </ProtectedRoute>
+                }
+              />
 
-            {/* Admin Protected Route */}
-            <Route
-              path="/admin"
-              element={
-                <AdminRoute>
-                  <Admin />
-                </AdminRoute>
-              }
-            />
-          </Routes>
-          {isModalOpen && <SearchModal setIsModalOpen={setIsModalOpen} />}
-        </main>
-      </CustomScrollbarWrapper>
-    </Router>
+              {/* Admin Protected Route */}
+              <Route
+                path="/admin"
+                element={
+                  <AdminRoute>
+                    <Admin />
+                  </AdminRoute>
+                }
+              />
+            </Routes>
+            {isModalOpen && <SearchModal setIsModalOpen={setIsModalOpen} />}
+          </main>
+        </CustomScrollbarWrapper>
+      </Router>
+    </AuthProvider>
   );
 }
 

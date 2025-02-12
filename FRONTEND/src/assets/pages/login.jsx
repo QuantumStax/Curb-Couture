@@ -1,60 +1,70 @@
-/* eslint-disable no-unused-vars */
 import { Link, useNavigate } from "react-router-dom";
-import Nav from "../components/nav2";
+import { useState } from "react";
+import { useAuth } from "../../context/authContext";
+import axios from "axios";
+import Footer from "../components/footer";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
-import Footer from "../components/footer";
-import axios from "axios";
-import { useState } from "react";
 
 const Login = () => {
   const navigate = useNavigate();
+  const { setAuthState } = useAuth();
 
-  const [formData, setFormData] = useState({
-    email: "",
-    password: "",
-  });
-
+  const [formData, setFormData] = useState({ email: "", password: "" });
   const [isError, setIsError] = useState(null);
   const [message, setMessage] = useState("");
   const [showMessage, setShowMessage] = useState(false);
   const [isVisible, setIsVisible] = useState(false);
+  const [loading, setLoading] = useState(false);
 
-  function toggleVisibility() {
-    setIsVisible(!isVisible);
-  }
+  const toggleVisibility = () => setIsVisible(!isVisible);
 
-  function handleInputChange(e) {
+  const handleInputChange = (e) =>
     setFormData({ ...formData, [e.target.name]: e.target.value });
-  }
 
-  async function handleSubmit(e) {
+  const handleSubmit = async (e) => {
     e.preventDefault();
+    setLoading(true);
+    setIsError(null);
+    setMessage("");
+    setShowMessage(false);
 
     try {
       const response = await axios.post(
         "http://localhost:3000/login",
         formData,
         {
-          headers: {
-            "Content-Type": "application/json",
-          },
+          headers: { "Content-Type": "application/json" },
+          withCredentials: true,
         }
       );
 
-      if (response.data.token) {
-        localStorage.setItem("token", response.data.token);
-        navigate(`/home/${formData.email}`);
+      if (response.data.user) {
+        setAuthState({
+          isAuthenticated: true,
+          isAdmin: response.data.user.role === "admin",
+          user: response.data.user,
+        });
+
+        navigate(
+          response.data.user.role === "admin"
+            ? "/admin"
+            : `/home/${formData.email}`
+        );
+
+        setIsError(false);
+        setMessage("Login Successful ✅");
       }
-      setIsError(false);
-      setMessage("Login Successful✅");
-      setShowMessage(true);
     } catch (error) {
       setIsError(true);
-      setMessage("An error occurred⚠️");
+      setMessage(
+        error.response?.data?.message || "Invalid email or password. Try again."
+      );
+    } finally {
       setShowMessage(true);
+      setLoading(false);
     }
-  }
+  };
 
   return (
     <section>
@@ -66,15 +76,17 @@ const Login = () => {
           <form onSubmit={handleSubmit}>
             <div>
               <label htmlFor="email" className="block text-sm md:text-base">
-                Username
+                Email
               </label>
               <input
                 id="email"
                 type="email"
                 name="email"
                 placeholder="johndoe@gmail.com"
+                value={formData.email}
                 onChange={handleInputChange}
                 className="bg-transparent border border-slate-950 w-full px-3 py-2 mt-2 rounded-md focus:outline-none focus:ring-1 focus:ring-black"
+                required
               />
             </div>
             <div className="relative mt-4">
@@ -86,8 +98,10 @@ const Login = () => {
                 type={isVisible ? "text" : "password"}
                 name="password"
                 placeholder="Enter Your Password"
+                value={formData.password}
                 onChange={handleInputChange}
                 className="bg-transparent border border-slate-950 w-full px-3 py-2 mt-2 rounded-md focus:outline-none focus:ring-1 focus:ring-black"
+                required
               />
               <div
                 onClick={toggleVisibility}
@@ -104,9 +118,13 @@ const Login = () => {
                 </p>
               </div>
             )}
+
             <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between mt-6">
-              <button className="bg-black text-primary text-base md:text-lg py-2 px-4 rounded-md w-full">
-                Login
+              <button
+                className="bg-black text-primary text-base md:text-lg py-2 px-4 rounded-md w-full disabled:opacity-50"
+                disabled={loading}
+              >
+                {loading ? "Logging in..." : "Login"}
               </button>
               <div className="mt-4 sm:mt-0 sm:ml-4 hover:text-primary hover:bg-black border border-slate-950 py-2 px-4 rounded-md w-full text-center transition-all duration-500">
                 <Link to="/register">
@@ -114,12 +132,13 @@ const Login = () => {
                 </Link>
               </div>
             </div>
+
             <div className="mt-6 text-center text-sm md:text-base">
               <Link
                 to="/forgot-password"
                 className="flex flex-col sm:flex-row items-center justify-center"
               >
-                <p className="mr-1">Dont remember your password?</p>
+                <p className="mr-1">Forgot your password?</p>
                 <p className="hover:text-blue-700 hover:underline">
                   Recover Password
                 </p>

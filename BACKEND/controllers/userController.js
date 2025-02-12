@@ -1,29 +1,38 @@
 import pool from "../config/db.js";
 import bcrypt from "bcrypt";
-import jwt from "jsonwebtoken";
+import { V2 } from "paseto";
+import crypto from "crypto";
+import ms from "ms";
 import dotenv from "dotenv";
 import { validationResult } from "express-validator";
 dotenv.config();
 
-const SECRET_KEY = process.env.SECRET_KEY;
 const TOKEN_EXPIRY = process.env.TOKEN_EXPIRY || "3h";
 const SALT_ROUNDS = Number(process.env.SALT_ROUNDS) || 10;
 
+// Helper to obtain the Ed25519 private key for signing tokens
+
+const getPrivateKey = () => {
+  const privateKeyPEM = process.env.PRIVATE_KEY;
+  if (!privateKeyPEM) {
+    throw new Error("PRIVATE_KEY is not defined in environment variables");
+  }
+  const formattedKey = privateKeyPEM.replace(/\\n/g, "\n");
+  return crypto.createPrivateKey(formattedKey);
+};
+
 export const register = async (req, res) => {
-  // Ensure upstream validation middleware has run
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
     return res.status(400).json({ errors: errors.array() });
   }
 
-  // Destructure and validate required fields
   const { firstname, lastname, email, phoneNumber, password, dob } = req.body;
   if (!firstname || !lastname || !email || !password || !dob) {
     return res.status(400).json({ message: "Missing required fields" });
   }
 
   try {
-    // Check if a user with this email already exists
     const userExists = await pool.query(
       "SELECT email FROM user_main WHERE email = $1",
       [email]
@@ -53,7 +62,6 @@ export const register = async (req, res) => {
 };
 
 export const login = async (req, res) => {
-  // Ensure upstream validation middleware has run
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
     return res.status(400).json({ errors: errors.array() });
@@ -72,7 +80,6 @@ export const login = async (req, res) => {
     `;
     const userResult = await pool.query(userQuery, [email]);
     if (userResult.rows.length === 0) {
-      // Use a generic error message to prevent enumeration
       return res.status(400).json({ message: "Invalid email or password" });
     }
 
@@ -82,7 +89,9 @@ export const login = async (req, res) => {
       return res.status(400).json({ message: "Invalid email or password" });
     }
 
-    // Build the token payload; include isAdmin flag for admin users
+    // Compute expiration as a Unix timestamp (in seconds) and convert to string
+    const expiration = new Date(Date.now() + ms(TOKEN_EXPIRY)).toISOString();
+
     const payload = {
       user_id: userData.id,
       email: userData.email,
@@ -90,17 +99,32 @@ export const login = async (req, res) => {
       lastname: userData.last_name,
       role: userData.role,
       isAdmin: userData.role === "admin",
+      exp: expiration,
     };
 
-    // Sign the token using HS256 and set the expiry time
-    const token = jwt.sign(payload, SECRET_KEY, {
-      expiresIn: TOKEN_EXPIRY,
-      algorithm: "HS256",
+    const privateKey = getPrivateKey();
+    // Sign the token using V2.sign with the Ed25519 private key
+    const token = await V2.sign(payload, privateKey);
+
+    res.cookie("token", token, {
+      httpOnly: true,
+      secure: false,
+      sameSite: "lax",
+      maxAge: ms(TOKEN_EXPIRY),
     });
 
-    // TODO : request login if token expired
+    // Build the user response without sensitive data
+    const userResponse = {
+      id: userData.id,
+      email: userData.email,
+      first_name: userData.first_name,
+      last_name: userData.last_name,
+      role: userData.role,
+    };
 
-    res.status(200).json({ message: "Login Successful ✅", token });
+    res
+      .status(200)
+      .json({ message: "Login Successful ✅", user: userResponse });
   } catch (error) {
     console.error("Login error:", error);
     res.status(500).json({ message: "Error logging in. Please try again." });
@@ -109,6 +133,7 @@ export const login = async (req, res) => {
 
 export const logout = async (req, res) => {
   try {
+    res.clearCookie("token");
     res.status(200).json({ message: "Logout successful! 😎" });
   } catch (error) {
     console.error("Error during logout:", error);
