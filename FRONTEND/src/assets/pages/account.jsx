@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 import { useEffect, useState } from "react";
 import UserAccount from "../components/userAccount";
 import Login from "./login";
@@ -12,11 +13,9 @@ const Account = () => {
           method: "GET",
           credentials: "include"
         });
-        console.log("response : ", res);
         
         if (res.ok) {
           const data = await res.json();
-          console.log("data : ", data);
           if (data.isAuthenticated) {
             setIsLoggedIn(true)
           } else {
@@ -27,7 +26,6 @@ const Account = () => {
         }
       } catch (error) {
         // 
-        console.log(error);
       }
     };
     validateUser();

@@ -14,14 +14,12 @@ const getPublicKey = () => {
 };
 
 const tokenMiddleware = async (req, res, next) => {
-  console.log("Cookies received:", req.cookies);
 
   if (!req.cookies || !req.cookies.token) {
     return res.status(401).json({ error: "Unauthorized - No token found" });
   }
   try {
     const token = req.cookies.token;
-    console.log("token : ", token);
 
     if (!token) {
       return res.status(401).json({ error: "No token provided" });
@@ -34,7 +32,6 @@ const tokenMiddleware = async (req, res, next) => {
     // res.status(200).json({isAuthenticated: true, user: decoded})
     next();
   } catch (error) {
-    console.error("Error verifying token:", error);
     res.status(401).json({ error: "Invalid token" });
   }
 };
