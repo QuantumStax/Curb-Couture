@@ -278,10 +278,12 @@ const ProductView = () => {
               {reviews.map((review, i) => (
                 <div key={i} className="mb-10">
                   <p className="text-xl font-bold">{review.rating}⭐</p>
-                  <h1 className="font-bold my-2 text-xl">{review.title}</h1>
-                  <p className="text-gray-500">
-                    {new Date(review.created_at).toLocaleDateString()}
-                  </p>
+                  <div className="flex gap-2 justify-between">
+                    <h1 className="font-bold my-2 text-xl">{review.title}</h1>
+                    <p className="text-gray-500">
+                      {new Date(review.created_at).toLocaleDateString()}
+                    </p>
+                  </div>
                   <p className="mb-2">{review.review}</p>
                   <hr className="h-[0.1rem] bg-black opacity-30 mt-2" />
                 </div>
