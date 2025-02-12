@@ -6,22 +6,20 @@ const UserAccount = () => {
 
   const handleLogout = async () => {
     try {
-      // Remove token from localStorage immediately
-      localStorage.removeItem("token");
-
-      // Optionally include withCredentials if backend sets HttpOnly cookies
-      const response = await axios.post("http://localhost:3000/logout");
+      const response = await axios.post(
+        "http://localhost:3000/logout",
+        {},
+        { withCredentials: true }
+      );
 
       console.log("Logout response:", response.data);
 
-      // Redirect user to login page after logout
       navigate("/", { replace: true });
     } catch (error) {
-      // Log detailed error information
       if (error.response) {
-        console.error("Logout error:", error.response.data);
+        console.error("Logout error:");
       } else {
-        console.error("Logout error:", error.message);
+        console.error("Logout error:");
       }
     }
   };

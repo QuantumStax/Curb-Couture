@@ -110,6 +110,7 @@ export const login = async (req, res) => {
       secure: false,
       sameSite: "lax",
       maxAge: ms(TOKEN_EXPIRY),
+      path: "/"
     });
 
     // Build the user response without sensitive data
@@ -131,7 +132,12 @@ export const login = async (req, res) => {
 
 export const logout = async (req, res) => {
   try {
-    res.clearCookie("token");
+    res.clearCookie("token", {
+      httpOnly: true,
+      secure: false,
+      sameSite: "lax",
+      path: "/"
+    });
     res.status(200).json({ message: "Logout successful! 😎" });
   } catch (error) {
     res
