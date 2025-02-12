@@ -74,7 +74,7 @@ const ShopActionsMenu = () => {
   }, [isFilterOpen, isSortOpen]);
 
   return (
-    <div className="flex items-end lg:gap-5 gap-2 lg:px-20 px-5 lg:py-22 py-16 h-[15rem]">
+    <div className="flex items-end lg:gap-5 gap-2 lg:px-[7rem] px-5 lg:py-22 py-16 h-[15rem]">
       {/* filter */}
       <div
         className="relative rounded-lg bg-secondary_2 text-primary_2 py-2 px-6 lg:w-[10rem] w-[10rem] h-[3rem] cursor-pointer hover:shadow-xl"

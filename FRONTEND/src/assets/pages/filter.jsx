@@ -7,38 +7,42 @@ import { gsap } from "gsap";
 const Filter = ({ toggleFilter }) => {
   const filterItems = [
     { head: "price" },
-    {
-      head: "color",
-      colors: [
-        {
-          name: "Black",
-          value: "#000",
-        },
-        {
-          name: "Grey",
-          value: "#808080",
-        },
-        {
-          name: "Red",
-          value: "#FF0000",
-        },
-        {
-          name: "Green",
-          value: "#008000",
-        },
-        {
-          name: "Blue",
-          value: "#0000FF",
-        },
-      ],
-    },
+    // {
+    //   head: "color",
+    //   colors: [
+    //     {
+    //       name: "Black",
+    //       value: "#000",
+    //     },
+    //     {
+    //       name: "Grey",
+    //       value: "#808080",
+    //     },
+    //     {
+    //       name: "Red",
+    //       value: "#FF0000",
+    //     },
+    //     {
+    //       name: "Green",
+    //       value: "#008000",
+    //     },
+    //     {
+    //       name: "Blue",
+    //       value: "#0000FF",
+    //     },
+    //   ],
+    // },
     {
       head: "size",
       value: ["s", "m", "l", "xl", "xxxl"],
     },
     {
       head: "material",
-      value: ["cottom", "rayon", "polyster", "satin"],
+      value: ["Cotton", "Rayon", "Polyester", "Satin"],
+    },
+    {
+      head: "Occasion",
+      value: ["Casual", "Adventure", "Oversized", "Sweaters"],
     },
   ];
 
@@ -134,7 +138,7 @@ const Filter = ({ toggleFilter }) => {
                   />
                 </div>
               )}
-              {item.head === "color" && (
+              {/* {item.head === "color" && (
                 <div className="flex gap-8 flex-wrap mt-10">
                   {item.colors.map((color, i) => (
                     <div
@@ -151,7 +155,7 @@ const Filter = ({ toggleFilter }) => {
                     </div>
                   ))}
                 </div>
-              )}
+              )} */}
               {item.head === "size" && (
                 <div className="flex items-center gap-8 flex-wrap">
                   {item.value.map((val, i) => (
@@ -173,6 +177,21 @@ const Filter = ({ toggleFilter }) => {
                     >
                       <li className="list-none uppercase text-lg">
                         {material}
+                      </li>
+                    </div>
+                  ))}
+                </div>
+              )}
+
+              {item.head === "Occasion" && (
+                <div className="flex items-center gap-8 flex-wrap">
+                  {item.value.map((occasion, i) => (
+                    <div
+                      key={i}
+                      className="border py-2 px-5 border-gray-400 cursor-pointer hover:bg-white hover:text-secondary_2 rounded-md"
+                    >
+                      <li className="list-none uppercase text-lg">
+                        {occasion}
                       </li>
                     </div>
                   ))}

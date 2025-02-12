@@ -2,7 +2,7 @@ import InstagramIcon from "@mui/icons-material/Instagram";
 import FacebookIcon from "@mui/icons-material/Facebook";
 import XIcon from "@mui/icons-material/X";
 import LinkedInIcon from "@mui/icons-material/LinkedIn";
-import { Link } from "react-router-dom"
+import { Link } from "react-router-dom";
 
 const Footer = () => {
   const year = new Date().getFullYear();
@@ -13,13 +13,15 @@ const Footer = () => {
         {/* Newsletter Section */}
         <div className="w-full md:max-w-[25rem]">
           <div className="mb-6">
-            <h1 className="text-3xl md:text-4xl lg:text-5xl font-fraunces">
-              Curb Coture
+            <h1 className="text-3xl md:text-4xl lg:text-5xl font-Outfit">
+              Rare Zero
             </h1>
             <p className="w-full py-2 text-sm md:text-base">
-              Lorem, ipsum dolor sit amet consectetur adipisicing elit. Fugiat
-              asperiores iste sit suscipit magnam voluptate est tempore deleniti
-              quas totam.
+              Built on a foundation of trust and care, standing
+              for quality and sustainability. Every detail reflects a legacy of
+              fine craftsmanship and a commitment to lasting value. Embracing
+              simplicity and integrity, it offers a timeless style that invites
+              you to experience the difference.
             </p>
           </div>
           <div>

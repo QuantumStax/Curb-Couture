@@ -1,6 +1,6 @@
 const Sort = () => {
   const sortMenuItems = [
-    "Top Deals",
+    "Rating",
     "Best Sellers",
     "Price - Low to High",
     "Price - High to Low",
