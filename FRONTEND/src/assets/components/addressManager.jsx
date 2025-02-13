@@ -270,7 +270,8 @@ const AddressManager = ({ selectedAddress, onSelectAddress }) => {
                 {addr.firstname} {addr.lastname}
               </p>
               <p>
-                {addr.house}, <br /> {addr.locality} <br /> {addr.landmark} <br />
+                {addr.house}, <br /> {addr.locality} <br /> {addr.landmark}{" "}
+                <br />
                 {addr.city}, {addr.state} <br /> {addr.pincode}
               </p>
             </div>
