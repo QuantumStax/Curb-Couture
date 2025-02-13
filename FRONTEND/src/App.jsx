@@ -31,6 +31,7 @@ import Nav from "./assets/components/nav2";
 import Account from "./assets/pages/account";
 import Hoodies from "./assets/pages/hoodies";
 import { useState } from "react";
+import Checkout from "./assets/pages/checkOut";
 
 const ProtectedRoute = ({ children }) => {
   const { isAuthenticated, loading } = useAuth();
@@ -70,6 +71,7 @@ function App() {
               <Route path="/womens-collection" element={<WomensCollection />} />
               <Route path="/account" element={<Account />} />
               <Route path="/contact" element={<Contact />} />
+              <Route path="/checkout" element={<Checkout />} />
               <Route path="/view" element={<ProductView />} />
               <Route path="/view/:id" element={<ProductView />} />
 

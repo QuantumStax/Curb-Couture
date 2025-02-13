@@ -258,12 +258,10 @@ export const addProduct = async (req, res) => {
 // Submit a product review
 export const submitReview = async (req, res) => {
   const { id } = req.params;
-  console.log("Product Id : ", id);
 
   const { rating, title, review, termsAccepted } = req.body;
 
   const { user_id } = req.user || {};
-  console.log("User Id : ", user_id);
 
   if (!id || !rating || !title || !review) {
     return res.status(400).json({ message: "Missing required fields" });
@@ -282,7 +280,6 @@ export const submitReview = async (req, res) => {
     `;
     const values = [id, user_id, rating, title, review, termsAccepted];
     const result = await pool.query(query, values);
-    console.log("Result : ", result.rows[0]);
 
     res.status(200).json({
       message: "Review submitted successfully",
