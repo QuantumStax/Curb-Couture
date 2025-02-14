@@ -27,16 +27,16 @@ function Home() {
       <Cupon />
       <Suspense fallback={<div><Loader/></div>}>
         <section>
-          <section className="bg-primary">
+          <section className="bg-secondary_2 text-primary_2">
             <RecentAdditions />
           </section>
-          <section className="bg-primary">
+          <section className="bg-secondary_2 text-primary_2">
             <OurCollection />
           </section>
-          <section className="bg-primary py-16">
+          <section className="bg-secondary_2 text-primary_2 py-16">
             <JustLaunced />
           </section>
-          <section className="bg-primary">
+          <section className="bg-secondary_2 text-primary_2">
             <BestSellers />
           </section>
         </section>
@@ -44,7 +44,7 @@ function Home() {
       <section className="bg-banner_2">
         <OurBrand />
       </section>
-      <section className="bg-banner">
+      <section className="">
         <Footer />
       </section>
     </section>

@@ -27,7 +27,7 @@ const Checkout = () => {
   }, [step]);
 
   return (
-    <section className="px-32 py-16">
+    <section className="px-32 py-16 bg-gradient-to-r from-[#DADADA] to-[#FFFFFF]">
       {/* Horizontal Progress Bar */}
       <div className="py-4">
         <div className="w-full bg-secondary_2 h-2 rounded">
@@ -85,15 +85,16 @@ const Checkout = () => {
           <OrderSummary
             onNext={() => alert("Final Payment Initiated")}
             selectedAddress={selectedAddress}
+            setStep={setStep}
           />
-          <div className="flex justify-end mt-4">
+          {/* <div className="flex justify-end mt-4">
             <button
               onClick={() => setStep("billing")}
               className="bg-secondary_2 text-white px-4 py-2 rounded"
             >
               Next
             </button>
-          </div>
+          </div> */}
         </section>
       )}
 
