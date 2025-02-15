@@ -37,7 +37,7 @@ const Shop = ({ itemArray, image, heading }) => {
         />
       </Helmet>
 
-      <section className="bg-primary">
+      <section className="bg-primary_2">
         {/* Hero */}
         <ShopHero image={image} heading={heading} />
 
