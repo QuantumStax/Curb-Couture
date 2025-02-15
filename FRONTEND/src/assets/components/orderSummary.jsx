@@ -34,15 +34,15 @@ const OrderSummary = ({ selectedAddress, setStep }) => {
       size: "M",
       shippingAmount: 75,
     },
-    {
-      id: 2,
-      image: "/images/categories/oversized_batik_anime_tshirt.webp",
-      name: "Sample Product 2",
-      price: 250,
-      color: "Blue",
-      size: "L",
-      shippingAmount: 50,
-    },
+    // {
+    //   id: 2,
+    //   image: "/images/categories/oversized_batik_anime_tshirt.webp",
+    //   name: "Sample Product 2",
+    //   price: 250,
+    //   color: "Blue",
+    //   size: "L",
+    //   shippingAmount: 50,
+    // },
   ];
 
   const coupon = "SAVE50";
