@@ -1,7 +1,8 @@
 /* eslint-disable react/prop-types */
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import DeleteIcon from "@mui/icons-material/Delete";
 import LocalShippingIcon from "@mui/icons-material/LocalShipping";
+import gsap from "gsap";
 
 const AddressModal = ({
   isOpen,
@@ -11,17 +12,32 @@ const AddressModal = ({
   onChange,
   isEditing,
 }) => {
+  const modalContentRef = useRef(null);
+
+  useEffect(() => {
+    if (isOpen && modalContentRef.current) {
+      gsap.fromTo(
+        modalContentRef.current,
+        { opacity: 0, y: -50 },
+        { opacity: 1, y: 0, duration: 0.5, ease: "power3.out" }
+      );
+    }
+  }, [isOpen]);
+
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 flex items-center justify-center z-50 w-full  ">
+    <div className="fixed inset-0 flex items-center justify-center z-50 w-full">
       {/* Modal backdrop */}
       <div
         className="absolute inset-0 bg-black opacity-50"
         onClick={onClose}
       ></div>
       {/* Modal content */}
-      <div className="bg-white p-6 rounded shadow-lg z-10 max-w-[50rem]">
+      <div
+        ref={modalContentRef}
+        className="bg-white p-6 rounded shadow-lg z-10 max-w-[50rem]"
+      >
         <h3 className="text-xl font-bold mb-4">
           {isEditing ? "Edit Address" : "Add New Address"}
         </h3>
@@ -38,8 +54,8 @@ const AddressModal = ({
             />
             <input
               type="text"
-              disabled
               name="country"
+              disabled
               placeholder="India"
               value="India"
               onChange={onChange}
@@ -143,7 +159,6 @@ const AddressModal = ({
 };
 
 const AddressManager = ({ selectedAddress, onSelectAddress }) => {
-  // Hardcoded addresses for layout testing
   const [addresses, setAddresses] = useState([
     {
       id: 1,
@@ -185,6 +200,18 @@ const AddressManager = ({ selectedAddress, onSelectAddress }) => {
   });
   const [showModal, setShowModal] = useState(false);
 
+  const addressesContainerRef = useRef(null);
+
+  useEffect(() => {
+    if (addressesContainerRef.current) {
+      gsap.fromTo(
+        addressesContainerRef.current.children,
+        { opacity: 0, x: -50 },
+        { opacity: 1, x: 0, duration: 0.5, stagger: 0.1, ease: "power3.out" }
+      );
+    }
+  }, [addresses]);
+
   const openModalForAdd = () => {
     setModalAddress({
       label: "",
@@ -220,13 +247,11 @@ const AddressManager = ({ selectedAddress, onSelectAddress }) => {
   const handleModalSubmit = (e) => {
     e.preventDefault();
     if (editingAddress) {
-      // Update address
       const updatedAddresses = addresses.map((addr) =>
         addr.id === editingAddress.id ? modalAddress : addr
       );
       setAddresses(updatedAddresses);
     } else {
-      // Add new address
       const nextId = addresses.length
         ? Math.max(...addresses.map((a) => a.id)) + 1
         : 1;
@@ -251,15 +276,22 @@ const AddressManager = ({ selectedAddress, onSelectAddress }) => {
           <LocalShippingIcon />
         </div>
       </h2>
-      <div className="space-y-4">
+      <div ref={addressesContainerRef} className="space-y-4">
         {addresses.map((addr) => (
           <div
             key={addr.id}
+            id={`address-${addr.id}`}
             className={`p-4 border rounded flex justify-between items-center ${
               selectedAddress && selectedAddress.id === addr.id
                 ? "border-2 border-secondary_2"
                 : "border-gray-300"
             }`}
+            onMouseEnter={() =>
+              gsap.to(`#address-${addr.id}`, { scale: 1.02, duration: 0.2 })
+            }
+            onMouseLeave={() =>
+              gsap.to(`#address-${addr.id}`, { scale: 1, duration: 0.2 })
+            }
           >
             <div
               onClick={() => onSelectAddress(addr)}
