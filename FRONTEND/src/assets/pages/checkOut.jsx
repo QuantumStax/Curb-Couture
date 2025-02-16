@@ -122,7 +122,13 @@ const Checkout = () => {
               />
             </button>
           </div>
-          <BillingSection onNext={() => setStep("orderSummary")} />
+          <BillingSection
+            onNext={() => setStep("orderSummary")}
+            product_image={product_image}
+            product_name={product_name}
+            product_price={product_price}
+            product_rating={product_rating}
+          />
         </section>
       )}
     </section>

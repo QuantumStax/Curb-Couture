@@ -1,13 +1,19 @@
+/* eslint-disable no-unused-vars */
+/* eslint-disable react/prop-types */
 import { useState, useEffect, useRef } from "react";
 import gsap from "gsap";
 
-const BillingSection = () => {
-  // Product details (hardcoded)
+const BillingSection = ({
+  product_image,
+  product_name,
+  product_price,
+  product_rating,
+}) => {
   const product = {
     id: 1,
-    image: "/images/categories/new_york_green_font_tshirt.webp",
-    name: "Sample Product",
-    price: 1000,
+    image: product_image,
+    name: product_name,
+    price: product_price,
     color: "Red",
     size: "M",
   };
