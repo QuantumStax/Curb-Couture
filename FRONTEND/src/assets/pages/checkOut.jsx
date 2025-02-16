@@ -5,14 +5,20 @@ import AddressManager from "../components/addressManager";
 import BillingSection from "../components/billingManager";
 import OrderSummary from "../components/orderSummary";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
+import { useSearchParams } from "react-router-dom";
 
 const Checkout = () => {
-  // State to track the current step: "address", "billing", or "orderSummary"
   const [step, setStep] = useState("address");
-  // State to manage the selected address
   const [selectedAddress, setSelectedAddress] = useState(null);
   const progressBarRef = useRef(null);
   const navigate = useNavigate();
+
+  const [searchParams] = useSearchParams();
+
+  const product_image = searchParams.get("product_image");
+  const product_name = searchParams.get("product_name");
+  const product_rating = searchParams.get("product_rating");
+  const product_price = searchParams.get("product_price");
 
   useEffect(() => {
     let width = "33%";
@@ -86,6 +92,10 @@ const Checkout = () => {
             onNext={() => alert("Final Payment Initiated")}
             selectedAddress={selectedAddress}
             setStep={setStep}
+            product_image={product_image}
+            product_name={product_name}
+            product_price={product_price}
+            product_rating={product_rating}
           />
           {/* <div className="flex justify-end mt-4">
             <button

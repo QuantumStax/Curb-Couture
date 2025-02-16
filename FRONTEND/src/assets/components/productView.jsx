@@ -165,9 +165,19 @@ const ProductView = () => {
                   +
                 </button>
                 <div className="flex flex-col items-center justify-center pb-1 ml-5 h-12 w-[9rem] text-xl rounded-md bg-secondary_2 text-primary_2 hover:scale-[1.02] hover:shadow-lg cursor-pointer">
-                  <Link to="/checkout">
-                    <button>Buy Now</button>
-                  </Link>
+                  {!loading && product && (
+                    <Link
+                      to={`/checkout?product_image=${encodeURIComponent(
+                        product?.images?.[0] || "/images/placeholder.jpg"
+                      )}&product_name=${encodeURIComponent(
+                        product?.name
+                      )}&product_rating=${encodeURIComponent(
+                        product?.rating
+                      )}&product_price=${encodeURIComponent(product.price)}`}
+                    >
+                      <button>Buy Now</button>
+                    </Link>
+                  )}
                 </div>
               </div>
               <button className="flex flex-col items-center justify-center pb-1 mt-4 h-12 w-[23rem] text-xl rounded-md border-[2px] border-secondary_2 hover:scale-[1.02] hover:shadow-lg cursor-pointer">
@@ -249,9 +259,7 @@ const ProductView = () => {
                   <p>{product?.sleeve_length}</p>
                 </li>
               </div>
-              <p className="mt-2">
-                {product?.description}
-              </p>
+              <p className="mt-2">{product?.description}</p>
             </div>
           </div>
           {/* Product Review and Rating */}

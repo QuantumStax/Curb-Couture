@@ -1,5 +1,6 @@
-/* eslint-disable react/no-unknown-property */
+/* eslint-disable no-unused-vars */
 /* eslint-disable react/prop-types */
+/* eslint-disable react/no-unknown-property */
 import { useEffect, useRef } from "react";
 import gsap from "gsap";
 import { ScrollToPlugin } from "gsap/ScrollToPlugin";
@@ -10,8 +11,14 @@ import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
 
 gsap.registerPlugin(ScrollToPlugin);
 
-const OrderSummary = ({ selectedAddress, setStep }) => {
-  // Shipping Address from props
+const OrderSummary = ({
+  selectedAddress,
+  setStep,
+  product_image,
+  product_name,
+  product_price,
+  product_rating,
+}) => {
   const shippingAddress = {
     label: selectedAddress.label,
     firstname: selectedAddress.firstname,
@@ -27,22 +34,13 @@ const OrderSummary = ({ selectedAddress, setStep }) => {
   const products = [
     {
       id: 1,
-      image: "/images/categories/new_york_green_font_tshirt.webp",
-      name: "Sample Product 1",
-      price: 1000,
+      image: product_image,
+      name: product_name,
+      price: product_price,
       color: "Red",
       size: "M",
       shippingAmount: 75,
     },
-    // {
-    //   id: 2,
-    //   image: "/images/categories/oversized_batik_anime_tshirt.webp",
-    //   name: "Sample Product 2",
-    //   price: 250,
-    //   color: "Blue",
-    //   size: "L",
-    //   shippingAmount: 50,
-    // },
   ];
 
   const coupon = "SAVE50";
@@ -56,7 +54,6 @@ const OrderSummary = ({ selectedAddress, setStep }) => {
   const finalPrice = subtotal - discount + totalShipping;
   const savedAmount = discount;
 
-  // Refs for container sections, slider, and arrow buttons animations
   const containerRef = useRef(null);
   const leftRef = useRef(null);
   const rightRef = useRef(null);
@@ -64,16 +61,13 @@ const OrderSummary = ({ selectedAddress, setStep }) => {
   const leftArrowRef = useRef(null);
   const rightArrowRef = useRef(null);
 
-  // GSAP animations on mount
   useEffect(() => {
-    // Animate overall container
     gsap.fromTo(
       containerRef.current,
       { opacity: 0, y: 20 },
       { opacity: 1, y: 0, duration: 0.8, ease: "power3.out" }
     );
 
-    // Animate left section product images
     if (products.length > 1) {
       gsap.fromTo(
         leftRef.current.children,
@@ -88,7 +82,6 @@ const OrderSummary = ({ selectedAddress, setStep }) => {
       );
     }
 
-    // Animate right section (slider/cards)
     if (products.length > 1 && sliderRef.current) {
       gsap.fromTo(
         sliderRef.current.children,
@@ -104,7 +97,6 @@ const OrderSummary = ({ selectedAddress, setStep }) => {
     }
   }, [products.length]);
 
-  // Horizontal scroll functions for the details slider with GSAP animation
   const scrollLeft = () => {
     const slider = sliderRef.current;
     gsap.to(slider, {
@@ -123,7 +115,6 @@ const OrderSummary = ({ selectedAddress, setStep }) => {
     });
   };
 
-  // GSAP button hover effects for main button and arrows
   const handleHoverEnter = (e) => {
     gsap.to(e.currentTarget, { scale: 1.05, duration: 0.2 });
   };
@@ -134,17 +125,14 @@ const OrderSummary = ({ selectedAddress, setStep }) => {
   return (
     <>
       <div className="py-10 px-6 md:px-8 lg:px-10 max-w-7xl mx-auto font-sans">
-        {/* Main Heading */}
         <h2 className="flex items-center justify-center gap-2 text-3xl font-bold mb-12 tracking-wider text-gray-900 uppercase">
           Order Summary
           <LocalShippingIcon fontSize="large" />
         </h2>
-
         <div
           ref={containerRef}
           className="flex flex-col md:flex-row gap-8 lg:gap-12 h-[70vh]"
         >
-          {/* Left Section: Product Images */}
           <div
             ref={leftRef}
             className={`md:w-1/2 ${
@@ -165,18 +153,13 @@ const OrderSummary = ({ selectedAddress, setStep }) => {
               </div>
             ))}
           </div>
-
-          {/* Right Section: Product Details and Order Info */}
           <div className="md:w-1/2 flex flex-col gap-6 overflow-y-auto hide-scrollbar">
             <div className="border border-gray-300 rounded-xl p-8 shadow-2xl bg-white">
               <h3 className="text-2xl font-bold mb-6 text-gray-900 tracking-wide">
                 Order Info
               </h3>
-
-              {/* Conditional rendering for product details */}
               {products.length > 1 ? (
                 <div className="relative">
-                  {/* Left arrow button */}
                   <button
                     ref={leftArrowRef}
                     onClick={scrollLeft}
@@ -186,7 +169,6 @@ const OrderSummary = ({ selectedAddress, setStep }) => {
                   >
                     <ArrowBackIosIcon fontSize="small" />
                   </button>
-                  {/* Horizontal slider for product detail cards */}
                   <div
                     ref={sliderRef}
                     className="flex overflow-x-scroll hide-scrollbar space-x-6 px-12"
@@ -216,7 +198,6 @@ const OrderSummary = ({ selectedAddress, setStep }) => {
                       </div>
                     ))}
                   </div>
-                  {/* Right arrow button */}
                   <button
                     ref={rightArrowRef}
                     onClick={scrollRight}
@@ -228,7 +209,6 @@ const OrderSummary = ({ selectedAddress, setStep }) => {
                   </button>
                 </div>
               ) : (
-                // Single product details
                 <div className="border rounded-xl p-6 bg-gray-50 shadow-md transition-transform duration-300 hover:scale-105">
                   <h4 className="text-xl font-semibold uppercase tracking-wider text-gray-800">
                     {products[0].name}
@@ -249,8 +229,6 @@ const OrderSummary = ({ selectedAddress, setStep }) => {
                   </div>
                 </div>
               )}
-
-              {/* Summary Calculations */}
               <div className="border-t border-gray-300 pt-6 mt-6 space-y-4 text-gray-700">
                 <div className="flex justify-between">
                   <span className="font-medium">Subtotal</span>
@@ -273,7 +251,6 @@ const OrderSummary = ({ selectedAddress, setStep }) => {
                   <p className="text-lg">₹ {finalPrice}</p>
                 </div>
               </div>
-
               <form className="flex items-center mt-6">
                 <input
                   type="text"
@@ -288,7 +265,6 @@ const OrderSummary = ({ selectedAddress, setStep }) => {
                 </button>
               </form>
             </div>
-
             <div className="border border-gray-300 rounded-xl p-8 shadow-2xl bg-white">
               <h3 className="text-2xl font-bold mb-6 text-gray-900 tracking-wide">
                 Shipping Address
@@ -323,7 +299,8 @@ const OrderSummary = ({ selectedAddress, setStep }) => {
           Confirm Order
         </button>
       </div>
-      <style jsx global>{`
+      {/* Error resolved: Changed style tag attributes from boolean to string */}
+      <style jsx="true" global="true">{`
         .hide-scrollbar::-webkit-scrollbar {
           display: none;
         }
