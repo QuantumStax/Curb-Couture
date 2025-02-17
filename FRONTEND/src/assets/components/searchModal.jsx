@@ -14,12 +14,19 @@ const SearchModal = ({ setIsModalOpen }) => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
+  // Refs for GSAP animations and focusing
   const modalRef = useRef(null);
   const inputRef = useRef(null);
+  const closeIconRef = useRef(null);
 
   const navigate = useNavigate();
 
+  // Animate modal in on mount + focus the input
   useEffect(() => {
+    // Reset the close icon transform
+    gsap.set(closeIconRef.current, { rotate: 0, scale: 1 });
+
+    // GSAP modal animation
     gsap.fromTo(
       modalRef.current,
       { opacity: 0, scale: 0.9 },
@@ -68,6 +75,7 @@ const SearchModal = ({ setIsModalOpen }) => {
     return () => clearTimeout(delayDebounceFn);
   }, [query]);
 
+  // Animate each result to "slide in" when results change
   useEffect(() => {
     if (results.length > 0) {
       gsap.fromTo(
@@ -84,6 +92,7 @@ const SearchModal = ({ setIsModalOpen }) => {
     }
   }, [results]);
 
+  // Animate modal out before closing
   const handleCloseModal = () => {
     gsap.to(modalRef.current, {
       opacity: 0,
@@ -96,8 +105,21 @@ const SearchModal = ({ setIsModalOpen }) => {
     });
   };
 
+  // Animate close button, then close the modal
+  const handleCloseIconClick = (e) => {
+    gsap.to(closeIconRef.current, {
+      rotate: 90,
+      scale: 1.2,
+      duration: 0.2,
+      ease: "power2.inOut",
+      onComplete: handleCloseModal,
+    });
+  };
+
+  // Handle keyboard navigation (Arrow keys, Enter, and Esc)
   const handleKeyDown = (e) => {
     if (!isResult || results.length === 0) {
+      // Even if no results, we want Esc to clear/close
       if (e.key === "Escape") {
         if (query) {
           setQuery("");
@@ -141,27 +163,30 @@ const SearchModal = ({ setIsModalOpen }) => {
     <section
       className="fixed inset-0 flex flex-col items-center justify-center z-50 backdrop-brightness-50 backdrop-blur-sm"
       ref={modalRef}
+      role="dialog"
+      aria-modal="true"
     >
       {/* Close Button */}
       <div
         className="absolute top-2 right-5 lg:top-8 lg:right-10 text-primary cursor-pointer"
-        onClick={handleCloseModal}
+        ref={closeIconRef}
+        onClick={handleCloseIconClick}
       >
         <CloseIcon style={{ fontSize: "2rem" }} />
       </div>
 
       {/* Modal Content */}
-      <section className="bg-white w-[90%] lg:w-[60rem] h-[90vh] lg:h-[75vh] rounded-xl overflow-hidden shadow-lg">
+      <section className="bg-white w-[90%] lg:w-[60rem] h-[90vh] lg:h-[75vh] rounded-xl overflow-hidden shadow-2xl transform-gpu">
         {/* Search Input */}
-        <div className="flex items-center p-5 border-b border-gray-200">
+        <div className="flex items-center p-6 border-b border-gray-200">
           <input
             ref={inputRef}
-            type="text"
+            type="text" // Removed default "search" type to avoid built-in "X"
             name="search"
             value={query}
             onChange={(e) => setQuery(e.target.value)}
             onKeyDown={handleKeyDown}
-            className="flex-1 h-12 px-4 bg-transparent border-none focus:outline-none text-lg z-50 appearance-none"
+            className="flex-1 h-12 px-4 bg-transparent border-none focus:outline-none focus:ring-2 focus:ring-blue-500 transition-shadow text-lg z-50 appearance-none"
             placeholder="Search for products..."
           />
           {query && (
@@ -179,10 +204,11 @@ const SearchModal = ({ setIsModalOpen }) => {
         </div>
 
         {/* Search Results */}
-        <div className="p-5 overflow-y-auto max-h-[70vh]">
+        <div className="p-6 overflow-y-auto max-h-[70vh]">
           {loading && (
             <div className="flex justify-center items-center h-full">
-              <p className="text-gray-700 text-center">Loading...</p>
+              {/* Spinner */}
+              <div className="w-8 h-8 border-4 border-blue-500 border-t-transparent rounded-full animate-spin" />
             </div>
           )}
           {error && <p className="text-red-500 text-center">{error}</p>}
@@ -203,7 +229,7 @@ const SearchModal = ({ setIsModalOpen }) => {
               {results.map((product, i) => (
                 <div
                   key={product.product_id}
-                  className={`search-result-item flex gap-4 items-center bg-gray-100 p-4 rounded-lg shadow-sm hover:shadow-md cursor-pointer transition-shadow duration-200 ${
+                  className={`search-result-item flex gap-4 items-center bg-gray-100 p-4 rounded-lg shadow-sm hover:shadow-md cursor-pointer transition-transform duration-200 hover:scale-[1.02] ${
                     selectedIndex === i ? "bg-blue-100" : ""
                   }`}
                   onClick={() => handleResultClick(product)}
