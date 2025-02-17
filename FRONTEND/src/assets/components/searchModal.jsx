@@ -1,9 +1,10 @@
 /* eslint-disable no-unused-vars */
 /* eslint-disable react/prop-types */
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import CloseIcon from "@mui/icons-material/Close";
 import axios from "axios";
+import { gsap } from "gsap";
 
 const SearchModal = ({ setIsModalOpen }) => {
   const [query, setQuery] = useState("");
@@ -13,9 +14,30 @@ const SearchModal = ({ setIsModalOpen }) => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
+  const modalRef = useRef(null);
+  const inputRef = useRef(null);
+
   const navigate = useNavigate();
 
-  // Debounce search input
+  useEffect(() => {
+    gsap.fromTo(
+      modalRef.current,
+      { opacity: 0, scale: 0.9 },
+      {
+        opacity: 1,
+        scale: 1,
+        duration: 0.4,
+        ease: "power2.out",
+      }
+    );
+
+    // Focus the input
+    if (inputRef.current) {
+      inputRef.current.focus();
+    }
+  }, []);
+
+  // Debounce search input using an async/await (try/catch) approach
   useEffect(() => {
     if (query.length < 3) {
       setResults([]);
@@ -25,31 +47,68 @@ const SearchModal = ({ setIsModalOpen }) => {
 
     setLoading(true);
 
-    const delayDebounceFn = setTimeout(() => {
-      axios
-        .get(`http://localhost:3000/search?query=${encodeURIComponent(query)}`)
-        .then((response) => {
-          const { products = [], message = "" } = response.data;
-
-          setResults(products);
-          setIsResult(true);
-          setSelectedIndex(-1);
-          setLoading(false);
-          setError("");
-        })
-        .catch((err) => {
-          setError("Error fetching search results.");
-          setLoading(false);
-          setIsResult(false);
-        });
+    const delayDebounceFn = setTimeout(async () => {
+      try {
+        const response = await axios.get(
+          `http://localhost:3000/search?query=${encodeURIComponent(query)}`
+        );
+        const { products = [], message = "" } = response.data;
+        setResults(products);
+        setIsResult(true);
+        setSelectedIndex(-1);
+        setLoading(false);
+        setError("");
+      } catch (err) {
+        setError("Error fetching search results.");
+        setLoading(false);
+        setIsResult(false);
+      }
     }, 300);
 
-    // Cleanup function to clear the debounce timer
     return () => clearTimeout(delayDebounceFn);
   }, [query]);
 
+  useEffect(() => {
+    if (results.length > 0) {
+      gsap.fromTo(
+        ".search-result-item",
+        { x: -50, opacity: 0 },
+        {
+          x: 0,
+          opacity: 1,
+          stagger: 0.05,
+          duration: 0.3,
+          ease: "power2.out",
+        }
+      );
+    }
+  }, [results]);
+
+  const handleCloseModal = () => {
+    gsap.to(modalRef.current, {
+      opacity: 0,
+      scale: 0.9,
+      duration: 0.3,
+      ease: "power2.in",
+      onComplete: () => {
+        setIsModalOpen(false);
+      },
+    });
+  };
+
   const handleKeyDown = (e) => {
-    if (!isResult || results.length === 0) return;
+    if (!isResult || results.length === 0) {
+      if (e.key === "Escape") {
+        if (query) {
+          setQuery("");
+          setResults([]);
+          setIsResult(false);
+        } else {
+          handleCloseModal();
+        }
+      }
+      return;
+    }
 
     if (e.key === "ArrowDown") {
       e.preventDefault();
@@ -62,6 +121,14 @@ const SearchModal = ({ setIsModalOpen }) => {
         navigate(`/products/${results[selectedIndex].product_id}`);
         setIsModalOpen(false);
       }
+    } else if (e.key === "Escape") {
+      if (query) {
+        setQuery("");
+        setResults([]);
+        setIsResult(false);
+      } else {
+        handleCloseModal();
+      }
     }
   };
 
@@ -71,11 +138,14 @@ const SearchModal = ({ setIsModalOpen }) => {
   };
 
   return (
-    <section className="fixed inset-0 flex flex-col items-center justify-center z-50 backdrop-brightness-50 backdrop-blur-sm">
+    <section
+      className="fixed inset-0 flex flex-col items-center justify-center z-50 backdrop-brightness-50 backdrop-blur-sm"
+      ref={modalRef}
+    >
       {/* Close Button */}
       <div
         className="absolute top-2 right-5 lg:top-8 lg:right-10 text-primary cursor-pointer"
-        onClick={() => setIsModalOpen(false)}
+        onClick={handleCloseModal}
       >
         <CloseIcon style={{ fontSize: "2rem" }} />
       </div>
@@ -85,12 +155,13 @@ const SearchModal = ({ setIsModalOpen }) => {
         {/* Search Input */}
         <div className="flex items-center p-5 border-b border-gray-200">
           <input
-            type="search"
+            ref={inputRef}
+            type="text"
             name="search"
             value={query}
             onChange={(e) => setQuery(e.target.value)}
             onKeyDown={handleKeyDown}
-            className="flex-1 h-12 px-4 bg-transparent border-none focus:outline-none text-lg z-50"
+            className="flex-1 h-12 px-4 bg-transparent border-none focus:outline-none text-lg z-50 appearance-none"
             placeholder="Search for products..."
           />
           {query && (
@@ -109,8 +180,13 @@ const SearchModal = ({ setIsModalOpen }) => {
 
         {/* Search Results */}
         <div className="p-5 overflow-y-auto max-h-[70vh]">
-          {loading && <p className="text-gray-700">Loading...</p>}
-          {error && <p className="text-red-500">{error}</p>}
+          {loading && (
+            <div className="flex justify-center items-center h-full">
+              <p className="text-gray-700 text-center">Loading...</p>
+            </div>
+          )}
+          {error && <p className="text-red-500 text-center">{error}</p>}
+
           {isResult && results.length === 0 && !loading && !error && (
             <div className="flex flex-col items-center justify-center h-full opacity-60">
               <p className="text-xl font-medium text-gray-700">
@@ -121,12 +197,13 @@ const SearchModal = ({ setIsModalOpen }) => {
               </p>
             </div>
           )}
+
           {results.length > 0 && (
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               {results.map((product, i) => (
                 <div
                   key={product.product_id}
-                  className={`flex gap-4 items-center bg-gray-100 p-4 rounded-lg shadow-sm hover:shadow-md cursor-pointer transition-shadow duration-200 ${
+                  className={`search-result-item flex gap-4 items-center bg-gray-100 p-4 rounded-lg shadow-sm hover:shadow-md cursor-pointer transition-shadow duration-200 ${
                     selectedIndex === i ? "bg-blue-100" : ""
                   }`}
                   onClick={() => handleResultClick(product)}
