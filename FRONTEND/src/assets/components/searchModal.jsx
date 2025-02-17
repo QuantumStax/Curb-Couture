@@ -14,19 +14,15 @@ const SearchModal = ({ setIsModalOpen }) => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
-  // Refs for GSAP animations and focusing
   const modalRef = useRef(null);
   const inputRef = useRef(null);
   const closeIconRef = useRef(null);
 
   const navigate = useNavigate();
 
-  // Animate modal in on mount + focus the input
   useEffect(() => {
-    // Reset the close icon transform
     gsap.set(closeIconRef.current, { rotate: 0, scale: 1 });
 
-    // GSAP modal animation
     gsap.fromTo(
       modalRef.current,
       { opacity: 0, scale: 0.9 },
@@ -38,7 +34,6 @@ const SearchModal = ({ setIsModalOpen }) => {
       }
     );
 
-    // Focus the input
     if (inputRef.current) {
       inputRef.current.focus();
     }
@@ -75,7 +70,6 @@ const SearchModal = ({ setIsModalOpen }) => {
     return () => clearTimeout(delayDebounceFn);
   }, [query]);
 
-  // Animate each result to "slide in" when results change
   useEffect(() => {
     if (results.length > 0) {
       gsap.fromTo(
@@ -92,7 +86,6 @@ const SearchModal = ({ setIsModalOpen }) => {
     }
   }, [results]);
 
-  // Animate modal out before closing
   const handleCloseModal = () => {
     gsap.to(modalRef.current, {
       opacity: 0,
@@ -105,7 +98,6 @@ const SearchModal = ({ setIsModalOpen }) => {
     });
   };
 
-  // Animate close button, then close the modal
   const handleCloseIconClick = (e) => {
     gsap.to(closeIconRef.current, {
       rotate: 90,
@@ -116,10 +108,8 @@ const SearchModal = ({ setIsModalOpen }) => {
     });
   };
 
-  // Handle keyboard navigation (Arrow keys, Enter, and Esc)
   const handleKeyDown = (e) => {
     if (!isResult || results.length === 0) {
-      // Even if no results, we want Esc to clear/close
       if (e.key === "Escape") {
         if (query) {
           setQuery("");
@@ -168,7 +158,7 @@ const SearchModal = ({ setIsModalOpen }) => {
     >
       {/* Close Button */}
       <div
-        className="absolute top-2 right-5 lg:top-8 lg:right-10 text-primary cursor-pointer"
+        className="absolute top-2 right-5 lg:top-8 lg:right-10 text-primary_2 cursor-pointer"
         ref={closeIconRef}
         onClick={handleCloseIconClick}
       >
@@ -181,17 +171,17 @@ const SearchModal = ({ setIsModalOpen }) => {
         <div className="flex items-center p-6 border-b border-gray-200">
           <input
             ref={inputRef}
-            type="text" // Removed default "search" type to avoid built-in "X"
+            type="text"
             name="search"
             value={query}
             onChange={(e) => setQuery(e.target.value)}
             onKeyDown={handleKeyDown}
-            className="flex-1 h-12 px-4 bg-transparent border-none focus:outline-none focus:ring-2 focus:ring-blue-500 transition-shadow text-lg z-50 appearance-none"
-            placeholder="Search for products..."
+            className="flex-1 h-12 px-4 bg-transparent border-none focus:outline-none focus:ring-2 focus:ring-secondary_2 transition-shadow text-lg z-50 appearance-none rounded-lg"
+            placeholder="Start typing to discover new products!"
           />
           {query && (
             <button
-              className="text-gray-500 hover:text-gray-800 transition-opacity duration-200 z-50"
+              className="absolute left-[94%] text-gray-500 hover:text-gray-800 transition-opacity duration-200 z-50"
               onClick={() => {
                 setQuery("");
                 setResults([]);
@@ -208,7 +198,7 @@ const SearchModal = ({ setIsModalOpen }) => {
           {loading && (
             <div className="flex justify-center items-center h-full">
               {/* Spinner */}
-              <div className="w-8 h-8 border-4 border-blue-500 border-t-transparent rounded-full animate-spin" />
+              <div className="w-8 h-8 border-4 border-secondary_2 border-t-transparent rounded-full animate-spin" />
             </div>
           )}
           {error && <p className="text-red-500 text-center">{error}</p>}
