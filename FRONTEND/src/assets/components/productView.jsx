@@ -1,5 +1,5 @@
 /* eslint-disable no-unused-vars */
-import { useState, useRef, useEffect } from "react";
+import { useState, useRef, useEffect, useMemo } from "react";
 import { gsap } from "gsap";
 import Footer from "./footer";
 import StraightenIcon from "@mui/icons-material/Straighten";
@@ -11,6 +11,19 @@ import Loader from "./loader";
 import axios from "axios";
 import ReviewModal from "./reviewModal";
 
+const usePrefersReducedMotion = () => {
+  const [reducedMotion, setReducedMotion] = useState(false);
+  useEffect(() => {
+    const mediaQuery = window.matchMedia("(prefers-reduced-motion: reduce)");
+    setReducedMotion(mediaQuery.matches);
+
+    const handler = () => setReducedMotion(mediaQuery.matches);
+    mediaQuery.addEventListener("change", handler);
+    return () => mediaQuery.removeEventListener("change", handler);
+  }, []);
+  return reducedMotion;
+};
+
 const ProductView = () => {
   const { id } = useParams();
 
@@ -20,6 +33,16 @@ const ProductView = () => {
   const [isReviewOpen, setIsReviewOpen] = useState(false);
   const [quantity, setQuantity] = useState(1);
   const [reviews, setReviews] = useState([]);
+
+  const [sortOption, setSortOption] = useState("Newest");
+  const [helpfulCounts, setHelpfulCounts] = useState({});
+
+  const containerRef = useRef(null);
+  const offersRef = useRef(null);
+
+  const prefersReducedMotion = usePrefersReducedMotion();
+
+  const [mainImage, setMainImage] = useState("");
 
   const increaseQuantity = () => {
     setQuantity((prevQuantity) => prevQuantity + 1);
@@ -35,6 +58,9 @@ const ProductView = () => {
         const res = await fetch(`http://localhost:3000/get-product/${id}`);
         const data = await res.json();
         setProduct(data);
+        setMainImage(
+          data?.images?.length > 0 ? data.images[0] : "/images/placeholder.jpg"
+        );
         setLoading(false);
       } catch (error) {
         setLoading(false);
@@ -47,17 +73,49 @@ const ProductView = () => {
     const fetchReview = async () => {
       try {
         const result = await axios.get(`http://localhost:3000/review/${id}`);
-        const reviews = result.data.reviews;
-        setReviews(reviews);
+        const reviewsData = result.data.reviews;
+        setReviews(reviewsData);
       } catch (error) {
-        //
         setReviews([]);
       }
     };
     fetchReview();
   }, [id]);
 
-  const offersRef = useRef(null);
+  useEffect(() => {
+    if (!loading && containerRef.current && !prefersReducedMotion) {
+      gsap.fromTo(
+        containerRef.current,
+        { opacity: 0, y: 20 },
+        {
+          opacity: 1,
+          y: 0,
+          duration: 0.5,
+          ease: "power2.out",
+        }
+      );
+    }
+  }, [loading, prefersReducedMotion]);
+
+  useEffect(() => {
+    if (!prefersReducedMotion) {
+      if (showOffers) {
+        gsap.to(offersRef.current, {
+          height: "auto",
+          duration: 0.3,
+          ease: "power2.out",
+          opacity: 1,
+        });
+      } else {
+        gsap.to(offersRef.current, {
+          height: 0,
+          duration: 0.3,
+          ease: "power2.in",
+        });
+      }
+    }
+  }, [showOffers, prefersReducedMotion]);
+
   const offers = [
     {
       coupon: "free15first",
@@ -73,45 +131,91 @@ const ProductView = () => {
     },
   ];
 
-  useEffect(() => {
-    if (showOffers) {
-      gsap.to(offersRef.current, {
-        height: "auto",
-        duration: 0.3,
-        ease: "power2.out",
-        opacity: 1,
-      });
-    } else {
-      gsap.to(offersRef.current, {
-        height: 0,
-        duration: 0.3,
-        ease: "power2.in",
-      });
+  const sortedReviews = useMemo(() => {
+    let sorted = [...reviews];
+    if (sortOption === "Newest") {
+      sorted.sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
+    } else if (sortOption === "Highest") {
+      sorted.sort((a, b) => b.rating - a.rating);
+    } else if (sortOption === "Lowest") {
+      sorted.sort((a, b) => a.rating - b.rating);
     }
-  }, [showOffers]);
+    return sorted;
+  }, [reviews, sortOption]);
+
+  const handleHelpful = (reviewIndex) => {
+    setHelpfulCounts((prev) => ({
+      ...prev,
+      [reviewIndex]: (prev[reviewIndex] || 0) + 1,
+    }));
+  };
+
+  const [relatedProducts, setRelatedProducts] = useState([]);
+  useEffect(() => {
+    setRelatedProducts([
+      {
+        id: "rel1",
+        name: "Recommended Product 1",
+        image: "/images/categories/oversized_hoodie_type_greatly_sweater.webp",
+        price: 499,
+      },
+      {
+        id: "rel2",
+        name: "Recommended Product 2",
+        image: "/images/categories/oversized_batik_anime_tshirt.webp",
+        price: 1299,
+      },
+    ]);
+  }, [id]);
+
+  const [showToast, setShowToast] = useState(false);
+  const handleAddToCart = () => {
+    setShowToast(true);
+    setTimeout(() => setShowToast(false), 2000);
+  };
 
   return (
-    <section>
+    <section className="bg-primary min-h-screen">
       {!loading ? (
-        <section className="px-20 py-16 bg-primary">
+        <section className="px-20 py-16" ref={containerRef}>
+          {showToast && (
+            <div className="fixed top-5 right-5 bg-black text-white px-4 py-2 rounded-md shadow-lg z-50 animate-fadeIn">
+              Added to Cart!
+            </div>
+          )}
+
+          {/* Breadcrumb */}
           <div className="flex items-center gap-2 opacity-70">
             <p className="hover:underline cursor-pointer">Home</p>
             <p className="cursor-default">/</p>
             <p className="hover:underline cursor-pointer">Recently viewed</p>
           </div>
-          <div className="flex items-start gap-10">
-            <div className="mt-10">
+
+          {/* Main Container */}
+          <div className="flex items-start gap-10 mt-10 bg-white shadow-lg rounded-lg p-8">
+            <div className="flex flex-col items-center">
               <img
-                src={
-                  product?.images?.length > 0
-                    ? product.images[0]
-                    : "/images/placeholder.jpg"
-                }
+                src={mainImage}
                 alt={product?.name || "Product Image"}
-                className="h-[40rem]"
+                loading="lazy"
+                className="h-[40rem] w-auto rounded-md shadow-md hover:scale-[1.01] transition-transform duration-300 object-cover"
               />
+              <div className="flex gap-2 mt-3">
+                {product?.images?.map((imgSrc, i) => (
+                  <img
+                    key={i}
+                    src={imgSrc}
+                    alt={`Thumbnail ${i}`}
+                    loading="lazy"
+                    onClick={() => setMainImage(imgSrc)}
+                    className="h-16 w-16 object-cover rounded-md cursor-pointer border-2 border-transparent hover:border-secondary_2 transition-colors"
+                  />
+                ))}
+              </div>
             </div>
-            <div className="relative top-9 w-[40rem]">
+
+            {/* Product Details */}
+            <div className="relative top-2 w-[40rem]">
               <h1 className="text-3xl font-bold opacity-75">{product?.name}</h1>
               <div className="flex items-center gap-2 mt-2">
                 <div>
@@ -122,12 +226,12 @@ const ProductView = () => {
                 <p> from 15 Reviews</p>
               </div>
               <p className="mt-2 opacity-70">{product?.description}</p>
-              {/* <div className="my-2">
-                <p className="text-red-700">Hurry! Only 5 Left</p>
-              </div> */}
-              <div className="flex items-center gap-3 mt-2 font-semibold">
+
+              <div className="flex items-center gap-3 mt-4 font-semibold">
                 <h1 className="text-3xl text-green-600">₹{product?.price}</h1>
               </div>
+
+              {/* Sizes */}
               <div className="flex gap-4 mt-4">
                 {product?.sizes.map((size, i) => (
                   <div
@@ -138,29 +242,43 @@ const ProductView = () => {
                   </div>
                 ))}
               </div>
+
               <div className="flex items-center gap-2 mt-2">
-                <StraightenIcon />
+                <StraightenIcon
+                  aria-label="Size Chart Icon"
+                  titleAccess="Size Chart Icon"
+                />
                 <p>
                   Please select according to the{" "}
-                  <a href="#" className="font-semibold hover:underline">
+                  <a
+                    href="#"
+                    className="font-semibold hover:underline"
+                    title="View the size chart"
+                  >
                     Size Chart
                   </a>
-                  {/* Changed: Updated href from "%" to "#" */}
                 </p>
               </div>
+
+              {/* Quantity and Buy Now */}
               <div className="flex items-center gap-5 mt-4">
                 <button
                   className="flex flex-col items-center justify-center pb-2 rounded-full h-10 w-10 text-3xl border border-slate-950"
-                  onClick={() => decreaseQuantity()}
+                  onClick={decreaseQuantity}
+                  aria-label="Decrease quantity"
                 >
                   -
                 </button>
-                <div className="flex flex-col items-center justify-center h-10 w-16 border border-slate-800 rounded-md text-lg">
+                <div
+                  className="flex flex-col items-center justify-center h-10 w-16 border border-slate-800 rounded-md text-lg"
+                  aria-label="Selected quantity"
+                >
                   <p>{quantity}</p>
                 </div>
                 <button
                   className="flex flex-col items-center justify-center pb-2 rounded-full h-10 w-10 text-3xl border border-slate-950"
-                  onClick={() => increaseQuantity()}
+                  onClick={increaseQuantity}
+                  aria-label="Increase quantity"
                 >
                   +
                 </button>
@@ -174,24 +292,33 @@ const ProductView = () => {
                       )}&product_rating=${encodeURIComponent(
                         product?.rating
                       )}&product_price=${encodeURIComponent(product.price)}`}
+                      aria-label="Proceed to checkout"
                     >
                       <button>Buy Now</button>
                     </Link>
                   )}
                 </div>
               </div>
-              <button className="flex flex-col items-center justify-center pb-1 mt-4 h-12 w-[23rem] text-xl rounded-md border-[2px] border-secondary_2 hover:scale-[1.02] hover:shadow-lg cursor-pointer">
+
+              <button
+                onClick={handleAddToCart}
+                className="flex flex-col items-center justify-center pb-1 mt-4 h-12 w-[23rem] text-xl rounded-md border-[2px] border-secondary_2 hover:scale-[1.02] hover:shadow-lg cursor-pointer"
+                aria-label="Add to Cart"
+              >
                 Add to Cart
               </button>
+
+              {/* Offers */}
               <div className="mt-5">
                 <div
                   onClick={() => setShowOffers(!showOffers)}
                   className="flex items-center gap-[10rem] border-t border-b border-slate-950 py-2 w-fit cursor-pointer"
+                  aria-label="Toggle offers"
                 >
                   <h1 className="text-lg font-semibold uppercase">
                     Offers just for you
                   </h1>
-                  <KeyboardArrowDownIcon />
+                  <KeyboardArrowDownIcon aria-label="Expand or collapse offers" />
                 </div>
                 <div
                   ref={offersRef}
@@ -210,10 +337,14 @@ const ProductView = () => {
                     </div>
                   ))}
                 </div>
-                {/* general info */}
-                <div className="text-lg">
+
+                {/* Delivery / Return Info */}
+                <div className="text-lg mt-4">
                   <div className="flex items-center gap-2">
-                    <AccessTimeIcon />
+                    <AccessTimeIcon
+                      aria-label="Delivery time icon"
+                      titleAccess="Delivery time icon"
+                    />
                     <p>Estimate delivery time: 3 - 5 business day</p>
                   </div>
                   <p>
@@ -221,9 +352,12 @@ const ProductView = () => {
                     delivered through DTDC and the delivery time may vary!
                   </p>
                   <div className="flex items-center gap-2 mt-3">
-                    <UndoIcon />
+                    <UndoIcon
+                      aria-label="Return policy icon"
+                      titleAccess="Return policy icon"
+                    />
                     <p>
-                      Return within 10 days of purchase. Duties & taxes are
+                      Return within 10 days of purchase. Duties &amp; taxes are
                       non-refundable!
                     </p>
                   </div>
@@ -231,9 +365,15 @@ const ProductView = () => {
               </div>
             </div>
           </div>
+
           {/* Product Description */}
-          <div className="pt-[7rem] w-[75rem]">
-            <h1 className="text-2xl uppercase font-semibold">Product Info</h1>
+          <details
+            className="bg-white shadow-lg rounded-lg p-8 mt-10 w-[75rem]"
+            open
+          >
+            <summary className="text-2xl uppercase font-semibold cursor-pointer list-none">
+              Product Info
+            </summary>
             <hr className="w-[11rem] mt-1 h-[0.1rem] bg-black opacity-70" />
             <div className="text-lg mt-4">
               <p>{product?.desc_1}</p>
@@ -261,9 +401,10 @@ const ProductView = () => {
               </div>
               <p className="mt-2">{product?.description}</p>
             </div>
-          </div>
+          </details>
+
           {/* Product Review and Rating */}
-          <div className="mt-10">
+          <div className="bg-white shadow-lg rounded-lg p-8 mt-10 w-[75rem]">
             <div className="flex items-center gap-10">
               <h1 className="text-2xl uppercase font-semibold">
                 Product Reviews
@@ -281,11 +422,36 @@ const ProductView = () => {
             )}
 
             <hr className="w-[13rem] mt-1 h-[0.1rem] bg-black opacity-70" />
-            {/* Changed: Updated review display to match the server data structure */}
+
+            {/* Sorting dropdown */}
+            <div className="flex items-center gap-4 mt-5">
+              <label htmlFor="sortReviews" className="font-semibold">
+                Sort By:
+              </label>
+              <select
+                id="sortReviews"
+                value={sortOption}
+                onChange={(e) => setSortOption(e.target.value)}
+                className="border border-gray-300 rounded-md p-1"
+              >
+                <option value="Newest">Newest</option>
+                <option value="Highest">Highest Rating</option>
+                <option value="Lowest">Lowest Rating</option>
+              </select>
+            </div>
+
             <div className="mt-5">
-              {reviews.map((review, i) => (
+              {sortedReviews.map((review, i) => (
                 <div key={i} className="mb-10">
-                  <p className="text-xl font-bold">{review.rating}⭐</p>
+                  <p className="text-xl font-bold">
+                    {review.rating}⭐
+                    {review.rating >= 5 && (
+                      <span className="text-green-600 ml-2">
+                        {/* highlight key reviews */}
+                        Top Rated
+                      </span>
+                    )}
+                  </p>
                   <div className="flex gap-2 justify-between">
                     <h1 className="font-bold my-2 text-xl">{review.title}</h1>
                     <p className="text-gray-500">
@@ -293,7 +459,44 @@ const ProductView = () => {
                     </p>
                   </div>
                   <p className="mb-2">{review.review}</p>
+
+                  {/* Review Reactions: Helpful */}
+                  <div className="flex items-center gap-4">
+                    <button
+                      onClick={() => handleHelpful(i)}
+                      className="text-blue-600 hover:underline"
+                    >
+                      Helpful ({helpfulCounts[i] || 0})
+                    </button>
+                  </div>
                   <hr className="h-[0.1rem] bg-black opacity-30 mt-2" />
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* Personalized Recommendations */}
+          <div className="bg-white shadow-lg rounded-lg p-8 mt-10 w-[75rem]">
+            <h2 className="text-2xl uppercase font-semibold">
+              You May Also Like
+            </h2>
+            <hr className="w-[13rem] mt-1 h-[0.1rem] bg-black opacity-70" />
+            <div className="flex gap-6 mt-5">
+              {relatedProducts.map((relProd) => (
+                <div
+                  key={relProd.id}
+                  className="w-[12rem] cursor-pointer hover:scale-[1.02] transition-transform"
+                >
+                  <img
+                    src={relProd.image}
+                    alt={relProd.name}
+                    loading="lazy"
+                    className="w-[12rem] h-[12rem] object-cover rounded-md"
+                  />
+                  <h3 className="text-lg font-semibold mt-2">{relProd.name}</h3>
+                  <p className="text-green-600 font-semibold">
+                    ₹{relProd.price}
+                  </p>
                 </div>
               ))}
             </div>
@@ -304,6 +507,7 @@ const ProductView = () => {
           <Loader />
         </div>
       )}
+
       <section className={`${loading ? "relative top-[13.3rem]" : ""}`}>
         <Footer />
       </section>
