@@ -8,6 +8,7 @@ import {
   submitReview,
   getReviewsByProductId,
   upload,
+  searchProducts,
 } from "../controllers/productController.js";
 
 const router = express.Router();
@@ -29,5 +30,7 @@ router.post(
   ]),
   addProduct
 );
+
+router.get("/search", searchProducts);
 
 export default router;

@@ -306,3 +306,58 @@ export const getReviewsByProductId = async (req, res) => {
     res.status(500).json({ message: "Error fetching reviews!" });
   }
 };
+
+export const searchProducts = async (req, res) => {
+  try {
+    const { query } = req.query;
+
+    if (!query || query.trim().length < 3) {
+      return res.status(400).json({
+        products: [],
+        message: "Please enter at least 3 characters to search.",
+      });
+    }
+
+    const searchTerm = `%${query.trim()}%`;
+
+    const sql = `
+      SELECT 
+        pm.product_id, 
+        pm.name, 
+        pm.price, 
+        encode(pi.image_1, 'base64') AS image_1
+      FROM product_main pm
+      LEFT JOIN product_images pi ON pm.product_id = pi.product_id
+      WHERE pm.name ILIKE $1
+      LIMIT 20;
+    `;
+    const result = await pool.query(sql, [searchTerm]);
+
+    const products = result.rows.map((product) => ({
+      product_id: product.product_id,
+      name: product.name,
+      price: product.price,
+      image: product.image_1
+        ? `data:image/jpeg;base64,${product.image_1}`
+        : null,
+    }));
+
+    if (products.length === 0) {
+      return res.status(200).json({
+        products: [],
+        message: "No products found for the given search term.",
+      });
+    }
+
+    return res.status(200).json({
+      products,
+      message: "Products retrieved successfully",
+    });
+  } catch (error) {
+    console.error("Search Products Error:", error);
+    return res.status(500).json({
+      products: [],
+      message: "Internal server error",
+    });
+  }
+};
