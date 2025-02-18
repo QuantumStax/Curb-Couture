@@ -41,7 +41,7 @@ function Home() {
           </section>
         </section>
       </Suspense>
-      <section className="bg-banner_2">
+      <section className="bg-gray-800 text-primary_2">
         <OurBrand />
       </section>
       <section className="">

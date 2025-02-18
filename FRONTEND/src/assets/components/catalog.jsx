@@ -46,7 +46,7 @@ const ShopCatalog = ({ items }) => {
               currentPage === 1
                 ? "opacity-50 cursor-not-allowed"
                 : "hover:bg-gray-200"
-            } text-gray-700 px-3 py-1 rounded-md`}
+            } text-primary_2 px-3 py-1 rounded-md`}
             disabled={currentPage === 1}
             aria-label="Previous page"
           >
@@ -60,7 +60,7 @@ const ShopCatalog = ({ items }) => {
                 className={`${
                   currentPage === pageNumber
                     ? "bg-gray-800 text-white"
-                    : "text-gray-700 hover:bg-gray-200"
+                    : "text-primary_2 hover:bg-primary_2 hover:text-secondary_2"
                 } px-3 py-1 border rounded-md`}
                 aria-current={currentPage === pageNumber ? "page" : undefined}
                 aria-label={`Page ${pageNumber}`}
@@ -74,8 +74,8 @@ const ShopCatalog = ({ items }) => {
             className={`${
               currentPage === totalPages
                 ? "opacity-50 cursor-not-allowed"
-                : "hover:bg-gray-200"
-            } text-gray-700 px-3 py-1 rounded-md`}
+                : "hover:bg-primary_2 hover:text-secondary_2"
+            } text-primary_2 px-3 py-1 rounded-md`}
             disabled={currentPage === totalPages}
             aria-label="Next page"
           >

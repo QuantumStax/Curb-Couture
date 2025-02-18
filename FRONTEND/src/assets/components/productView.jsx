@@ -283,7 +283,6 @@ const ProductView = () => {
                   </div>
                 )}
 
-
                 {/* Quantity */}
                 <div className="flex flex-col gap-2 ml-[4rem]">
                   <p className="text-sm uppercase text-primary_2 opacity-50 tracking-wide mb-1">
@@ -311,12 +310,6 @@ const ProductView = () => {
 
               {/* Add to Cart + Buy Now */}
               <div className="flex items-center gap-4 mt-6">
-                <button
-                  onClick={handleAddToCart}
-                  className="border border-[#6f6f6f] px-6 py-2 text-sm text-[#e8e8e8] rounded hover:bg-[#e8e8e8] hover:text-black transition-colors"
-                >
-                  Add to Cart
-                </button>
                 <Link
                   to={`/checkout?product_image=${encodeURIComponent(
                     product?.images?.[0] || "/images/placeholder.jpg"
@@ -326,10 +319,16 @@ const ProductView = () => {
                     product?.rating
                   )}&product_price=${encodeURIComponent(product.price)}`}
                 >
-                  <button className="bg-[#4f4f4f] px-6 py-2 text-sm text-white rounded hover:bg-[#616161] transition-colors">
+                  <button className="bg-banner_2 px-6 py-3 w-[13rem] text-lg text-secondary_2 rounded hover:bg-[#616161] hover:text-primary_2 transition-colors">
                     Buy Now
                   </button>
                 </Link>
+                <button
+                  onClick={handleAddToCart}
+                  className="bg-transparent border  px-6 py-3 w-[13rem] text-lg text-primary_2 rounded hover:bg-[#616161] hover:text-primary_2 transition-colors"
+                >
+                  Add to Cart
+                </button>
               </div>
             </div>
           </div>

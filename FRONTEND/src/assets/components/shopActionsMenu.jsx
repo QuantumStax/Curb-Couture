@@ -77,10 +77,10 @@ const ShopActionsMenu = () => {
     <div className="flex items-end lg:gap-5 gap-2 lg:px-[7rem] px-5 lg:py-22 py-16 h-[15rem]">
       {/* filter */}
       <div
-        className="relative rounded-lg bg-secondary_2 text-primary_2 py-2 px-6 lg:w-[10rem] w-[10rem] h-[3rem] cursor-pointer hover:shadow-xl"
+        className="relative rounded-lg bg-primary_2 text-secondary_2 py-2 px-6 lg:w-[10rem] w-[10rem] h-[3rem] cursor-pointer hover:shadow-xl"
         onClick={toggleFilter}
       >
-        <div className="relative -left-3 top-0.5 text-primary_2">
+        <div className="relative -left-3 top-0.5 text-secondary_2">
           <FilterListIcon />
         </div>
         <h1 className="absolute left-[50%] top-[50%] translate-x-[-50%] translate-y-[-50%] text-xl font-semibold">
@@ -96,7 +96,7 @@ const ShopActionsMenu = () => {
       </div>
       {/* sort */}
       <div
-        className="relative rounded-lg bg-transparent text-secondary_2 border border-secondary_2 transition-all duration-200 py-2 px-6 w-[10rem] h-[3rem] hover:shadow-xl cursor-pointer"
+        className="relative rounded-lg bg-transparent text-primary_2 border border-primary_2 transition-all duration-200 py-2 px-6 w-[10rem] h-[3rem] hover:shadow-xl cursor-pointer"
         onClick={toggleSort}
       >
         <div className="relative -left-3 top-0.5 opacity-75">
