@@ -1,25 +1,24 @@
 /* eslint-disable no-unused-vars */
-import { useState, useRef, useEffect, useMemo } from "react";
+import { useState, useEffect, useRef, useMemo } from "react";
 import { gsap } from "gsap";
+import { Link, useParams } from "react-router-dom";
+import axios from "axios";
+
 import Footer from "./footer";
-import StraightenIcon from "@mui/icons-material/Straighten";
+import Loader from "./loader";
+import ReviewModal from "./reviewModal";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import AccessTimeIcon from "@mui/icons-material/AccessTime";
 import UndoIcon from "@mui/icons-material/Undo";
-import { Link, useParams } from "react-router-dom";
-import Loader from "./loader";
-import axios from "axios";
-import ReviewModal from "./reviewModal";
 
 const usePrefersReducedMotion = () => {
   const [reducedMotion, setReducedMotion] = useState(false);
   useEffect(() => {
-    const mediaQuery = window.matchMedia("(prefers-reduced-motion: reduce)");
-    setReducedMotion(mediaQuery.matches);
-
-    const handler = () => setReducedMotion(mediaQuery.matches);
-    mediaQuery.addEventListener("change", handler);
-    return () => mediaQuery.removeEventListener("change", handler);
+    const mq = window.matchMedia("(prefers-reduced-motion: reduce)");
+    setReducedMotion(mq.matches);
+    const handler = () => setReducedMotion(mq.matches);
+    mq.addEventListener("change", handler);
+    return () => mq.removeEventListener("change", handler);
   }, []);
   return reducedMotion;
 };
@@ -27,31 +26,35 @@ const usePrefersReducedMotion = () => {
 const ProductView = () => {
   const { id } = useParams();
 
+  // State
   const [product, setProduct] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [quantity, setQuantity] = useState(1);
   const [showOffers, setShowOffers] = useState(false);
   const [isReviewOpen, setIsReviewOpen] = useState(false);
-  const [quantity, setQuantity] = useState(1);
   const [reviews, setReviews] = useState([]);
-
   const [sortOption, setSortOption] = useState("Newest");
   const [helpfulCounts, setHelpfulCounts] = useState({});
+  const [relatedProducts, setRelatedProducts] = useState([]);
+  const [showToast, setShowToast] = useState(false);
 
-  const containerRef = useRef(null);
-  const offersRef = useRef(null);
+  // Main product image
+  const [mainImage, setMainImage] = useState("");
+
+  // GSAP refs
+  const containerRef = useRef(null); // entire hero container
+  const circleRef = useRef(null); // circle behind product
+  const imageRef = useRef(null); // product image
+  const textRef = useRef(null); // text block
+  const offersRef = useRef(null); // offers expand/collapse
 
   const prefersReducedMotion = usePrefersReducedMotion();
 
-  const [mainImage, setMainImage] = useState("");
+  // Increase / Decrease quantity
+  const increaseQuantity = () => setQuantity((q) => q + 1);
+  const decreaseQuantity = () => setQuantity((q) => (q > 1 ? q - 1 : 1));
 
-  const increaseQuantity = () => {
-    setQuantity((prevQuantity) => prevQuantity + 1);
-  };
-
-  const decreaseQuantity = () => {
-    setQuantity((prevQuantity) => (prevQuantity > 1 ? prevQuantity - 1 : 1));
-  };
-
+  // Fetch product
   useEffect(() => {
     const fetchProduct = async () => {
       try {
@@ -62,13 +65,14 @@ const ProductView = () => {
           data?.images?.length > 0 ? data.images[0] : "/images/placeholder.jpg"
         );
         setLoading(false);
-      } catch (error) {
+      } catch (err) {
         setLoading(false);
       }
     };
     fetchProduct();
   }, [id]);
 
+  // Fetch reviews
   useEffect(() => {
     const fetchReview = async () => {
       try {
@@ -82,75 +86,7 @@ const ProductView = () => {
     fetchReview();
   }, [id]);
 
-  useEffect(() => {
-    if (!loading && containerRef.current && !prefersReducedMotion) {
-      gsap.fromTo(
-        containerRef.current,
-        { opacity: 0, y: 20 },
-        {
-          opacity: 1,
-          y: 0,
-          duration: 0.5,
-          ease: "power2.out",
-        }
-      );
-    }
-  }, [loading, prefersReducedMotion]);
-
-  useEffect(() => {
-    if (!prefersReducedMotion) {
-      if (showOffers) {
-        gsap.to(offersRef.current, {
-          height: "auto",
-          duration: 0.3,
-          ease: "power2.out",
-          opacity: 1,
-        });
-      } else {
-        gsap.to(offersRef.current, {
-          height: 0,
-          duration: 0.3,
-          ease: "power2.in",
-        });
-      }
-    }
-  }, [showOffers, prefersReducedMotion]);
-
-  const offers = [
-    {
-      coupon: "free15first",
-      desc: "15% off on your first order!",
-    },
-    {
-      coupon: "SAVE20",
-      desc: "Get ₹200 off on orders above ₹1000!",
-    },
-    {
-      coupon: "FREESHIP",
-      desc: "Free shipping on your first order!",
-    },
-  ];
-
-  const sortedReviews = useMemo(() => {
-    let sorted = [...reviews];
-    if (sortOption === "Newest") {
-      sorted.sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
-    } else if (sortOption === "Highest") {
-      sorted.sort((a, b) => b.rating - a.rating);
-    } else if (sortOption === "Lowest") {
-      sorted.sort((a, b) => a.rating - b.rating);
-    }
-    return sorted;
-  }, [reviews, sortOption]);
-
-  const handleHelpful = (reviewIndex) => {
-    setHelpfulCounts((prev) => ({
-      ...prev,
-      [reviewIndex]: (prev[reviewIndex] || 0) + 1,
-    }));
-  };
-
-  const [relatedProducts, setRelatedProducts] = useState([]);
+  // Recommended products (placeholder)
   useEffect(() => {
     setRelatedProducts([
       {
@@ -168,347 +104,424 @@ const ProductView = () => {
     ]);
   }, [id]);
 
-  const [showToast, setShowToast] = useState(false);
+  // Animate the hero layout
+  useEffect(() => {
+    if (!loading && containerRef.current && !prefersReducedMotion) {
+      const tl = gsap.timeline({ defaults: { ease: "power2.out" } });
+
+      // Fade in the entire container
+      tl.fromTo(
+        containerRef.current,
+        { opacity: 0 },
+        { opacity: 1, duration: 0.6 }
+      );
+      // Scale/fade in the circle
+      tl.fromTo(
+        circleRef.current,
+        { scale: 0, opacity: 0 },
+        { scale: 1, opacity: 0.15, duration: 0.6 },
+        "-=0.3"
+      );
+      // Slide product image from the left
+      tl.fromTo(
+        imageRef.current,
+        { x: -100, opacity: 0 },
+        { x: 0, opacity: 1, duration: 0.7 },
+        "-=0.3"
+      );
+      // Slide text from the right
+      tl.fromTo(
+        textRef.current,
+        { x: 100, opacity: 0 },
+        { x: 0, opacity: 1, duration: 0.7 },
+        "-=0.5"
+      );
+    }
+  }, [loading, prefersReducedMotion]);
+
+  // Animate offers expand/collapse
+  useEffect(() => {
+    if (!prefersReducedMotion) {
+      if (showOffers) {
+        gsap.to(offersRef.current, {
+          height: "auto",
+          duration: 0.3,
+          opacity: 1,
+        });
+      } else {
+        gsap.to(offersRef.current, {
+          height: 0,
+          duration: 0.3,
+          opacity: 0,
+        });
+      }
+    }
+  }, [showOffers, prefersReducedMotion]);
+
+  // Sort reviews
+  const sortedReviews = useMemo(() => {
+    const sorted = [...reviews];
+    if (sortOption === "Newest") {
+      sorted.sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
+    } else if (sortOption === "Highest") {
+      sorted.sort((a, b) => b.rating - a.rating);
+    } else if (sortOption === "Lowest") {
+      sorted.sort((a, b) => a.rating - b.rating);
+    }
+    return sorted;
+  }, [reviews, sortOption]);
+
+  // Mark review as helpful
+  const handleHelpful = (idx) => {
+    setHelpfulCounts((prev) => ({
+      ...prev,
+      [idx]: (prev[idx] || 0) + 1,
+    }));
+  };
+
+  // Toast for "Add to Cart"
   const handleAddToCart = () => {
     setShowToast(true);
     setTimeout(() => setShowToast(false), 2000);
+    // Real logic: add product to cart
   };
 
+  // Offers data
+  const offers = [
+    { coupon: "free15first", desc: "15% off on your first order!" },
+    { coupon: "SAVE20", desc: "Get ₹200 off on orders above ₹1000!" },
+    { coupon: "FREESHIP", desc: "Free shipping on your first order!" },
+  ];
+
   return (
-    <section className="bg-primary min-h-screen">
-      {!loading ? (
-        <section className="px-20 py-16" ref={containerRef}>
-          {showToast && (
-            <div className="fixed top-5 right-5 bg-black text-white px-4 py-2 rounded-md shadow-lg z-50 animate-fadeIn">
-              Added to Cart!
-            </div>
-          )}
-
-          {/* Breadcrumb */}
-          <div className="flex items-center gap-2 opacity-70">
-            <p className="hover:underline cursor-pointer">Home</p>
-            <p className="cursor-default">/</p>
-            <p className="hover:underline cursor-pointer">Recently viewed</p>
-          </div>
-
-          {/* Main Container */}
-          <div className="flex items-start gap-10 mt-10 bg-white shadow-lg rounded-lg p-8">
-            <div className="flex flex-col items-center">
-              <img
-                src={mainImage}
-                alt={product?.name || "Product Image"}
-                loading="lazy"
-                className="h-[40rem] w-auto rounded-md shadow-md hover:scale-[1.01] transition-transform duration-300 object-cover"
-              />
-              <div className="flex gap-2 mt-3">
-                {product?.images?.map((imgSrc, i) => (
-                  <img
-                    key={i}
-                    src={imgSrc}
-                    alt={`Thumbnail ${i}`}
-                    loading="lazy"
-                    onClick={() => setMainImage(imgSrc)}
-                    className="h-16 w-16 object-cover rounded-md cursor-pointer border-2 border-transparent hover:border-secondary_2 transition-colors"
-                  />
-                ))}
-              </div>
-            </div>
-
-            {/* Product Details */}
-            <div className="relative top-2 w-[40rem]">
-              <h1 className="text-3xl font-bold opacity-75">{product?.name}</h1>
-              <div className="flex items-center gap-2 mt-2">
-                <div>
-                  <p className="text-xl font-bold text-green-600">
-                    {product?.rating}⭐
-                  </p>
-                </div>
-                <p> from 15 Reviews</p>
-              </div>
-              <p className="mt-2 opacity-70">{product?.description}</p>
-
-              <div className="flex items-center gap-3 mt-4 font-semibold">
-                <h1 className="text-3xl text-green-600">₹{product?.price}</h1>
-              </div>
-
-              {/* Sizes */}
-              <div className="flex gap-4 mt-4">
-                {product?.sizes.map((size, i) => (
-                  <div
-                    key={i}
-                    className="border py-2 px-4 border-slate-950 cursor-pointer hover:bg-secondary_2 hover:text-primary_2 transition-all duration-300"
-                  >
-                    <p className="uppercase font-semibold">{size}</p>
-                  </div>
-                ))}
-              </div>
-
-              <div className="flex items-center gap-2 mt-2">
-                <StraightenIcon
-                  aria-label="Size Chart Icon"
-                  titleAccess="Size Chart Icon"
-                />
-                <p>
-                  Please select according to the{" "}
-                  <a
-                    href="#"
-                    className="font-semibold hover:underline"
-                    title="View the size chart"
-                  >
-                    Size Chart
-                  </a>
-                </p>
-              </div>
-
-              {/* Quantity and Buy Now */}
-              <div className="flex items-center gap-5 mt-4">
-                <button
-                  className="flex flex-col items-center justify-center pb-2 rounded-full h-10 w-10 text-3xl border border-slate-950"
-                  onClick={decreaseQuantity}
-                  aria-label="Decrease quantity"
-                >
-                  -
-                </button>
-                <div
-                  className="flex flex-col items-center justify-center h-10 w-16 border border-slate-800 rounded-md text-lg"
-                  aria-label="Selected quantity"
-                >
-                  <p>{quantity}</p>
-                </div>
-                <button
-                  className="flex flex-col items-center justify-center pb-2 rounded-full h-10 w-10 text-3xl border border-slate-950"
-                  onClick={increaseQuantity}
-                  aria-label="Increase quantity"
-                >
-                  +
-                </button>
-                <div className="flex flex-col items-center justify-center pb-1 ml-5 h-12 w-[9rem] text-xl rounded-md bg-secondary_2 text-primary_2 hover:scale-[1.02] hover:shadow-lg cursor-pointer">
-                  {!loading && product && (
-                    <Link
-                      to={`/checkout?product_image=${encodeURIComponent(
-                        product?.images?.[0] || "/images/placeholder.jpg"
-                      )}&product_name=${encodeURIComponent(
-                        product?.name
-                      )}&product_rating=${encodeURIComponent(
-                        product?.rating
-                      )}&product_price=${encodeURIComponent(product.price)}`}
-                      aria-label="Proceed to checkout"
-                    >
-                      <button>Buy Now</button>
-                    </Link>
-                  )}
-                </div>
-              </div>
-
-              <button
-                onClick={handleAddToCart}
-                className="flex flex-col items-center justify-center pb-1 mt-4 h-12 w-[23rem] text-xl rounded-md border-[2px] border-secondary_2 hover:scale-[1.02] hover:shadow-lg cursor-pointer"
-                aria-label="Add to Cart"
-              >
-                Add to Cart
-              </button>
-
-              {/* Offers */}
-              <div className="mt-5">
-                <div
-                  onClick={() => setShowOffers(!showOffers)}
-                  className="flex items-center gap-[10rem] border-t border-b border-slate-950 py-2 w-fit cursor-pointer"
-                  aria-label="Toggle offers"
-                >
-                  <h1 className="text-lg font-semibold uppercase">
-                    Offers just for you
-                  </h1>
-                  <KeyboardArrowDownIcon aria-label="Expand or collapse offers" />
-                </div>
-                <div
-                  ref={offersRef}
-                  className={`${
-                    showOffers ? "border-b w-[23.1rem] border-slate-950" : ""
-                  } overflow-hidden h-0 opacity-0 py-3`}
-                >
-                  {offers.map((offer, i) => (
-                    <div key={i} className="my-3">
-                      <h1 className="uppercase text-2xl font-bold">
-                        {offer.coupon}
-                      </h1>
-                      <p className="text-lg opacity-70 font-semibold">
-                        {offer.desc}
-                      </p>
-                    </div>
-                  ))}
-                </div>
-
-                {/* Delivery / Return Info */}
-                <div className="text-lg mt-4">
-                  <div className="flex items-center gap-2">
-                    <AccessTimeIcon
-                      aria-label="Delivery time icon"
-                      titleAccess="Delivery time icon"
-                    />
-                    <p>Estimate delivery time: 3 - 5 business day</p>
-                  </div>
-                  <p>
-                    <span className="font-bold">Note : </span>The orders are
-                    delivered through DTDC and the delivery time may vary!
-                  </p>
-                  <div className="flex items-center gap-2 mt-3">
-                    <UndoIcon
-                      aria-label="Return policy icon"
-                      titleAccess="Return policy icon"
-                    />
-                    <p>
-                      Return within 10 days of purchase. Duties &amp; taxes are
-                      non-refundable!
-                    </p>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          {/* Product Description */}
-          <details
-            className="bg-white shadow-lg rounded-lg p-8 mt-10 w-[75rem]"
-            open
-          >
-            <summary className="text-2xl uppercase font-semibold cursor-pointer list-none">
-              Product Info
-            </summary>
-            <hr className="w-[11rem] mt-1 h-[0.1rem] bg-black opacity-70" />
-            <div className="text-lg mt-4">
-              <p>{product?.desc_1}</p>
-              <div className="mt-2">
-                <li className="flex gap-2">
-                  <span className="font-semibold">Name : </span>
-                  <p>{product?.name}</p>
-                </li>
-                <li className="flex gap-2">
-                  <span className="font-semibold">Fabric : </span>
-                  <p>{product?.material}</p>
-                </li>
-                <li className="flex gap-2">
-                  <span className="font-semibold">Occation : </span>
-                  <p>{product?.occation}</p>
-                </li>
-                <li className="flex gap-2">
-                  <span className="font-semibold">Pattern : </span>
-                  <p>{product?.type}</p>
-                </li>
-                <li className="flex gap-2">
-                  <span className="font-semibold">Sleeve Length : </span>
-                  <p>{product?.sleeve_length}</p>
-                </li>
-              </div>
-              <p className="mt-2">{product?.description}</p>
-            </div>
-          </details>
-
-          {/* Product Review and Rating */}
-          <div className="bg-white shadow-lg rounded-lg p-8 mt-10 w-[75rem]">
-            <div className="flex items-center gap-10">
-              <h1 className="text-2xl uppercase font-semibold">
-                Product Reviews
-              </h1>
-              <button
-                className="border border-secondary_2 py-2 px-4 hover:shadow-lg uppercase"
-                onClick={() => setIsReviewOpen(true)}
-              >
-                Write a Review
-              </button>
-            </div>
-
-            {isReviewOpen && (
-              <ReviewModal setIsReviewOpen={setIsReviewOpen} id={id} />
-            )}
-
-            <hr className="w-[13rem] mt-1 h-[0.1rem] bg-black opacity-70" />
-
-            {/* Sorting dropdown */}
-            <div className="flex items-center gap-4 mt-5">
-              <label htmlFor="sortReviews" className="font-semibold">
-                Sort By:
-              </label>
-              <select
-                id="sortReviews"
-                value={sortOption}
-                onChange={(e) => setSortOption(e.target.value)}
-                className="border border-gray-300 rounded-md p-1"
-              >
-                <option value="Newest">Newest</option>
-                <option value="Highest">Highest Rating</option>
-                <option value="Lowest">Lowest Rating</option>
-              </select>
-            </div>
-
-            <div className="mt-5">
-              {sortedReviews.map((review, i) => (
-                <div key={i} className="mb-10">
-                  <p className="text-xl font-bold">
-                    {review.rating}⭐
-                    {review.rating >= 5 && (
-                      <span className="text-green-600 ml-2">
-                        {/* highlight key reviews */}
-                        Top Rated
-                      </span>
-                    )}
-                  </p>
-                  <div className="flex gap-2 justify-between">
-                    <h1 className="font-bold my-2 text-xl">{review.title}</h1>
-                    <p className="text-gray-500">
-                      {new Date(review.created_at).toLocaleDateString()}
-                    </p>
-                  </div>
-                  <p className="mb-2">{review.review}</p>
-
-                  {/* Review Reactions: Helpful */}
-                  <div className="flex items-center gap-4">
-                    <button
-                      onClick={() => handleHelpful(i)}
-                      className="text-blue-600 hover:underline"
-                    >
-                      Helpful ({helpfulCounts[i] || 0})
-                    </button>
-                  </div>
-                  <hr className="h-[0.1rem] bg-black opacity-30 mt-2" />
-                </div>
-              ))}
-            </div>
-          </div>
-
-          {/* Personalized Recommendations */}
-          <div className="bg-white shadow-lg rounded-lg p-8 mt-10 w-[75rem]">
-            <h2 className="text-2xl uppercase font-semibold">
-              You May Also Like
-            </h2>
-            <hr className="w-[13rem] mt-1 h-[0.1rem] bg-black opacity-70" />
-            <div className="flex gap-6 mt-5">
-              {relatedProducts.map((relProd) => (
-                <div
-                  key={relProd.id}
-                  className="w-[12rem] cursor-pointer hover:scale-[1.02] transition-transform"
-                >
-                  <img
-                    src={relProd.image}
-                    alt={relProd.name}
-                    loading="lazy"
-                    className="w-[12rem] h-[12rem] object-cover rounded-md"
-                  />
-                  <h3 className="text-lg font-semibold mt-2">{relProd.name}</h3>
-                  <p className="text-green-600 font-semibold">
-                    ₹{relProd.price}
-                  </p>
-                </div>
-              ))}
-            </div>
-          </div>
-        </section>
-      ) : (
-        <div className="absolute left-[50%] top-[25%]">
+    <section className="min-h-screen bg-[#2f2f2f] text-white relative">
+      {loading && (
+        <div className="absolute left-1/2 top-1/3 transform -translate-x-1/2">
           <Loader />
         </div>
       )}
 
-      <section className={`${loading ? "relative top-[13.3rem]" : ""}`}>
+      {showToast && (
+        <div className="fixed top-5 right-5 bg-black text-white px-4 py-2 rounded-md shadow-lg z-50 animate-fadeIn">
+          Added to Cart!
+        </div>
+      )}
+
+      {!loading && product && (
+        <>
+          {/* HERO SECTION */}
+          <div
+            ref={containerRef}
+            className="opacity-0 w-full h-[70vh] lg:h-[100vh] relative overflow-hidden flex items-center justify-center px-8"
+          >
+            {/* BACKGROUND CIRCLE */}
+            <div
+              ref={circleRef}
+              className="absolute w-[80rem] h-[70rem] bg-black rounded-full left-[-25rem] top-[-20rem] opacity-20"
+            />
+
+            {/* LEFT - PRODUCT IMAGE */}
+            <div className="flex-1 flex max-w-[30%]">
+              <img
+                ref={imageRef}
+                src={mainImage}
+                alt={product?.name || "Product Image"}
+                className=" max-h-[30rem] object-cover shadow-lg transition-transform duration-300 hover:scale-[1.01] rounded-lg"
+              />
+            </div>
+
+            {/* RIGHT - TEXT CONTENT */}
+            <div
+              ref={textRef}
+              className="flex-1 max-w-[28rem] flex flex-col items-start justify-center ml-[20%]"
+            >
+              <p className="text-sm uppercase text-primary_2 opacity-50 tracking-wide mb-1">
+                {product?.type || ""}
+              </p>
+
+              <h1 className="text-[3rem] font-bold text-primary_2 leading-tight">
+                {product?.name || "Gunmetal Black"}
+              </h1>
+
+              {/* Price + Rating */}
+              <div className="flex items-center gap-5 mt-3">
+                <h2 className="text-2xl text-green-600 font-semibold">
+                  ₹{product?.price || ""}
+                </h2>
+                {/* Star Rating (or numeric) */}
+                <div className="flex items-center gap-1">
+                  <p className="text-[#cfcfcf] font-bold">
+                    {product?.rating || 5}⭐
+                  </p>
+                  <p className="text-[#7f7f7f]">(from 15 Reviews)</p>
+                </div>
+              </div>
+
+              {/* Short description */}
+              <p className="text-[#b5b5b5] mt-4 text-sm leading-relaxed">
+                {product?.description ||
+                  "Lorem ipsum is simply dummy text of the printing and typesetting industry."}
+              </p>
+
+              {/* Sizes */}
+              <div className="flex items-center gap-6 mt-6">
+                {product?.sizes?.length > 0 && (
+                  <div className="flex flex-col gap-2">
+                    <p className="text-sm uppercase text-primary_2 opacity-50 tracking-wide mb-1">
+                      Size:
+                    </p>
+                    <div className="flex  gap-4">
+                      {product.sizes.map((size, i) => (
+                        <button
+                          key={i}
+                          className="border border-primary_2 px-3 py-1 text-sm text-primary_2 rounded hover:bg-[#e8e8e8] hover:text-black transition-colors uppercase"
+                        >
+                          {size}
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+                )}
+
+
+                {/* Quantity */}
+                <div className="flex flex-col gap-2 ml-[4rem]">
+                  <p className="text-sm uppercase text-primary_2 opacity-50 tracking-wide mb-1">
+                    Quantity:
+                  </p>
+                  <div className="flex items-center gap-5">
+                    <button
+                      onClick={decreaseQuantity}
+                      className="w-8 h-8 pb-1 flex items-center justify-center border rounded-full text-xl text-primary_2 hover:bg-primary_2 hover:text-black transition-colors"
+                    >
+                      -
+                    </button>
+                    <div className="w-10 h-8 flex items-center justify-center border border-primary_2 rounded text-primary_2">
+                      {quantity}
+                    </div>
+                    <button
+                      onClick={increaseQuantity}
+                      className="w-8 h-8 pb-1 flex items-center justify-center border rounded-full text-xl text-primary_2 hover:bg-primary_2 hover:text-black transition-colors"
+                    >
+                      +
+                    </button>
+                  </div>
+                </div>
+              </div>
+
+              {/* Add to Cart + Buy Now */}
+              <div className="flex items-center gap-4 mt-6">
+                <button
+                  onClick={handleAddToCart}
+                  className="border border-[#6f6f6f] px-6 py-2 text-sm text-[#e8e8e8] rounded hover:bg-[#e8e8e8] hover:text-black transition-colors"
+                >
+                  Add to Cart
+                </button>
+                <Link
+                  to={`/checkout?product_image=${encodeURIComponent(
+                    product?.images?.[0] || "/images/placeholder.jpg"
+                  )}&product_name=${encodeURIComponent(
+                    product?.name
+                  )}&product_rating=${encodeURIComponent(
+                    product?.rating
+                  )}&product_price=${encodeURIComponent(product.price)}`}
+                >
+                  <button className="bg-[#4f4f4f] px-6 py-2 text-sm text-white rounded hover:bg-[#616161] transition-colors">
+                    Buy Now
+                  </button>
+                </Link>
+              </div>
+            </div>
+          </div>
+
+          {/* OFFERS / Delivery / Return Info */}
+          <section className="px-10 py-8 text-sm">
+            {/* Toggle Offers */}
+            <div
+              onClick={() => setShowOffers(!showOffers)}
+              className="flex items-center gap-4 w-fit cursor-pointer border-t border-b border-[#5f5f5f] py-2"
+            >
+              <h1 className="text-lg font-semibold uppercase text-[#cfcfcf]">
+                Offers just for you
+              </h1>
+              <KeyboardArrowDownIcon />
+            </div>
+            <div
+              ref={offersRef}
+              className="overflow-hidden h-0 opacity-0 py-3 text-[#b5b5b5]"
+            >
+              {offers.map((offer, i) => (
+                <div key={i} className="my-2">
+                  <h1 className="uppercase text-md font-bold text-[#ffffff]">
+                    {offer.coupon}
+                  </h1>
+                  <p className="text-sm">{offer.desc}</p>
+                </div>
+              ))}
+            </div>
+
+            {/* Delivery / Return */}
+            <div className="mt-5 text-[#b5b5b5]">
+              <div className="flex items-center gap-2">
+                <AccessTimeIcon fontSize="small" />
+                <p>Estimate delivery time: 3 - 5 business days</p>
+              </div>
+              <p className="mt-2">
+                <span className="font-bold text-white">Note:</span> The orders
+                are delivered through DTDC; delivery time may vary!
+              </p>
+              <div className="flex items-center gap-2 mt-3">
+                <UndoIcon fontSize="small" />
+                <p>
+                  Return within 10 days of purchase. Duties &amp; taxes are
+                  non-refundable!
+                </p>
+              </div>
+            </div>
+          </section>
+
+          {/* Additional Product Info */}
+          <section className="px-10 pb-8">
+            <div className="bg-[#3f3f3f] rounded p-6 text-[#e0e0e0]">
+              <h2 className="text-xl font-semibold mb-3 text-white">
+                Product Info
+              </h2>
+              <p className="mb-2">{product?.desc_1}</p>
+              <ul className="mb-3 space-y-1 text-sm">
+                <li>
+                  <span className="font-semibold text-white">Name:</span>{" "}
+                  {product?.name}
+                </li>
+                <li>
+                  <span className="font-semibold text-white">Fabric:</span>{" "}
+                  {product?.material}
+                </li>
+                <li>
+                  <span className="font-semibold text-white">Occation:</span>{" "}
+                  {product?.occation}
+                </li>
+                <li>
+                  <span className="font-semibold text-white">Pattern:</span>{" "}
+                  {product?.type}
+                </li>
+                <li>
+                  <span className="font-semibold text-white">Sleeve:</span>{" "}
+                  {product?.sleeve_length}
+                </li>
+              </ul>
+              <p>{product?.description}</p>
+            </div>
+          </section>
+
+          {/* Reviews */}
+          <section className="px-10 pb-8">
+            <div className="bg-[#3f3f3f] rounded p-6 text-[#e0e0e0]">
+              <div className="flex items-center justify-between">
+                <h2 className="text-xl font-semibold text-white">
+                  Product Reviews
+                </h2>
+                <button
+                  onClick={() => setIsReviewOpen(true)}
+                  className="border border-[#afafaf] text-[#afafaf] px-4 py-2 rounded hover:bg-[#afafaf] hover:text-black transition-colors"
+                >
+                  Write a Review
+                </button>
+              </div>
+              {isReviewOpen && (
+                <ReviewModal setIsReviewOpen={setIsReviewOpen} id={id} />
+              )}
+
+              <hr className="my-3 border-[#5f5f5f]" />
+
+              {/* Sorting */}
+              <div className="flex items-center gap-4 mt-3">
+                <label htmlFor="sortReviews" className="font-medium text-white">
+                  Sort By:
+                </label>
+                <select
+                  id="sortReviews"
+                  value={sortOption}
+                  onChange={(e) => setSortOption(e.target.value)}
+                  className="border border-[#afafaf] bg-[#2f2f2f] text-white rounded-md p-1"
+                >
+                  <option value="Newest">Newest</option>
+                  <option value="Highest">Highest Rating</option>
+                  <option value="Lowest">Lowest Rating</option>
+                </select>
+              </div>
+
+              <div className="mt-5 space-y-6">
+                {sortedReviews.map((review, i) => (
+                  <div key={i}>
+                    <p className="text-lg font-bold text-[#b0ffb0]">
+                      {review.rating}⭐
+                      {review.rating >= 5 && (
+                        <span className="ml-2 text-sm text-white">
+                          Top Rated
+                        </span>
+                      )}
+                    </p>
+                    <div className="flex gap-2 justify-between mt-1">
+                      <h3 className="font-semibold text-md text-white">
+                        {review.title}
+                      </h3>
+                      <p className="text-[#cfcfcf] text-sm">
+                        {new Date(review.created_at).toLocaleDateString()}
+                      </p>
+                    </div>
+                    <p className="text-sm mt-1">{review.review}</p>
+                    <div className="mt-2">
+                      <button
+                        onClick={() => handleHelpful(i)}
+                        className="text-blue-400 hover:underline text-sm"
+                      >
+                        Helpful ({helpfulCounts[i] || 0})
+                      </button>
+                    </div>
+                    <hr className="mt-3 border-[#5f5f5f]" />
+                  </div>
+                ))}
+              </div>
+            </div>
+          </section>
+
+          {/* Recommended Products */}
+          {relatedProducts.length > 0 && (
+            <section className="px-10 pb-8">
+              <div className="bg-[#3f3f3f] rounded p-6 text-[#e0e0e0]">
+                <h2 className="text-xl font-semibold text-white mb-3">
+                  You May Also Like
+                </h2>
+                <hr className="my-3 border-[#5f5f5f]" />
+                <div className="flex gap-6">
+                  {relatedProducts.map((relProd) => (
+                    <div
+                      key={relProd.id}
+                      className="w-[12rem] cursor-pointer hover:scale-[1.02] transition-transform"
+                    >
+                      <img
+                        src={relProd.image}
+                        alt={relProd.name}
+                        loading="lazy"
+                        className="w-[12rem] h-[12rem] object-cover rounded-md"
+                      />
+                      <h3 className="text-lg font-semibold mt-2 text-white">
+                        {relProd.name}
+                      </h3>
+                      <p className="text-green-400 font-semibold">
+                        ₹{relProd.price}
+                      </p>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </section>
+          )}
+        </>
+      )}
+
+      {/* Footer */}
+      <section>
         <Footer />
       </section>
     </section>
