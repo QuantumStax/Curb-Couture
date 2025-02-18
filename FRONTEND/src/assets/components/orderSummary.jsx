@@ -125,7 +125,7 @@ const OrderSummary = ({
   return (
     <>
       <div className="py-10 px-6 md:px-8 lg:px-10 max-w-7xl mx-auto font-sans">
-        <h2 className="flex items-center justify-center gap-2 text-3xl font-bold mb-12 tracking-wider text-gray-900 uppercase">
+        <h2 className="flex items-center justify-center gap-2 text-3xl font-bold mb-12 tracking-wider text-primary_2 uppercase">
           Order Summary
           <LocalShippingIcon fontSize="large" />
         </h2>

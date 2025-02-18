@@ -33,10 +33,10 @@ const Checkout = () => {
   }, [step]);
 
   return (
-    <section className="px-32 py-16 bg-gradient-to-r from-[#DADADA] to-[#FFFFFF]">
+    <section className="px-32 py-16 bg-secondary_2 text-primary_2">
       {/* Horizontal Progress Bar */}
       <div className="py-4">
-        <div className="w-full bg-secondary_2 h-2 rounded">
+        <div className="w-full bg-primary_2 h-2 rounded">
           <div
             ref={progressBarRef}
             className="bg-banner_2 h-2 rounded"
@@ -50,7 +50,7 @@ const Checkout = () => {
           <div className="flex justify-between mt-4">
             <button
               onClick={() => navigate("/top-deals", { replace: true })}
-              className="bg-secondary_2 text-white px-8 py-2 rounded"
+              className="bg-primary_2 text-secondary_2 px-8 py-2 rounded"
             >
               <ArrowBackIcon
                 style={{
@@ -66,7 +66,7 @@ const Checkout = () => {
           <div className="flex justify-end mt-4">
             <button
               onClick={() => setStep("orderSummary")}
-              className="bg-secondary_2 text-white px-4 py-2 rounded"
+              className="bg-primary_2 text-secondary_2 px-4 py-2 rounded"
             >
               Next
             </button>
@@ -79,7 +79,7 @@ const Checkout = () => {
           <div className="flex justify-between mt-4">
             <button
               onClick={() => setStep("address")}
-              className="bg-secondary_2 text-white px-8 py-2 rounded"
+              className="bg-primary_2 text-secondary_2 px-8 py-2 rounded"
             >
               <ArrowBackIcon
                 style={{
@@ -113,7 +113,7 @@ const Checkout = () => {
           <div className="flex justify-between mt-4">
             <button
               onClick={() => setStep("orderSummary")}
-              className="bg-secondary_2 text-white px-8 py-2 rounded"
+              className="bg-primary_2 text-secondary_2 px-8 py-2 rounded"
             >
               <ArrowBackIcon
                 style={{

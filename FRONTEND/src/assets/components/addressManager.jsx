@@ -36,9 +36,9 @@ const AddressModal = ({
       {/* Modal content */}
       <div
         ref={modalContentRef}
-        className="bg-white p-6 rounded shadow-lg z-10 max-w-[50rem]"
+        className="bg-secondary_2 text-secondary_2 p-6 rounded shadow-lg z-10 max-w-[50rem]"
       >
-        <h3 className="text-xl font-bold mb-4">
+        <h3 className="text-xl font-bold mb-4 text-primary_2">
           {isEditing ? "Edit Address" : "Add New Address"}
         </h3>
         <form onSubmit={onSubmit}>
@@ -59,7 +59,7 @@ const AddressModal = ({
               placeholder="India"
               value="India"
               onChange={onChange}
-              className="w-full border p-2 rounded"
+              className="w-full border p-2 rounded text-primary_2"
               required
             />
             <div className="flex items-center gap-4">
@@ -283,8 +283,8 @@ const AddressManager = ({ selectedAddress, onSelectAddress }) => {
             id={`address-${addr.id}`}
             className={`p-4 border rounded flex justify-between items-center ${
               selectedAddress && selectedAddress.id === addr.id
-                ? "border-2 border-secondary_2"
-                : "border-gray-300"
+                ? "border-2 border-primary_2"
+                : "border-gray-500"
             }`}
             onMouseEnter={() =>
               gsap.to(`#address-${addr.id}`, { scale: 1.02, duration: 0.2 })
@@ -309,13 +309,13 @@ const AddressManager = ({ selectedAddress, onSelectAddress }) => {
             </div>
             <div className="space-x-10">
               <button
-                className="text-secondary_2 border border-secondary_2 py-1 px-4 hover:bg-secondary_2 hover:text-primary_2 font-semibold uppercase"
+                className="text-primary_2 border border-primary_2 py-1 px-4 hover:bg-primary_2 hover:text-secondary_2 font-semibold uppercase"
                 onClick={() => openModalForEdit(addr)}
               >
                 Edit
               </button>
               <button
-                className="text-secondary_2 hover:text-red-600"
+                className="text-primary_2 hover:text-red-600"
                 onClick={() => handleDeleteAddress(addr.id)}
               >
                 <DeleteIcon />
@@ -325,7 +325,7 @@ const AddressManager = ({ selectedAddress, onSelectAddress }) => {
         ))}
       </div>
       <button
-        className="mt-6 bg-secondary_2 text-white px-4 py-2 rounded"
+        className="mt-6 bg-primary_2 text-secondary_2 px-4 py-2 rounded"
         onClick={openModalForAdd}
       >
         Add New Address
