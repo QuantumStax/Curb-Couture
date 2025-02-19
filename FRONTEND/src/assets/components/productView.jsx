@@ -268,6 +268,7 @@ const ProductView = () => {
               {/* Add to Cart + Buy Now */}
               <div className="flex items-center gap-4 mt-6">
                 <Link
+                  replace
                   to={`/checkout?product_id=${encodeURIComponent(
                     id
                   )}&product_image=${encodeURIComponent(
