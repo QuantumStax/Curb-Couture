@@ -15,7 +15,7 @@ const BestSellers = lazy(() => import("../components/bestSellers"));
 function Home() {
   return (
     <section>
-      <header aria-label="Site Header">
+      <header aria-label="Site Header" className="h-[90vh]">
         <HeroSlider2 />
       </header>
       {/* <section aria-labelledby="categories-heading">

@@ -52,7 +52,7 @@ function App() {
     <AuthProvider>
       <Router>
         <CustomScrollbarWrapper>
-          <main>
+          <main className="">
             <ScrollToTop />
             <Nav setIsModalOpen={setIsModalOpen} />
             <Routes>

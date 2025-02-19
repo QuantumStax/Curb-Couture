@@ -51,7 +51,7 @@ const HeroSlider2 = () => {
   }, [nextSlide]);
 
   return (
-    <div className="relative w-full h-[92vh] overflow-hidden">
+    <div className="relative top-[-4rem] w-full h-[100vh] overflow-hidden">
       <div
         ref={sliderRef}
         className="flex transition-transform duration-500 ease-out"
@@ -59,7 +59,7 @@ const HeroSlider2 = () => {
         {images.map((image, index) => (
           <div
             key={index}
-            className="flex-shrink-0 w-full h-[92vh] flex items-center justify-center bg-cover bg-center"
+            className="flex-shrink-0 w-full h-[100vh] flex items-center justify-center bg-cover bg-center"
             style={{
               backgroundImage: `url(${image.src})`,
               backgroundPosition: "center",

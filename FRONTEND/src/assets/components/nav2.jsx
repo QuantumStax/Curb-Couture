@@ -69,7 +69,7 @@ const Nav = ({ setIsModalOpen }) => {
     <nav
       role="navigation"
       aria-label="Primary Navigation"
-      className="flex items-center justify-between bg-banner_2 px-5 md:px-10 lg:px-20 py-2 relative"
+      className="flex items-center justify-between bg-banner_2 px-5 md:px-10 lg:px-20 py-2 sticky top-5 left-[2.5rem] z-30 w-[95%] rounded-lg"
     >
       {/* Menu Icon for Mobile */}
       <div
@@ -83,7 +83,7 @@ const Nav = ({ setIsModalOpen }) => {
       <div>
         <a href="/" aria-label="Home">
           <p className="text-xl sm:text-2xl md:text-3xl font-Outfit font-bold text-center md:text-left lg:translate-x-[3.5rem]">
-            Curb Coture
+            RARE ZERO
           </p>
         </a>
       </div>
