@@ -1,8 +1,29 @@
+/* eslint-disable no-unused-vars */
 /* eslint-disable react/prop-types */
 import { useEffect, useRef, useState } from "react";
 import DeleteIcon from "@mui/icons-material/Delete";
 import LocalShippingIcon from "@mui/icons-material/LocalShipping";
 import gsap from "gsap";
+import React from "react";
+
+class ErrorBoundary extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = { hasError: false };
+  }
+  static getDerivedStateFromError(error) {
+    return { hasError: true };
+  }
+  componentDidCatch(error, info) {
+    console.error("ErrorBoundary caught an error", error, info);
+  }
+  render() {
+    if (this.state.hasError) {
+      return <h2>Something went wrong.</h2>;
+    }
+    return this.props.children;
+  }
+}
 
 const AddressModal = ({
   isOpen,
@@ -16,11 +37,15 @@ const AddressModal = ({
 
   useEffect(() => {
     if (isOpen && modalContentRef.current) {
-      gsap.fromTo(
-        modalContentRef.current,
-        { opacity: 0, y: -50 },
-        { opacity: 1, y: 0, duration: 0.5, ease: "power3.out" }
-      );
+      try {
+        gsap.fromTo(
+          modalContentRef.current,
+          { opacity: 0, y: -50 },
+          { opacity: 1, y: 0, duration: 0.5, ease: "power3.out" }
+        );
+      } catch (error) {
+        console.error("Modal animation error:", error);
+      }
     }
   }, [isOpen]);
 
@@ -31,7 +56,13 @@ const AddressModal = ({
       {/* Modal backdrop */}
       <div
         className="absolute inset-0 bg-black opacity-50"
-        onClick={onClose}
+        onClick={() => {
+          try {
+            onClose();
+          } catch (error) {
+            console.error("Backdrop onClose error:", error);
+          }
+        }}
       ></div>
       {/* Modal content */}
       <div
@@ -41,7 +72,15 @@ const AddressModal = ({
         <h3 className="text-xl font-bold mb-4 text-primary_2">
           {isEditing ? "Edit Address" : "Add New Address"}
         </h3>
-        <form onSubmit={onSubmit}>
+        <form
+          onSubmit={(e) => {
+            try {
+              onSubmit(e);
+            } catch (error) {
+              console.error("Form submission error:", error);
+            }
+          }}
+        >
           <div className="space-y-4">
             <input
               type="text"
@@ -140,7 +179,13 @@ const AddressModal = ({
           <div className="mt-6 flex justify-end space-x-2">
             <button
               type="button"
-              onClick={onClose}
+              onClick={() => {
+                try {
+                  onClose();
+                } catch (error) {
+                  console.error("Cancel button error:", error);
+                }
+              }}
               className="bg-primary_2 text-secondary_2 font-semibold uppercase px-4 py-2 rounded"
             >
               Cancel
@@ -204,142 +249,189 @@ const AddressManager = ({ selectedAddress, onSelectAddress }) => {
 
   useEffect(() => {
     if (addressesContainerRef.current) {
-      gsap.fromTo(
-        addressesContainerRef.current.children,
-        { opacity: 0, x: -50 },
-        { opacity: 1, x: 0, duration: 0.5, stagger: 0.1, ease: "power3.out" }
-      );
+      try {
+        gsap.fromTo(
+          addressesContainerRef.current.children,
+          { opacity: 0, x: -50 },
+          { opacity: 1, x: 0, duration: 0.5, stagger: 0.1, ease: "power3.out" }
+        );
+      } catch (error) {
+        console.error("Addresses animation error:", error);
+      }
     }
   }, [addresses]);
 
   const openModalForAdd = () => {
-    setModalAddress({
-      label: "",
-      firstname: "",
-      lastname: "",
-      house: "",
-      locality: "",
-      landmark: "",
-      city: "",
-      state: "",
-      pincode: "",
-    });
-    setEditingAddress(null);
-    setShowModal(true);
+    try {
+      setModalAddress({
+        label: "",
+        firstname: "",
+        lastname: "",
+        house: "",
+        locality: "",
+        landmark: "",
+        city: "",
+        state: "",
+        pincode: "",
+      });
+      setEditingAddress(null);
+      setShowModal(true);
+    } catch (error) {
+      console.error("Error opening add modal:", error);
+    }
   };
 
   const openModalForEdit = (addr) => {
-    setModalAddress(addr);
-    setEditingAddress(addr);
-    setShowModal(true);
+    try {
+      setModalAddress(addr);
+      setEditingAddress(addr);
+      setShowModal(true);
+    } catch (error) {
+      console.error("Error opening edit modal:", error);
+    }
   };
 
   const closeModal = () => {
-    setShowModal(false);
-    setEditingAddress(null);
+    try {
+      setShowModal(false);
+      setEditingAddress(null);
+    } catch (error) {
+      console.error("Error closing modal:", error);
+    }
   };
 
   const handleModalChange = (e) => {
-    const { name, value } = e.target;
-    setModalAddress({ ...modalAddress, [name]: value });
+    try {
+      const { name, value } = e.target;
+      setModalAddress((prev) => ({ ...prev, [name]: value }));
+    } catch (error) {
+      console.error("Error updating modal state:", error);
+    }
   };
 
   const handleModalSubmit = (e) => {
     e.preventDefault();
-    if (editingAddress) {
-      const updatedAddresses = addresses.map((addr) =>
-        addr.id === editingAddress.id ? modalAddress : addr
-      );
-      setAddresses(updatedAddresses);
-    } else {
-      const nextId = addresses.length
-        ? Math.max(...addresses.map((a) => a.id)) + 1
-        : 1;
-      const newAddr = { ...modalAddress, id: nextId };
-      setAddresses([...addresses, newAddr]);
+    try {
+      if (editingAddress) {
+        const updatedAddresses = addresses.map((addr) =>
+          addr.id === editingAddress.id ? modalAddress : addr
+        );
+        setAddresses(updatedAddresses);
+      } else {
+        const nextId = addresses.length
+          ? Math.max(...addresses.map((a) => a.id)) + 1
+          : 1;
+        const newAddr = { ...modalAddress, id: nextId };
+        setAddresses([...addresses, newAddr]);
+      }
+      closeModal();
+    } catch (error) {
+      console.error("Error handling modal submit:", error);
     }
-    closeModal();
   };
 
   const handleDeleteAddress = (addressId) => {
-    setAddresses(addresses.filter((addr) => addr.id !== addressId));
-    if (selectedAddress && selectedAddress.id === addressId) {
-      onSelectAddress(null);
+    try {
+      setAddresses(addresses.filter((addr) => addr.id !== addressId));
+      if (selectedAddress && selectedAddress.id === addressId) {
+        onSelectAddress(null);
+      }
+    } catch (error) {
+      console.error("Error deleting address:", error);
     }
   };
 
   return (
-    <div className="py-5">
-      <h2 className="flex items-center gap-2 justify-center text-2xl font-bold mb-10 uppercase">
-        <p>Shipping</p>
-        <div>
-          <LocalShippingIcon />
-        </div>
-      </h2>
-      <div ref={addressesContainerRef} className="space-y-4">
-        {addresses.map((addr) => (
-          <div
-            key={addr.id}
-            id={`address-${addr.id}`}
-            className={`p-4 border rounded flex justify-between items-center ${
-              selectedAddress && selectedAddress.id === addr.id
-                ? "border-2 border-primary_2"
-                : "border-gray-500"
-            }`}
-            onMouseEnter={() =>
-              gsap.to(`#address-${addr.id}`, { scale: 1.02, duration: 0.2 })
-            }
-            onMouseLeave={() =>
-              gsap.to(`#address-${addr.id}`, { scale: 1, duration: 0.2 })
-            }
-          >
-            <div
-              onClick={() => onSelectAddress(addr)}
-              className="cursor-pointer w-[85%]"
-            >
-              <p className="font-semibold">{addr.label}</p>
-              <p>
-                {addr.firstname} {addr.lastname}
-              </p>
-              <p>
-                {addr.house}, <br /> {addr.locality} <br /> {addr.landmark}{" "}
-                <br />
-                {addr.city}, {addr.state} <br /> {addr.pincode}
-              </p>
-            </div>
-            <div className="space-x-10">
-              <button
-                className="text-primary_2 border border-primary_2 py-1 px-4 hover:bg-primary_2 hover:text-secondary_2 font-semibold uppercase"
-                onClick={() => openModalForEdit(addr)}
-              >
-                Edit
-              </button>
-              <button
-                className="text-primary_2 hover:text-red-600"
-                onClick={() => handleDeleteAddress(addr.id)}
-              >
-                <DeleteIcon />
-              </button>
-            </div>
+    <ErrorBoundary>
+      <div className="py-5">
+        <h2 className="flex items-center gap-2 justify-center text-2xl font-bold mb-10 uppercase">
+          <p>Shipping</p>
+          <div>
+            <LocalShippingIcon />
           </div>
-        ))}
-      </div>
-      <button
-        className="mt-6 bg-primary_2 text-secondary_2 px-4 py-2 rounded"
-        onClick={openModalForAdd}
-      >
-        Add New Address
-      </button>
+        </h2>
+        <div ref={addressesContainerRef} className="space-y-4">
+          {addresses.map((addr) => (
+            <div
+              key={addr.id}
+              id={`address-${addr.id}`}
+              className={`p-4 border rounded flex justify-between items-center ${
+                selectedAddress && selectedAddress.id === addr.id
+                  ? "border-2 border-primary_2"
+                  : "border-gray-500"
+              }`}
+              onMouseEnter={() => {
+                try {
+                  gsap.to(`#address-${addr.id}`, {
+                    scale: 1.02,
+                    duration: 0.2,
+                  });
+                } catch (error) {
+                  console.error("Address hover error:", error);
+                }
+              }}
+              onMouseLeave={() => {
+                try {
+                  gsap.to(`#address-${addr.id}`, { scale: 1, duration: 0.2 });
+                } catch (error) {
+                  console.error("Address hover error:", error);
+                }
+              }}
+            >
+              <div
+                onClick={() => {
+                  try {
+                    onSelectAddress(addr);
+                  } catch (error) {
+                    console.error("Error selecting address:", error);
+                  }
+                }}
+                className="cursor-pointer w-[85%]"
+              >
+                <p className="font-semibold">{addr.label}</p>
+                <p>
+                  {addr.firstname} {addr.lastname}
+                </p>
+                <p>
+                  {addr.house}, <br /> {addr.locality} <br /> {addr.landmark}{" "}
+                  <br />
+                  {addr.city}, {addr.state} <br /> {addr.pincode}
+                </p>
+              </div>
+              <div className="space-x-10">
+                <button
+                  className="text-primary_2 border border-primary_2 py-1 px-4 hover:bg-primary_2 hover:text-secondary_2 font-semibold uppercase"
+                  onClick={() => openModalForEdit(addr)}
+                >
+                  Edit
+                </button>
+                <button
+                  className="text-primary_2 hover:text-red-600"
+                  onClick={() => handleDeleteAddress(addr.id)}
+                >
+                  <DeleteIcon />
+                </button>
+              </div>
+            </div>
+          ))}
+        </div>
+        <button
+          className="mt-6 bg-primary_2 text-secondary_2 px-4 py-2 rounded"
+          onClick={openModalForAdd}
+        >
+          Add New Address
+        </button>
 
-      <AddressModal
-        isOpen={showModal}
-        onClose={closeModal}
-        addressData={modalAddress}
-        onChange={handleModalChange}
-        onSubmit={handleModalSubmit}
-        isEditing={!!editingAddress}
-      />
-    </div>
+        <AddressModal
+          isOpen={showModal}
+          onClose={closeModal}
+          addressData={modalAddress}
+          onChange={handleModalChange}
+          onSubmit={handleModalSubmit}
+          isEditing={!!editingAddress}
+        />
+      </div>
+    </ErrorBoundary>
   );
 };
 

@@ -10,6 +10,7 @@ import { useSearchParams } from "react-router-dom";
 const Checkout = () => {
   const [step, setStep] = useState("address");
   const [selectedAddress, setSelectedAddress] = useState(null);
+  const [error, setError] = useState("");
   const progressBarRef = useRef(null);
   const navigate = useNavigate();
 
@@ -29,7 +30,13 @@ const Checkout = () => {
     } else if (step === "billing") {
       width = "100%";
     }
-    gsap.to(progressBarRef.current, { width, duration: 0.5 });
+    try {
+      if (progressBarRef.current) {
+        gsap.to(progressBarRef.current, { width, duration: 0.5 });
+      }
+    } catch (error) {
+      console.error("GSAP animation error:", error);
+    }
   }, [step]);
 
   return (
@@ -49,23 +56,36 @@ const Checkout = () => {
         <section>
           <div className="flex justify-between mt-4">
             <button
-              onClick={() => navigate("/top-deals", { replace: true })}
+              onClick={() => {
+                try {
+                  navigate("/top-deals", { replace: true });
+                } catch (error) {
+                  console.error("Navigation error:", error);
+                }
+              }}
               className="bg-primary_2 text-secondary_2 px-8 py-2 rounded"
             >
-              <ArrowBackIcon
-                style={{
-                  fontSize: "1.5rem",
-                }}
-              />
+              <ArrowBackIcon style={{ fontSize: "1.5rem" }} />
             </button>
           </div>
           <AddressManager
             selectedAddress={selectedAddress}
-            onSelectAddress={setSelectedAddress}
+            onSelectAddress={(addr) => {
+              setSelectedAddress(addr);
+              setError("");
+            }}
           />
+          {error && <p className="text-red-500 mt-2">{error}</p>}
           <div className="flex justify-end mt-4">
             <button
-              onClick={() => setStep("orderSummary")}
+              onClick={() => {
+                if (!selectedAddress) {
+                  setError("Please select an address before proceeding.");
+                } else {
+                  setError("");
+                  setStep("orderSummary");
+                }
+              }}
               className="bg-primary_2 text-secondary_2 px-4 py-2 rounded"
             >
               Next
@@ -81,15 +101,17 @@ const Checkout = () => {
               onClick={() => setStep("address")}
               className="bg-primary_2 text-secondary_2 px-8 py-2 rounded"
             >
-              <ArrowBackIcon
-                style={{
-                  fontSize: "1.5rem",
-                }}
-              />
+              <ArrowBackIcon style={{ fontSize: "1.5rem" }} />
             </button>
           </div>
           <OrderSummary
-            onNext={() => alert("Final Payment Initiated")}
+            onNext={() => {
+              try {
+                alert("Final Payment Initiated");
+              } catch (error) {
+                console.error("Payment initiation error:", error);
+              }
+            }}
             selectedAddress={selectedAddress}
             setStep={setStep}
             product_image={product_image}
@@ -97,14 +119,6 @@ const Checkout = () => {
             product_price={product_price}
             product_rating={product_rating}
           />
-          {/* <div className="flex justify-end mt-4">
-            <button
-              onClick={() => setStep("billing")}
-              className="bg-secondary_2 text-white px-4 py-2 rounded"
-            >
-              Next
-            </button>
-          </div> */}
         </section>
       )}
 
@@ -115,11 +129,7 @@ const Checkout = () => {
               onClick={() => setStep("orderSummary")}
               className="bg-primary_2 text-secondary_2 px-8 py-2 rounded"
             >
-              <ArrowBackIcon
-                style={{
-                  fontSize: "1.5rem",
-                }}
-              />
+              <ArrowBackIcon style={{ fontSize: "1.5rem" }} />
             </button>
           </div>
           <BillingSection
