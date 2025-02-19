@@ -268,7 +268,9 @@ const ProductView = () => {
               {/* Add to Cart + Buy Now */}
               <div className="flex items-center gap-4 mt-6">
                 <Link
-                  to={`/checkout?product_image=${encodeURIComponent(
+                  to={`/checkout?product_id=${encodeURIComponent(
+                    id
+                  )}&product_image=${encodeURIComponent(
                     product?.images?.[0] || "/images/placeholder.jpg"
                   )}&product_name=${encodeURIComponent(
                     product?.name
@@ -337,7 +339,9 @@ const ProductView = () => {
                         {product?.name}
                       </li>
                       <li>
-                        <span className="font-semibold text-white">Fabric:</span>{" "}
+                        <span className="font-semibold text-white">
+                          Fabric:
+                        </span>{" "}
                         {product?.material}
                       </li>
                       <li>
@@ -347,11 +351,15 @@ const ProductView = () => {
                         {product?.occation}
                       </li>
                       <li>
-                        <span className="font-semibold text-white">Pattern:</span>{" "}
+                        <span className="font-semibold text-white">
+                          Pattern:
+                        </span>{" "}
                         {product?.type}
                       </li>
                       <li>
-                        <span className="font-semibold text-white">Sleeve:</span>{" "}
+                        <span className="font-semibold text-white">
+                          Sleeve:
+                        </span>{" "}
                         {product?.sleeve_length}
                       </li>
                     </ul>

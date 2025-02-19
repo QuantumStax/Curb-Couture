@@ -16,6 +16,7 @@ const Checkout = () => {
 
   const [searchParams] = useSearchParams();
 
+  const id = searchParams.get("product_id");
   const product_image = searchParams.get("product_image");
   const product_name = searchParams.get("product_name");
   const product_rating = searchParams.get("product_rating");
@@ -58,7 +59,9 @@ const Checkout = () => {
             <button
               onClick={() => {
                 try {
-                  navigate("/top-deals", { replace: true });
+                  navigate(`/view/${encodeURIComponent(id)}`, {
+                    replace: true,
+                  });
                 } catch (error) {
                   console.error("Navigation error:", error);
                 }
