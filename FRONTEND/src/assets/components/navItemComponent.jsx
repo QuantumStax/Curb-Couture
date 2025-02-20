@@ -59,6 +59,11 @@ const NavItemComponent = ({ isOpen, setIsOpen }) => {
       link: "/blogs",
       icon: React.createElement(ArticleIcon, { style: { fontSize: "2rem" } }),
     },
+    {
+      name: "TEST",
+      link: "/test",
+      icon: React.createElement(ArticleIcon, { style: { fontSize: "2rem" } }),
+    },
   ];
 
   useEffect(() => {

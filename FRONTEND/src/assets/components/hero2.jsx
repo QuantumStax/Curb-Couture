@@ -1,114 +1,65 @@
-import { useState, useEffect, useCallback } from "react";
-import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos';
-import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
-
+import ArrowOutwardIcon from "@mui/icons-material/ArrowOutward";
 const HeroSlider = () => {
-  const slides = [
-    {
-      id: 1,
-      image: "/images/collection/doodle/doodles-shirt-559986.webp",
-      heading: "Exciting Deal #1",
-      button: "Shop Now",
-    },
-    {
-      id: 2,
-      image:
-        "/images/collection/oversized/egyptian-oversized-t-shirt-302886.webp",
-      heading: "Exciting Deal #2",
-      button: "Discover More",
-    },
-    {
-      id: 3,
-      image:
-        "/images/collection/oversized/medusa-oversized-t-shirt-753500.webp",
-      heading: "Exciting Deal #3",
-      button: "Check It Out",
-    },
-  ];
-
-  const [currentIndex, setCurrentIndex] = useState(0);
-  const [progress, setProgress] = useState(0);
-
-  const handleNext = useCallback(() => {
-    setCurrentIndex((prevIndex) => (prevIndex + 1) % slides.length);
-    setProgress(0);
-  }, [slides.length]);
-
-  const handlePrev = () => {
-    setCurrentIndex(
-      (prevIndex) => (prevIndex - 1 + slides.length) % slides.length
-    );
-    setProgress(0);
-  };
-
-  useEffect(() => {
-    const progressInterval = setInterval(() => {
-      setProgress((prev) => {
-        if (prev >= 100) {
-          handleNext();
-          return 0;
-        }
-        return prev + 2;
-      });
-    }, 100);
-
-    return () => clearInterval(progressInterval);
-  }, [handleNext]);
-
   return (
-    <div className="relative w-full overflow-hidden h-[40rem]">
-      {/* Slides */}
-      {slides.map((slide, index) => (
-        <div
-          key={slide.id}
-          className={`absolute inset-0 transition-opacity duration-700 ${
-            index === currentIndex ? "opacity-100 z-10" : "opacity-0 z-0"
-          }`}
-        >
-          <img
-            src={slide.image}
-            alt={`Slide ${slide.id}`}
-            className="w-full h-full object-cover"
-          />
-          <div className="absolute inset-0 bg-black bg-opacity-50 flex flex-col items-center justify-center text-white">
-            <h1 className="text-4xl md:text-6xl font-bold mb-4 text-center">
-              {slide.heading}
-            </h1>
-            <button className="px-6 py-3 bg-blue-600 hover:bg-blue-700 transition-all rounded-md text-lg">
-              {slide.button}
-            </button>
-          </div>
-        </div>
-      ))}
+    <div className="relative top-[-4rem] w-full h-[100vh] overflow-hidden bg-secondary_2">
+      {/* Background Video */}
+      <video
+        className="absolute top-0 left-0 w-full h-full object-cover filter blur-sm"
+        src="/videos/3163534-uhd_3840_2160_30fps.mp4"
+        autoPlay
+        muted
+        loop
+        playsInline
+      >
+        Your browser does not support the video tag.
+      </video>
 
-      {/* Progress Bar */}
-      <div className="absolute bottom-4 left-0 right-0 flex justify-center gap-2 z-40">
-        {slides.map((_, index) => (
-          <div
-            key={index}
-            className="h-1 w-12 bg-gray-400 rounded-full overflow-hidden relative"
-          >
-            <div
-              className={`h-full bg-red-800 transition-all duration-[100ms]`}
-              style={{ width: index === currentIndex ? `${progress}%` : "0%" }}
-            ></div>
-          </div>
-        ))}
+      <div className="absolute top-0 left-0 w-full h-full bg-black opacity-50"></div>
+
+      <div
+        aria-label="social"
+        className="flex flex-col items-center justify-end gap-20 absolute right-10 top-24 h-[80vh] w-[5%] py-12 text-primary_2"
+      >
+        <a href="#" className="-rotate-90 w-fit nav-hover-social">
+          Instagram
+        </a>
+        <a href="@" className="-rotate-90 w-fit nav-hover-social">
+          Twitter
+        </a>
+        <a href="!" className="-rotate-90 w-fit nav-hover-social">
+          Facebook
+        </a>
       </div>
 
-      {/* Navigation Arrows */}
-      <button
-        className="absolute left-4 top-1/2 transform -translate-y-1/2 p-3 bg-opacity-50 text-white rounded-full hover:bg-opacity-75 z-40"
-        onClick={handlePrev}
-      >
-        <ArrowBackIosIcon fontSize="large" />
-      </button>
-      <button
-        className="absolute right-4 top-1/2 transform -translate-y-1/2 p-3 bg-opacity-50 text-white rounded-full hover:bg-opacity-75 z-40"
-        onClick={handleNext}
-      >
-        <ArrowForwardIosIcon fontSize="large" />
-      </button>
+      <div className="absolute left-[4%] top-[15vh] z-20 text-primary_2 w-[10%]">
+        <h1 className="uppercase text-9xl w-full special-font font-zentry font-black">
+          gr<b>a</b>phic print c<b>o</b>llecti<b>o</b>n
+        </h1>
+        <button className="absolute top-[35%] left-[18rem] rounded-full bg-primary_2 text-secondary_light p-8 hover:bg-banner_2 hover:text-primary_2 transition-colors duration-200">
+          <ArrowOutwardIcon />
+        </button>
+      </div>
+
+      <div className="relative left-[50%] top-[40%] flex items-end gap-5">
+        <img
+          src="/images/hero/one_piece_anime_oversized_tshirt.webp"
+          alt="product_1"
+          className="w-[15%] object-cover rounded-lg"
+        />
+        <img
+          src="/images/hero/obito_anime_oversized_tshirt.webp"
+          alt="product_1"
+          className="w-[20%] h-[25rem] object-cover rounded-lg"
+        />
+      </div>
+
+      <div className="absolute left-[4%] bottom-20 text-primary_2 text-4xl w-[35%] font-circular-web">
+        <h2 className="opacity-75">Rare Zero introducing our latest Graphic Print Collection</h2>
+        <button className="relative top-[1rem] left-[0%] w-fit flex items-center rounded-full px-4 py-2 bg-banner_2 text-primary_2 transition-colors duration-200">
+          <span className="text-2xl font-semibold">Explore</span>
+          <ArrowOutwardIcon />
+        </button>
+      </div>
     </div>
   );
 };

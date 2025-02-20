@@ -69,11 +69,11 @@ const Nav = ({ setIsModalOpen }) => {
     <nav
       role="navigation"
       aria-label="Primary Navigation"
-      className="flex items-center justify-between bg-banner_2 px-5 md:px-10 lg:px-20 py-2 sticky top-5 left-[2.5rem] z-30 w-[95%] rounded-lg"
+      className="flex items-center justify-between bg-banner_2 text-primary_2 px-5 md:px-10 lg:px-20 py-2 sticky top-5 left-[2.5rem] z-30 w-[95%] rounded-lg"
     >
       {/* Menu Icon for Mobile */}
       <div
-        className="text-slate-950 p-2 cursor-pointer hover:opacity-60"
+        className="text-primary_2 p-2 cursor-pointer hover:opacity-60"
         onClick={() => setIsOpen((prev) => !prev)}
       >
         <MenuIcon className="text-2xl sm:text-xl md:text-2xl" />
@@ -82,7 +82,7 @@ const Nav = ({ setIsModalOpen }) => {
       {/* Logo */}
       <div>
         <a href="/" aria-label="Home">
-          <p className="text-xl sm:text-2xl md:text-3xl font-Outfit font-bold text-center md:text-left lg:translate-x-[3.5rem]">
+          <p className="sm:text-2xl md:text-3xl font-bold text-center md:text-left lg:translate-x-[3.5rem] special-font font-zentry text-xl">
             RARE ZERO
           </p>
         </a>

@@ -6,12 +6,12 @@ export default {
   theme: {
     extend: {
       colors: {
-        primary_2: "#DADADA", //white
-        secondary_2: "#343434", //gray
+        primary_2: "#EEEEEE",
+        secondary_2: "#222831",
         secondary_light: "#3f3f3f",
         tertiary: "#2C3E50",
-        banner_2: "#E6F52E", //yellow hue
-        brand: "#48A6A7",
+        banner_2: "#7A1CAC",
+        brand: "#31363F",
         "text-main": "#403F2B",
         "cupon-bg": "#9ACBD0",
       },
@@ -20,6 +20,11 @@ export default {
         itim: ["Itim", "serif"],
         fraunces: ["Fraunces", "serif"],
         Outfit: ["Outfit", "serif"],
+        zentry: ["zentry", "sans-serif"],
+        general: ["general", "sans-serif"],
+        "circular-web": ["circular-web", "sans-serif"],
+        "robert-medium": ["robert-medium", "sans-serif"],
+        "robert-regular": ["robert-regular", "sans-serif"],
       },
       fontSize: {
         "hero-head": "12rem",

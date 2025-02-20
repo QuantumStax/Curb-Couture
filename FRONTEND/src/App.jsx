@@ -32,6 +32,7 @@ import Account from "./assets/pages/account";
 import Hoodies from "./assets/pages/hoodies";
 import { useState } from "react";
 import Checkout from "./assets/pages/checkOut";
+import Test from "./assets/pages/test";
 
 const ProtectedRoute = ({ children }) => {
   const { isAuthenticated, loading } = useAuth();
@@ -73,6 +74,7 @@ function App() {
               <Route path="/contact" element={<Contact />} />
               <Route path="/checkout" element={<Checkout />} />
               <Route path="/view" element={<ProductView />} />
+              <Route path="/test" element={<Test />} />
               <Route path="/view/:id" element={<ProductView />} />
 
               {/* Protected Routes for authenticated users */}

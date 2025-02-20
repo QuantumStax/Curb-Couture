@@ -1,10 +1,9 @@
 import { lazy, Suspense } from "react";
-import Cupon from "../components/cupon";
 import Footer from "../components/footer";
 import OurBrand from "../components/ourBrand";
-// import Categories from "../components/categories";
-import HeroSlider2 from "../components/hero3";
+// import HeroSlider2 from "../components/hero3";
 import Loader from "../components/loader"
+import HeroSlider from "../components/hero2";
 
 // Lazy-loaded components
 const RecentAdditions = lazy(() => import("../components/recentAdditions"));
@@ -16,15 +15,8 @@ function Home() {
   return (
     <section>
       <header aria-label="Site Header" className="h-[90vh]">
-        <HeroSlider2 />
+        <HeroSlider />
       </header>
-      {/* <section aria-labelledby="categories-heading">
-        <h2 id="categories-heading" className="sr-only">
-          Categories
-        </h2>
-        <Categories />
-      </section> */}
-      <Cupon />
       <Suspense fallback={<div><Loader/></div>}>
         <section>
           <section className="bg-secondary_2 text-primary_2">
