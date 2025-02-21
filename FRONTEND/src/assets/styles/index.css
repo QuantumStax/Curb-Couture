@@ -1,5 +1,5 @@
 @import url("https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,100..900;1,9..144,100..900&family=Itim&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap");
-@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@100..900&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Outfit:wght@100..900&display=swap");
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -35,6 +35,16 @@
     font-family: "zentry";
     src: url("/fonts/zentry-regular.woff2") format("woff2");
   }
+
+  @font-face {
+    font-family: "Bleeding_Cowboys";
+    src: url("/fonts/Bleeding_Cowboys.ttf") format("truetype");
+  }
+
+  @font-face {
+    font-family: "Roman SD";
+    src: url("/fonts/Roman SD.ttf") format("truetype");
+  }
 }
 
 @layer utilities {
@@ -59,7 +69,7 @@
   }
 
   .custom-scrollbar::-webkit-scrollbar-track {
-    background: #FEFAF0 !important;
+    background: #fefaf0 !important;
   }
 
   .custom-scrollbar::-webkit-scrollbar-thumb {
@@ -72,24 +82,23 @@
     background: #555 !important;
   }
 
-
   .privacy-policy h1 {
-    @apply text-2xl font-semibold font-Outfit opacity-70 my-2
+    @apply text-2xl font-semibold font-Outfit opacity-70 my-2;
   }
 
   .privacy-policy h3 {
-    @apply text-xl
+    @apply text-xl;
   }
 
   .privacy-policy span {
-    @apply text-xl
+    @apply text-xl;
   }
 
   .privacy-policy li {
-    @apply list-disc ml-5
+    @apply list-disc ml-5;
   }
 
   .privacy-policy p {
-    @apply text-lg
+    @apply text-lg;
   }
 }

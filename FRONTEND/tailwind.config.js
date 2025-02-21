@@ -22,6 +22,8 @@ export default {
         Outfit: ["Outfit", "serif"],
         zentry: ["zentry", "sans-serif"],
         general: ["general", "sans-serif"],
+        'bleeding-cowboys': ['"Bleeding_Cowboys"', 'sans-serif'],
+        'Roman-SD': ['"Roman SD"', 'sans-serif'],
         "circular-web": ["circular-web", "sans-serif"],
         "robert-medium": ["robert-medium", "sans-serif"],
         "robert-regular": ["robert-regular", "sans-serif"],
