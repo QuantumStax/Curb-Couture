@@ -45,6 +45,26 @@
     font-family: "Roman SD";
     src: url("/fonts/Roman SD.ttf") format("truetype");
   }
+
+  @font-face {
+    font-family: "911porschav33d";
+    src: url("/fonts/911porschav33d.ttf") format("truetype");
+  }
+
+  @font-face {
+    font-family: "911porschav3title";
+    src: url("/fonts/911porschav3title.ttf") format("truetype");
+  }
+
+  @font-face {
+    font-family: "911porschav3laser";
+    src: url("/fonts/911porschav3laser.ttf") format("truetype");
+  }
+
+  @font-face {
+    font-family: "911porschav3expand";
+    src: url("/fonts/911porschav3expand.ttf") format("truetype");
+  }
 }
 
 @layer utilities {

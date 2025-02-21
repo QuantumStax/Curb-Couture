@@ -82,7 +82,7 @@ const Nav = ({ setIsModalOpen }) => {
       {/* Logo */}
       <div>
         <a href="/" aria-label="Home">
-          <p className="sm:text-2xl md:text-3xl font-bold text-center md:text-left lg:translate-x-[3.5rem] special-font font-zentry text-xl">
+          <p className="sm:text-2xl md:text-3xl font-bold text-center md:text-left lg:translate-x-[3.5rem] special-font font-911porschav3laser text-xl">
             RARE ZERO
           </p>
         </a>
