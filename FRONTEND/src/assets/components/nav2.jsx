@@ -8,8 +8,8 @@ import ShoppingCartOutlinedIcon from "@mui/icons-material/ShoppingCartOutlined";
 import MenuIcon from "@mui/icons-material/Menu";
 import MenuOpenIcon from "@mui/icons-material/MenuOpen";
 import React, { useState, useRef, useEffect } from "react";
-import gsap from "gsap";
 import NavItemComponent from "./navItemComponent";
+import gsap from "gsap";
 import { Link } from "react-router-dom";
 
 const Nav = ({ setIsModalOpen }) => {

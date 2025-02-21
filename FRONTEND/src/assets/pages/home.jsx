@@ -19,16 +19,16 @@ function Home() {
       </header>
       <Suspense fallback={<div><Loader/></div>}>
         <section>
-          <section className="bg-secondary_2 text-primary_2">
+          <section className="bg-bg-main text-primary_2">
             <RecentAdditions />
           </section>
-          <section className="bg-secondary_2 text-primary_2">
+          <section className="bg-bg-main text-primary_2">
             <OurCollection />
           </section>
-          <section className="bg-secondary_2 text-primary_2 py-16">
+          <section className="bg-bg-main text-primary_2 py-16">
             <JustLaunced />
           </section>
-          <section className="bg-secondary_2 text-primary_2">
+          <section className="bg-bg-main text-primary_2">
             <BestSellers />
           </section>
         </section>

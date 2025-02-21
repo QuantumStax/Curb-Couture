@@ -8,7 +8,7 @@ const Footer = () => {
   const year = new Date().getFullYear();
 
   return (
-    <div className="px-4 md:px-10 lg:px-20 py-10 bg-banner_2 text-secondary_2">
+    <div className="px-4 md:px-10 lg:px-20 py-10 bg-banner_2 text-primary_2">
       <div className="flex flex-col md:flex-row gap-8 md:gap-16 lg:gap-24 xl:gap-44 items-baseline">
         {/* Newsletter Section */}
         <div className="w-full md:max-w-[25rem]">
