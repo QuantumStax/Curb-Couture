@@ -192,13 +192,16 @@ const ProductCarouselWithDetails = ({ mainHead, subPara, itemList, Icon }) => {
           style={{ width: "30rem", minHeight: "25rem" }}
           ref={detailsRef}
         >
-          <h1 className="text-4xl font-bold mb-2">
-            {itemList[activeIndex].title}
-          </h1>
-          <h2 className="text-xl text-primary_2 mb-2">
+          <h1 className="text-4xl font-bold">{itemList[activeIndex].title}</h1>
+          <p className="text-primary_2 py-4 opacity-80">
+            {itemList[activeIndex].description}
+          </p>
+          <h2 className="text-xl text-primary_2 font-semibold mb-2">
             {itemList[activeIndex].price}
           </h2>
-          <p className="text-primary_2">{itemList[activeIndex].description}</p>
+          <button className="mt-4 bg-banner_2 text-primary_2 py-3 px-6 rounded-lg text-lg font-bleeding-cowboys">
+            Make it yours now
+          </button>
         </div>
       </div>
     </div>
