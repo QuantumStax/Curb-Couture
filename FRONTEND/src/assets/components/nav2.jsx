@@ -1,13 +1,12 @@
 /* eslint-disable react/prop-types */
 import { useState, useRef, useEffect } from "react";
 import { Link } from "react-router-dom";
-import MenuIcon from "@mui/icons-material/Menu";
 import SearchIcon from "@mui/icons-material/Search";
 import PersonOutlineOutlinedIcon from "@mui/icons-material/PersonOutlineOutlined";
 import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
 import ShoppingCartOutlinedIcon from "@mui/icons-material/ShoppingCartOutlined";
+import HamburgerIcon from "./hamburgerIcon";
 import SideMenu from "./navbar";
-
 const Nav2 = ({ setIsModalOpen }) => {
   const [isOpen, setIsOpen] = useState(false);
   const navContainerRef = useRef(null);
@@ -31,13 +30,14 @@ const Nav2 = ({ setIsModalOpen }) => {
     setIsOpen((prev) => !prev);
   };
 
+  // Close menu on outside click
   useEffect(() => {
     const handleClickOutside = (e) => {
       if (
         isOpen &&
         navContainerRef.current &&
         !navContainerRef.current.contains(e.target) &&
-        !e.target.matches(".hamburger-btn")
+        !e.target.closest(".hamburger-btn")
       ) {
         setIsOpen(false);
       }
@@ -46,6 +46,7 @@ const Nav2 = ({ setIsModalOpen }) => {
     return () => window.removeEventListener("mousedown", handleClickOutside);
   }, [isOpen]);
 
+  // Close menu on Escape press
   useEffect(() => {
     const handleEsc = (e) => {
       if (e.key === "Escape") {
@@ -56,6 +57,7 @@ const Nav2 = ({ setIsModalOpen }) => {
     return () => window.removeEventListener("keydown", handleEsc);
   }, []);
 
+  // Prevent body scroll when menu is open
   useEffect(() => {
     document.body.style.overflow = isOpen ? "hidden" : "auto";
   }, [isOpen]);
@@ -66,13 +68,10 @@ const Nav2 = ({ setIsModalOpen }) => {
         ref={navContainerRef}
         role="navigation"
         aria-label="Primary Navigation"
-        className="flex items-center justify-between bg-banner_2 text-primary_2 px-5 md:px-10 lg:px-20 py-2 sticky top-5 left-[2.5rem] z-30 w-[95%] rounded-lg"
+        className="flex items-center justify-between bg-banner_2 text-primary_2 px-5 md:px-10 lg:px-10 py-2 sticky top-5 left-[2.5rem] z-50 w-[95%] rounded-lg"
       >
-        <div
-          className="hamburger-btn text-primary_2 p-2 cursor-pointer hover:opacity-60"
-          onClick={handleToggleMenu}
-        >
-          <MenuIcon className="text-2xl sm:text-xl md:text-2xl" />
+        <div className="hamburger-btn">
+          <HamburgerIcon isOpen={isOpen} onClick={handleToggleMenu} />
         </div>
 
         {/* Logo */}

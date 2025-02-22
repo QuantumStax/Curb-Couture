@@ -2,7 +2,7 @@
 import { useEffect, useRef } from "react";
 import gsap from "gsap";
 
-const MENU_ITEMS = ["Hoodies", "Classics", "Top-deals", "Graphic Prints"];
+const MENU_ITEMS = ["Top-Deals", "Classics", "Hoodies", "Featured", "Contact", "Blog"];
 
 const SideMenu = ({ isOpen }) => {
   const menuRef = useRef(null);
@@ -41,8 +41,8 @@ const SideMenu = ({ isOpen }) => {
     <div
       ref={menuRef}
       className={`
-        fixed top-0 left-0 h-full z-50
-        bg-banner_2 text-white overflow-hidden
+        fixed top-0 left-0 h-full z-40
+        bg-banner_2 text-white overflow-hidden py-16
         ${isOpen ? "lg:w-[30%] sm:w-[20rem]" : "w-0"}
       `}
     >
@@ -52,14 +52,14 @@ const SideMenu = ({ isOpen }) => {
         </span>
       </div>
 
-      <nav className="relative mt-20 px-6">
+      <nav className="relative mt-20 px-20">
         <ul className="flex flex-col gap-6">
           {MENU_ITEMS.map((item, i) => (
             <li
               key={item}
               ref={(el) => (menuItemsRef.current[i] = el)}
               className={`
-                !text-7xl font-robert-regular relative cursor-pointer
+                !text-5xl font-robert-regular relative cursor-pointer
                 sm:text-base md:text-xl group
               `}
             >
