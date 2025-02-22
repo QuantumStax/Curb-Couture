@@ -6,7 +6,8 @@ import PersonOutlineOutlinedIcon from "@mui/icons-material/PersonOutlineOutlined
 import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
 import ShoppingCartOutlinedIcon from "@mui/icons-material/ShoppingCartOutlined";
 import HamburgerIcon from "./hamburgerIcon";
-import SideMenu from "./navbar";
+import SideMenu from "./navItemComponent";
+
 const Nav2 = ({ setIsModalOpen }) => {
   const [isOpen, setIsOpen] = useState(false);
   const navContainerRef = useRef(null);
