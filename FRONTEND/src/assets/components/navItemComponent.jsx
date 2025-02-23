@@ -1,14 +1,29 @@
 /* eslint-disable react/prop-types */
 import { useEffect, useRef } from "react";
 import gsap from "gsap";
+import { Link } from "react-router-dom";
 
 const MENU_ITEMS = [
-  "Top-Deals",
-  "Classics",
-  "Hoodies",
-  "Featured",
-  "Contact",
-  "Blog",
+  {
+    menuItem: "Top-Deals",
+    path: "/top-deals",
+  },
+  {
+    menuItem: "Classics",
+    path: "/classics",
+  },
+  {
+    menuItem: "Hoodies",
+    path: "/hoodies",
+  },
+  {
+    menuItem: "Contact",
+    path: "/featured",
+  },
+  {
+    menuItem: "Blog",
+    path: "/blog",
+  },
 ];
 
 const SideMenu = ({ isOpen }) => {
@@ -62,25 +77,27 @@ const SideMenu = ({ isOpen }) => {
       <nav className="relative mt-20 px-20">
         <ul className="flex flex-col gap-6">
           {MENU_ITEMS.map((item, i) => (
-            <li
-              key={item}
-              ref={(el) => (menuItemsRef.current[i] = el)}
-              className={`
-                !text-5xl font-robert-regular relative cursor-pointer
-                sm:text-base md:text-xl group
-              `}
-            >
-              <span
-                className="
-                  block pb-1
-                  after:content-[''] after:block after:h-[2px] after:bg-white
-                  after:scale-x-0 after:origin-left after:transition-transform after:duration-300
-                  group-hover:after:scale-x-100
-                "
+            <Link className="" key={i} to={item.path}>
+              <li
+                key={i}
+                ref={(el) => (menuItemsRef.current[i] = el)}
+                className={`
+                  !text-5xl font-robert-regular relative cursor-pointer
+                  sm:text-base md:text-xl group
+                `}
               >
-                {item}
-              </span>
-            </li>
+                <span
+                  className="
+                    block pb-1
+                    after:content-[''] after:block after:h-[2px] after:bg-white
+                    after:scale-x-0 after:origin-left after:transition-transform after:duration-300
+                    group-hover:after:scale-x-100
+                  "
+                >
+                  {item.menuItem}
+                </span>
+              </li>
+            </Link>
           ))}
         </ul>
       </nav>

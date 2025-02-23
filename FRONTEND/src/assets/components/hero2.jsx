@@ -60,7 +60,7 @@ const HeroSlider = () => {
         className="flex flex-col items-center justify-end gap-20 absolute right-10 top-24 h-[80vh] w-[5%] py-12 text-primary_2"
       >
         <a
-          href="#"
+          href="https://www.instagram.com/rarezero_?igsh=MTBuamxjOWY4bXE3aA=="
           className="rotate-90 w-fit nav-hover-social focus:outline-none focus:ring-2 focus:ring-primary_2 hero-social-link"
           tabIndex={0}
         >
@@ -85,7 +85,7 @@ const HeroSlider = () => {
       {/* Hero Title & Primary CTA */}
       <div className="absolute left-[4%] top-[15vh] z-20 text-primary_2 w-[45%]">
         <h1 className="uppercase text-8xl tracking-tight font-Roman-SD special-font hero-heading">
-          Wearable Art Redefined
+          Threads define freedom
         </h1>
         <p className="mt-4 text-xl font-light hero-subheading">
           Discover bold designs that speak your style.
