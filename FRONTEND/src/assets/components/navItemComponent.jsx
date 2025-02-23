@@ -4,6 +4,7 @@ import gsap from "gsap";
 import { Link } from "react-router-dom";
 
 const MENU_ITEMS = [
+  { menuItem: "Home", path: "/" },
   { menuItem: "Top-Deals", path: "/top-deals" },
   { menuItem: "Classics", path: "/classics" },
   { menuItem: "Hoodies", path: "/hoodies" },

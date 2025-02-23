@@ -32,7 +32,7 @@ const TopDeals = ({ setIsModalOpen }) => {
         <Shop
           itemArray={products}
           heading="Top Deals"
-          image="\images\collection\retro\top_deals_corrected_2.png"
+          image="/images/posters/top_deals_corrected_2.png"
           setIsModalOpen={setIsModalOpen}
         />
       ) : isLoading ? (

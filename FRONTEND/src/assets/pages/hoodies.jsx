@@ -32,7 +32,7 @@ const Hoodies = ({ setIsModalOpen }) => {
         <Shop
           itemArray={products}
           heading="Hoodies"
-          image="\images\categories\hoodies.png"
+          image="/images/posters/hoodies.png"
           setIsModalOpen={setIsModalOpen}
         />
       ) : isLoading ? (
