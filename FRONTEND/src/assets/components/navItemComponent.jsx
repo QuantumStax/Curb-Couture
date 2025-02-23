@@ -4,35 +4,23 @@ import gsap from "gsap";
 import { Link } from "react-router-dom";
 
 const MENU_ITEMS = [
-  {
-    menuItem: "Top-Deals",
-    path: "/top-deals",
-  },
-  {
-    menuItem: "Classics",
-    path: "/classics",
-  },
-  {
-    menuItem: "Hoodies",
-    path: "/hoodies",
-  },
-  {
-    menuItem: "Contact",
-    path: "/featured",
-  },
-  {
-    menuItem: "Blog",
-    path: "/blog",
-  },
+  { menuItem: "Top-Deals", path: "/top-deals" },
+  { menuItem: "Classics", path: "/classics" },
+  { menuItem: "Hoodies", path: "/hoodies" },
+  { menuItem: "Featured", path: "/featured" },
+  { menuItem: "Contact", path: "/contact" },
+  { menuItem: "Blog", path: "/blogs" },
 ];
 
-const SideMenu = ({ isOpen }) => {
-  const menuRef = useRef(null);
+const SideMenu = ({ isOpen, menuRef }) => {
   const menuItemsRef = useRef([]);
 
   useEffect(() => {
-    gsap.killTweensOf(menuRef.current);
-    gsap.killTweensOf(menuItemsRef.current);
+    // Kill any ongoing tweens to prevent conflicts
+    if (menuRef.current) {
+      gsap.killTweensOf(menuRef.current);
+      gsap.killTweensOf(menuItemsRef.current);
+    }
 
     if (isOpen) {
       gsap.set(menuRef.current, { clearProps: "transition" });
@@ -57,16 +45,14 @@ const SideMenu = ({ isOpen }) => {
         ease: "power2.in",
       });
     }
-  }, [isOpen]);
+  }, [isOpen, menuRef]);
 
   return (
     <div
       ref={menuRef}
-      className={`
-        fixed top-0 left-0 h-full z-40
-        bg-banner_2 text-white overflow-hidden py-16
-        ${isOpen ? "lg:w-[30%] sm:w-[20rem]" : "w-0"}
-      `}
+      // Setting the initial transform off-screen to avoid flashing open on mount.
+      style={{ transform: "translateX(-100%)" }}
+      className="fixed top-0 left-0 h-full z-40 bg-banner_2 text-white overflow-hidden py-16 lg:w-[30%] sm:w-[20rem]"
     >
       <div className="absolute inset-0 flex items-center justify-center pointer-events-none rotate-90">
         <span className="text-white opacity-10 text-[20rem] font-robert-regular leading-none select-none">
@@ -77,23 +63,12 @@ const SideMenu = ({ isOpen }) => {
       <nav className="relative mt-20 px-20">
         <ul className="flex flex-col gap-6">
           {MENU_ITEMS.map((item, i) => (
-            <Link className="" key={i} to={item.path}>
+            <Link key={i} to={item.path}>
               <li
-                key={i}
                 ref={(el) => (menuItemsRef.current[i] = el)}
-                className={`
-                  !text-5xl font-robert-regular relative cursor-pointer
-                  sm:text-base md:text-xl group
-                `}
+                className="!text-5xl font-robert-regular relative cursor-pointer sm:text-base md:text-xl group"
               >
-                <span
-                  className="
-                    block pb-1
-                    after:content-[''] after:block after:h-[2px] after:bg-white
-                    after:scale-x-0 after:origin-left after:transition-transform after:duration-300
-                    group-hover:after:scale-x-100
-                  "
-                >
+                <span className="block pb-1 after:content-[''] after:block after:h-[2px] after:bg-white after:scale-x-0 after:origin-left after:transition-transform after:duration-300 group-hover:after:scale-x-100">
                   {item.menuItem}
                 </span>
               </li>

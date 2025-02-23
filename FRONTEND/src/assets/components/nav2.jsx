@@ -1,6 +1,6 @@
 /* eslint-disable react/prop-types */
 import { useState, useRef, useEffect } from "react";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import SearchIcon from "@mui/icons-material/Search";
 import PersonOutlineOutlinedIcon from "@mui/icons-material/PersonOutlineOutlined";
 import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
@@ -11,6 +11,8 @@ import SideMenu from "./navItemComponent";
 const Nav2 = ({ setIsModalOpen }) => {
   const [isOpen, setIsOpen] = useState(false);
   const navContainerRef = useRef(null);
+  const sideMenuRef = useRef(null);
+  const location = useLocation();
 
   const actionIcons = [
     {
@@ -31,13 +33,15 @@ const Nav2 = ({ setIsModalOpen }) => {
     setIsOpen((prev) => !prev);
   };
 
-  // Close menu on outside click
+  // Close menu on outside click by checking both the nav and the side menu
   useEffect(() => {
     const handleClickOutside = (e) => {
       if (
         isOpen &&
         navContainerRef.current &&
+        sideMenuRef.current &&
         !navContainerRef.current.contains(e.target) &&
+        !sideMenuRef.current.contains(e.target) &&
         !e.target.closest(".hamburger-btn")
       ) {
         setIsOpen(false);
@@ -62,6 +66,11 @@ const Nav2 = ({ setIsModalOpen }) => {
   useEffect(() => {
     document.body.style.overflow = isOpen ? "hidden" : "auto";
   }, [isOpen]);
+
+  // Auto-close side menu after routing
+  useEffect(() => {
+    setIsOpen(false);
+  }, [location]);
 
   return (
     <>
@@ -109,7 +118,7 @@ const Nav2 = ({ setIsModalOpen }) => {
         />
       )}
 
-      <SideMenu isOpen={isOpen} />
+      <SideMenu isOpen={isOpen} menuRef={sideMenuRef} />
     </>
   );
 };
