@@ -68,7 +68,7 @@ const Login = () => {
 
   return (
     <section>
-      <section className="flex flex-col items-center bg-primary px-6 md:px-20 py-16 md:py-24">
+      <section className="flex flex-col items-center bg-secondary_2 -mt-[4rem] px-6 md:px-20 py-20 lg:py-[10rem] md:py-24 text-primary_2">
         <h1 className="text-3xl md:text-4xl font-semibold mb-10 md:mb-16 text-center">
           Login
         </h1>
@@ -85,7 +85,7 @@ const Login = () => {
                 placeholder="johndoe@gmail.com"
                 value={formData.email}
                 onChange={handleInputChange}
-                className="bg-transparent border border-slate-950 w-full px-3 py-2 mt-2 rounded-md focus:outline-none focus:ring-1 focus:ring-black"
+                className="bg-transparent border border-primary_2 w-full px-3 py-2 mt-2 rounded-md focus:outline-none focus:ring-1 focus:ring-primary_2"
                 required
               />
             </div>
@@ -100,7 +100,7 @@ const Login = () => {
                 placeholder="Enter Your Password"
                 value={formData.password}
                 onChange={handleInputChange}
-                className="bg-transparent border border-slate-950 w-full px-3 py-2 mt-2 rounded-md focus:outline-none focus:ring-1 focus:ring-black"
+                className="bg-transparent border border-primary_2 w-full px-3 py-2 mt-2 rounded-md focus:outline-none focus:ring-1 focus:ring-primary_2"
                 required
               />
               <div
@@ -121,12 +121,12 @@ const Login = () => {
 
             <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between mt-6">
               <button
-                className="bg-black text-primary text-base md:text-lg py-2 px-4 rounded-md w-full disabled:opacity-50"
+                className="bg-banner_2 text-primary_2 hover:scale-[1.05] text-base md:text-lg py-2 px-4 rounded-md w-full disabled:opacity-50 transition-all duration-200"
                 disabled={loading}
               >
                 {loading ? "Logging in..." : "Login"}
               </button>
-              <div className="mt-4 sm:mt-0 sm:ml-4 hover:text-primary hover:bg-black border border-slate-950 py-2 px-4 rounded-md w-full text-center transition-all duration-500">
+              <div className="mt-4 sm:mt-0 sm:ml-4 hover:text-primary hover:bg-primary_2 hover:text-secondary_2 border border-primary_2 py-2 px-4 rounded-md w-full text-center transition-all duration-500">
                 <Link to="/register">
                   <p className="text-sm md:text-base">Create an Account</p>
                 </Link>
