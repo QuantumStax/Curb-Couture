@@ -4,28 +4,28 @@ import Hero from "../components/hero";
 const Blogs = () => {
   const blogItems = [
     {
-      img: "/images/collection/specials/starry-night-385896.webp",
+      img: "/images/collection/holding_hands_graffiti_oversized_tshirt.webp",
       title: "10 Timeless Wardrobe Staples: Build Your Perfect Closet",
       date: "04 January 2025",
       intro:
         "Discover the essential wardrobe staples every closet needs for effortless, timeless style.",
     },
     {
-      img: "/images/collection/doodle/doodles-shirt-559986.webp",
+      img: "/images/collection/death_print_oversized_tshirt.webp",
       title: "Runway to Reality: Transforming Trends into Everyday Style",
       date: "13 September 2024",
       intro:
         "Learn how to adapt bold runway trends into wearable, everyday fashion",
     },
     {
-      img: "/images/collection/oversized/medusa-oversized-t-shirt-753500.webp",
+      img: "/images/collection/smile_x_normal_tshirt.webp",
       title: "The Power of Accessories: Elevate Your Outfit in Seconds",
       date: "25 January 2024",
       intro:
         "Explore the transformative power of accessories to take any outfit from simple to stunning.",
     },
     {
-      img: "/images/collection/retro/retro-shirt-225762.webp",
+      img: "/images/collection/the_eye_oversized_tshirt.webp",
       title: "Sustainable Style: How to Stay Chic While Saving the Planet",
       date: "21 June 2024",
       intro:
@@ -38,8 +38,8 @@ const Blogs = () => {
       <section>
         <Hero />
       </section>
-      <section className="bg-primary px-6 sm:px-10 lg:px-24 py-10">
-        <h1 className="text-4xl sm:text-5xl font-semibold">Couture Corner</h1>
+      <section className="bg-primary px-6 sm:px-10 lg:px-24 py-10 bg-secondary_2 text-primary_2">
+        <h1 className="text-4xl sm:text-5xl font-semibold font-robert-regular">Rare Zero Rhapsody</h1>
         <p className="opacity-70 leading-loose text-sm sm:text-base">
           Your Daily Dose of Fashion Inspiration
         </p>

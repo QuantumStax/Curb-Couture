@@ -32,7 +32,7 @@ const Hero = () => {
   }, []);
 
   return (
-    <div className="relative flex items-center lg:justify-center md:justify-center h-[36.1rem] w-full sm:h-[28rem]">
+    <div className="relative flex items-center lg:justify-center md:justify-center h-[40.1rem] lg:h-[30rem] w-full sm:h-[28rem] -mt-[4rem]">
       {/* Background Image */}
       <div
         className="absolute inset-0 pointer-events-none"
@@ -49,10 +49,10 @@ const Hero = () => {
       <div className="relative text-primary px-5 w-full">
         {/* Heading */}
         <h1
-          className="font-Outfit flex justify-center md:justify-center space-x-1 overflow-hidden text-center"
+          className="flex justify-center md:justify-center -space-x-10 overflow-hidden text-center text-primary_2 font-911porschav3title"
           ref={textRef}
         >
-          {"Curb Coture".split("").map((char, index) => (
+          {"Rare Zer0".split("").map((char, index) => (
             <span
               key={index}
               className="letter inline-block text-5xl lg:text-9xl md:text-7xl sm:text-4xl"
@@ -64,15 +64,15 @@ const Hero = () => {
 
         {/* Slogan */}
         <p
-          className="text-3xl md:text-2xl sm:text-xl text-center mt-3"
+          className="text-3xl md:text-2xl sm:text-xl text-center mt-3 text-primary_2"
           id="slogan"
         >
-          Redesigning Modern Elegance
+          THREADS DEFINE FREEDOM
         </p>
 
         {/* Explore Button */}
         <div className="flex justify-center mt-10">
-          <div className="flex items-center justify-center rounded-3xl text-center w-[10rem] h-[3rem] bg-brand text-primary text-lg md:w-[8rem] md:h-[2.5rem] sm:w-[7rem] sm:h-[2.5rem] sm:text-base hover:bg-banner transition-all duration-500 cursor-pointer font-semibold">
+          <div className="flex items-center justify-center rounded-3xl text-center w-[10rem] h-[3rem] bg-banner_2 text-primary_2 text-xl md:w-[8rem] md:h-[2.5rem] sm:w-[7rem] sm:h-[2.5rem] sm:text-base hover:bg-banner transition-all duration-500 cursor-pointer font-semibold">
             <Link to="/featured">
               <h3>Explore</h3>
             </Link>
