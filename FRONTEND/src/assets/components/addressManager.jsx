@@ -343,7 +343,7 @@ const AddressManager = ({ selectedAddress, onSelectAddress }) => {
 
   return (
     <ErrorBoundary>
-      <div className="mt-[-2rem]">
+      <div className="mt-[-2rem] min-h-[60vh]">
         <h2 className="flex items-center gap-2 justify-center text-2xl font-robert-regular mb-10 uppercase">
           <p className="font-semibold">Shipping</p>
           <div>
@@ -416,7 +416,11 @@ const AddressManager = ({ selectedAddress, onSelectAddress }) => {
           ))}
         </div>
         <button
-          className="mt-6 bg-primary_2 text-secondary_2 px-4 py-2 rounded"
+          className={`${
+            !addresses || addresses.length === 0
+              ? "absolute top-[50%] left-[50%] translate-x-[-50%] !bg-banner_2 !text-primary_2 text-xl hover:scale-[1.05]"
+              : ""
+          } mt-6 bg-primary_2 text-secondary_2 px-4 py-2 rounded transition-all duration-200`}
           onClick={openModalForAdd}
         >
           Add New Address

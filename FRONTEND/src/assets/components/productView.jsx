@@ -36,14 +36,13 @@ const ProductView = () => {
   const [relatedProducts, setRelatedProducts] = useState([]);
   const [showToast, setShowToast] = useState(false);
   const [currentSection, setCurrentSection] = useState("product-info");
-  console.log(currentSection);
 
   // Main product image
   const [mainImage, setMainImage] = useState("");
 
   // GSAP refs
   const containerRef = useRef(null); // entire hero container
-  const circleRef = useRef(null); // background circle
+  const circleRef = useRef(null); // background element with clip-path
   const imageRef = useRef(null); // product image
   const textRef = useRef(null); // text block
   const sectionContentRef = useRef(null); // new ref for section content
@@ -111,7 +110,7 @@ const ProductView = () => {
         { opacity: 0 },
         { opacity: 1, duration: 0.6 }
       );
-      // Scale/fade in the background circle
+      // Animate the background element using clip-path
       tl.fromTo(
         circleRef.current,
         { scale: 0, opacity: 0 },
@@ -176,9 +175,14 @@ const ProductView = () => {
 
   return (
     <section className="bg-secondary_2 text-white -mt-16 py-20 relative">
+      {/* Background element with clip-path instead of a circle */}
       <div
         ref={circleRef}
-        className="absolute w-[80rem] h-[70rem] bg-black rounded-full left-[-25rem] top-[-20rem] opacity-20"
+        className="absolute w-[80rem] h-[70rem] bg-black left-[-25rem] top-[-20rem] opacity-20"
+        style={{
+          clipPath: "polygon(50% 0, 100% 39%, 90% 100%, 0 79%)",
+          display: loading ? "none" : "",
+        }}
       />
 
       {loading && (
@@ -215,16 +219,22 @@ const ProductView = () => {
               ref={textRef}
               className="flex-1 max-w-[28rem] flex flex-col ml-[20%]"
             >
-              <p className="text-sm uppercase text-primary_2 opacity-50 tracking-wide mb-1">
+              <p className="text-sm uppercase text-primary_2 opacity-50 tracking-wide">
                 {product?.type || ""}
               </p>
 
-              <h1 className="text-[3rem] font-bold text-primary_2 leading-tight mb-4">
+              <h1 className="text-[3rem] font-bold text-primary_2 leading-tight">
                 {product?.name || "Gunmetal Black"}
               </h1>
 
+              {/* Short description */}
+              <p className="text-gray-300 mt-2 text-sm leading-relaxed">
+                {product?.description ||
+                  "Lorem ipsum is simply dummy text of the printing and typesetting industry."}
+              </p>
+
               {/* Price + Rating */}
-              <div className="flex items-center gap-5 mt-3 mb-4">
+              <div className="flex items-center gap-5 mt-3">
                 <h2 className="text-2xl text-green-600 font-semibold">
                   ₹{product?.price || ""}
                 </h2>
@@ -236,12 +246,6 @@ const ProductView = () => {
                   <p className="text-[#7f7f7f]">(from 15 Reviews)</p>
                 </div>
               </div>
-
-              {/* Short description */}
-              <p className="text-gray-300 mt-4 mb-4 text-sm leading-relaxed">
-                {product?.description ||
-                  "Lorem ipsum is simply dummy text of the printing and typesetting industry."}
-              </p>
 
               {/* Sizes */}
               <div className="flex items-center gap-6 mt-6">
@@ -306,19 +310,19 @@ const ProductView = () => {
           <section className="mt-16">
             <div className="relative left-[5%] flex justify-between w-[90%] px-20 py-10">
               <button
-                className="border-b py-2 px-4 uppercase text-lg font-semibold hover:bg-secondary_light transition-colors duration-300 rounded-t-lg"
+                className="border-b py-2 px-4 uppercase text-lg font-semibold hover:bg-secondary_light_os transition-colors duration-300 rounded-t-lg"
                 onClick={() => setCurrentSection("product-info")}
               >
                 product Info
               </button>
               <button
-                className="border-b py-2 px-4 uppercase text-lg font-semibold hover:bg-secondary_light transition-colors duration-300 rounded-t-lg"
+                className="border-b py-2 px-4 uppercase text-lg font-semibold hover:bg-secondary_light_os transition-colors duration-300 rounded-t-lg"
                 onClick={() => setCurrentSection("product-reviews")}
               >
                 product review
               </button>
               <button
-                className="border-b py-2 px-4 uppercase text-lg font-semibold hover:bg-secondary_light transition-colors duration-300 rounded-t-lg"
+                className="border-b py-2 px-4 uppercase text-lg font-semibold hover:bg-secondary_light_os transition-colors duration-300 rounded-t-lg"
                 onClick={() => setCurrentSection("related-products")}
               >
                 Related Products
@@ -328,7 +332,7 @@ const ProductView = () => {
               {currentSection === "product-info" ? (
                 <section className="px-10 pb-8">
                   {/* Additional Product Info with improved typography, spacing, and visual hierarchy */}
-                  <div className="bg-secondary_light rounded p-6 text-gray-300 space-y-4 leading-relaxed">
+                  <div className="rounded p-6 text-gray-300 space-y-4 leading-relaxed">
                     <h2 className="text-2xl font-bold text-white mb-2">
                       Product Info
                     </h2>
@@ -369,14 +373,14 @@ const ProductView = () => {
               ) : currentSection === "product-reviews" ? (
                 <section className="px-10 pb-8">
                   {/* Reviews with improved typography, spacing, and readability */}
-                  <div className="bg-[#3f3f3f] rounded p-6 text-gray-300 space-y-4 leading-relaxed">
+                  <div className="rounded p-6 text-gray-300 space-y-4 leading-relaxed">
                     <div className="flex items-center justify-between">
                       <h2 className="text-2xl font-bold text-white mb-2">
                         Product Reviews
                       </h2>
                       <button
                         onClick={() => setIsReviewOpen(true)}
-                        className="border border-[#afafaf] text-[#afafaf] px-4 py-2 rounded hover:bg-[#afafaf] hover:text-black transition-colors"
+                        className="border border-primary_2 text-primary_2 px-4 py-2 rounded hover:bg-primary_2 hover:text-black transition-colors"
                       >
                         Write a Review
                       </button>
@@ -399,11 +403,17 @@ const ProductView = () => {
                         id="sortReviews"
                         value={sortOption}
                         onChange={(e) => setSortOption(e.target.value)}
-                        className="border border-[#afafaf] bg-[#2f2f2f] text-white rounded-md p-1"
+                        className="bg-transparent border cursor-pointer text-primary_2 rounded-md p-1"
                       >
-                        <option value="Newest">Newest</option>
-                        <option value="Highest">Highest Rating</option>
-                        <option value="Lowest">Lowest Rating</option>
+                        <option value="Newest" className="text-secondary_2">
+                          Newest
+                        </option>
+                        <option value="Highest" className="text-secondary_2">
+                          Highest Rating
+                        </option>
+                        <option value="Lowest" className="text-secondary_2">
+                          Lowest Rating
+                        </option>
                       </select>
                     </div>
 
@@ -445,7 +455,7 @@ const ProductView = () => {
                 <section className="px-10 pb-8">
                   {/* Recommended Products */}
                   {relatedProducts.length > 0 && (
-                    <div className="bg-[#3f3f3f] rounded p-6 text-gray-300 space-y-4">
+                    <div className="rounded p-6 text-gray-300 space-y-4">
                       <h2 className="text-2xl font-bold text-white mb-2">
                         You May Also Like
                       </h2>
@@ -483,7 +493,11 @@ const ProductView = () => {
       )}
 
       {/* Footer */}
-      <section>
+      <section
+        className={`${
+          loading ? "relative top-[20rem]" : "relative top-[5rem]"
+        }`}
+      >
         <Footer />
       </section>
     </section>
