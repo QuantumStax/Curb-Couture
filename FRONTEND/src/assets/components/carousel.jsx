@@ -158,7 +158,7 @@ const ProductCarouselWithDetails = ({ mainHead, subPara, itemList, Icon }) => {
               }
               return (
                 <div
-                  key={card.id}
+                  key={i}
                   ref={(el) => (cardRefs.current[i] = el)}
                   onClick={
                     clickable
