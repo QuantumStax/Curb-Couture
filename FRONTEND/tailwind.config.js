@@ -9,6 +9,7 @@ export default {
         primary_2: "#EEEEEE",
         secondary_2: "#222831",
         secondary_light: "#3f3f3f",
+        secondary_light_os: "#4E535A",
         tertiary: "#2C3E50",
         banner_2: "#7A1CAC",
         brand: "#31363F",

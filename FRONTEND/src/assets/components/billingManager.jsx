@@ -108,21 +108,21 @@ const BillingSection = ({
       {/* Invoice & Billing Section */}
       <div
         ref={containerRef}
-        className="max-w-4xl mx-auto bg-white rounded-lg shadow-2xl p-6 md:p-10"
+        className="max-w-4xl mx-auto bg-secondary_light_os rounded-lg shadow-2xl p-6 md:p-10"
       >
         {/* Invoice Header */}
         <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-6">
           <div>
-            <h2 className="text-2xl md:text-3xl font-bold text-gray-800">
+            <h2 className="text-2xl md:text-3xl font-bold text-primary_2">
               Billing
             </h2>
-            <p className="text-sm text-gray-500">
+            <p className="text-sm text-gray-400">
               Complete your payment details below.
             </p>
           </div>
           <div className="mt-4 md:mt-0 text-right">
-            <p className="text-gray-700 font-semibold">Order ID: {orderId}</p>
-            <p className="text-gray-700 font-semibold">
+            <p className="text-primary_2 font-semibold">Order ID: {orderId}</p>
+            <p className="text-primary_2 font-semibold">
               Payment ID: {paymentId}
             </p>
           </div>
@@ -132,7 +132,7 @@ const BillingSection = ({
         <div className="flex flex-col md:flex-row gap-6">
           {/* Left: Product Invoice Details */}
           <div className="md:w-1/2">
-            <h3 className="text-lg font-semibold text-gray-800 mb-2">
+            <h3 className="text-lg font-semibold text-primary_2 mb-2">
               Invoice Details
             </h3>
             <div className="border rounded-md p-4 shadow-sm flex items-center">
@@ -143,15 +143,15 @@ const BillingSection = ({
               />
               <div className="w-full">
                 <div className="flex justify-between">
-                  <span className="text-sm text-gray-600 text-left w-1/2">
+                  <span className="text-sm font-semibold text-gray-300 text-left w-1/2">
                     Product Name:
                   </span>
                   <span className="text-sm font-medium text-right w-1/2">
                     {product.name}
                   </span>
                 </div>
-                <div className="flex justify-between">
-                  <span className="text-sm text-gray-600 text-left w-1/2">
+                <div className="flex justify-between text-primary_2">
+                  <span className="text-sm text-left w-1/2">
                     Color:
                   </span>
                   <span className="text-sm font-medium text-right w-1/2">
@@ -159,7 +159,7 @@ const BillingSection = ({
                   </span>
                 </div>
                 <div className="flex justify-between">
-                  <span className="text-sm text-gray-600 text-left w-1/2">
+                  <span className="text-sm text-left w-1/2">
                     Size:
                   </span>
                   <span className="text-sm font-medium text-right w-1/2">
@@ -168,7 +168,7 @@ const BillingSection = ({
                 </div>
                 <div className="mt-2 space-y-1">
                   <div className="flex justify-between">
-                    <span className="text-sm text-gray-600 text-left w-1/2">
+                    <span className="text-sm text-left w-1/2">
                       Actual Price:
                     </span>
                     <span className="text-sm font-medium text-right w-1/2">
@@ -176,7 +176,7 @@ const BillingSection = ({
                     </span>
                   </div>
                   <div className="flex justify-between">
-                    <span className="text-sm text-gray-600 text-left w-1/2">
+                    <span className="text-sm text-left w-1/2">
                       Coupon Applied:
                     </span>
                     <span className="text-sm font-medium text-right w-1/2">
@@ -184,7 +184,7 @@ const BillingSection = ({
                     </span>
                   </div>
                   <div className="flex justify-between">
-                    <span className="text-sm text-gray-600 text-left w-1/2">
+                    <span className="text-sm text-left w-1/2">
                       Discount:
                     </span>
                     <span className="text-sm font-medium text-right w-1/2">
@@ -192,10 +192,10 @@ const BillingSection = ({
                     </span>
                   </div>
                   <div className="flex justify-between">
-                    <span className="text-base text-green-700 text-left w-1/2">
+                    <span className="text-base text-green-500 text-left w-1/2">
                       Checkout Price:
                     </span>
-                    <span className="text-base font-semibold text-green-700 text-right w-1/2">
+                    <span className="text-base font-semibold text-green-500 text-right w-1/2">
                       ₹{finalPrice}
                     </span>
                   </div>
@@ -214,7 +214,7 @@ const BillingSection = ({
 
           {/* Right: Payment Method Section */}
           <div className="md:w-1/2">
-            <h3 className="text-lg font-semibold text-gray-800 mb-2">
+            <h3 className="text-lg font-semibold text-primary_2 mb-2">
               Choose Payment Method
             </h3>
             {step === "selection" && (
@@ -234,7 +234,7 @@ const BillingSection = ({
                       onChange={handlePaymentMethodChange}
                       className="mr-3"
                     />
-                    <span className="font-medium text-gray-700">{option}</span>
+                    <span className="font-medium text-primary_2">{option}</span>
                   </label>
                 ))}
               </div>

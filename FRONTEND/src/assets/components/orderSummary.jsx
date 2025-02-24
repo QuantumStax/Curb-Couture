@@ -196,7 +196,7 @@ const OrderSummary = ({
         </div>
       ) : (
         <div>
-          <div className="py-10 px-6 md:px-8 lg:px-10 max-w-7xl mx-auto font-sans">
+          <div className="md:px-8 lg:px-10 max-w-7xl mx-auto font-robert-regular mt-[-2rem]">
             <h2 className="flex items-center justify-center gap-2 text-3xl font-bold mb-12 tracking-wider text-primary_2 uppercase">
               Order Summary
               <LocalShippingIcon fontSize="large" />
@@ -228,8 +228,8 @@ const OrderSummary = ({
                 ))}
               </div>
               <div className="md:w-1/2 flex flex-col gap-6 overflow-y-auto hide-scrollbar">
-                <div className="border border-gray-300 rounded-xl p-8 shadow-2xl bg-white">
-                  <h3 className="text-2xl font-bold mb-6 text-gray-900 tracking-wide">
+                <div className="rounded-xl p-8 shadow-2xl bg-[#4E535A]">
+                  <h3 className="text-2xl font-bold mb-6 text-primary_2 tracking-wide">
                     Order Info
                   </h3>
                   {products.length > 1 ? (
@@ -239,7 +239,7 @@ const OrderSummary = ({
                         onClick={scrollLeft}
                         onMouseEnter={handleHoverEnter}
                         onMouseLeave={handleHoverLeave}
-                        className="absolute left-0 top-1/2 transform -translate-y-1/2 bg-gray-200 hover:bg-gray-300 rounded-full p-3 shadow-md z-10"
+                        className="absolute left-0 top-1/2 transform -translate-y-1/2 bg-primary_2 hover:bg-gray-300 rounded-full p-3 shadow-md z-10"
                       >
                         <ArrowBackIosIcon fontSize="small" />
                       </button>
@@ -252,7 +252,7 @@ const OrderSummary = ({
                             key={product.id}
                             className="min-w-[280px] flex-shrink-0 border rounded-xl p-6 bg-gray-50 shadow-md transition-transform duration-300 hover:scale-105"
                           >
-                            <h4 className="text-xl font-semibold uppercase tracking-wider text-gray-800">
+                            <h4 className="text-xl font-semibold uppercase tracking-wider text-secondary_2">
                               {product.name}
                             </h4>
                             <div className="flex gap-3 text-md text-gray-600 my-3">
@@ -290,7 +290,7 @@ const OrderSummary = ({
                     </div>
                   ) : (
                     <div className="border rounded-xl p-6 bg-gray-50 shadow-md transition-transform duration-300 hover:scale-105">
-                      <h4 className="text-xl font-semibold uppercase tracking-wider text-gray-800">
+                      <h4 className="text-xl font-semibold uppercase tracking-wider text-secondary_2">
                         {products[0].name}
                       </h4>
                       <div className="flex gap-3 text-md text-gray-600 my-3">
@@ -315,17 +315,18 @@ const OrderSummary = ({
                       </div>
                     </div>
                   )}
-                  <div className="border-t border-gray-300 pt-6 mt-6 space-y-4 text-gray-700">
+                  <div className=" pt-6 mt-6 space-y-4 text-primary_2">
+                    <hr className="mb-6 h-[1.5px] bg-secondary_2 border-none" />
                     <div className="flex justify-between">
                       <span className="font-medium">Subtotal</span>
                       <span className="font-medium">₹ {subtotal}</span>
                     </div>
                     <div className="flex items-center justify-between">
-                      <div className="flex items-center text-gray-600 text-md">
+                      <div className="flex items-center text-gray-300 text-md">
                         <DiscountIcon className="mr-2" />
                         <span className="font-medium">Coupon</span>
                       </div>
-                      <p className="text-gray-700 font-medium">
+                      <p className="text-gray-300 font-medium">
                         - ₹ {discountValue}
                       </p>
                     </div>
@@ -333,8 +334,10 @@ const OrderSummary = ({
                       <span className="font-medium">Shipping</span>
                       <span>₹ {totalShipping}</span>
                     </div>
-                    <hr className="mt-4 mb-6 h-[1.5px] bg-gray-300" />
-                    <div className="flex justify-between text-gray-900 font-semibold">
+
+                    <hr className="mt-4 mb-6 h-[1.5px] bg-secondary_2 border-none" />
+
+                    <div className="flex justify-between text-primary_2 font-semibold">
                       <p className="text-lg">Final Price</p>
                       <p className="text-lg">₹ {finalPrice}</p>
                     </div>
@@ -349,7 +352,7 @@ const OrderSummary = ({
                         placeholder="Enter Coupon Code"
                         value={couponCode}
                         onChange={(e) => setCouponCode(e.target.value)}
-                        className="w-[70%] py-2 px-4 border border-gray-300 rounded-l-xl focus:outline-none"
+                        className="w-[70%] py-2 px-4 rounded-l-xl focus:outline-none"
                       />
                       <button
                         type="submit"
@@ -363,14 +366,14 @@ const OrderSummary = ({
                     )}
                   </form>
                 </div>
-                <div className="border border-gray-300 rounded-xl p-8 shadow-2xl bg-white">
-                  <h3 className="text-2xl font-bold mb-6 text-gray-900 tracking-wide">
+                <div className="rounded-xl p-8 shadow-2xl bg-secondary_light_os">
+                  <h3 className="text-2xl font-bold mb-6 text-primary_2 tracking-wide">
                     Shipping Address
                   </h3>
-                  <p className="text-md font-semibold text-gray-800 mb-2">
+                  <p className="text-md font-semibold text-primary_2 mb-2">
                     {selectedAddress.firstname} {selectedAddress.lastname}
                   </p>
-                  <p className="text-md text-gray-700 leading-6">
+                  <p className="text-md text-primary_2 leading-6">
                     {selectedAddress.house}, {selectedAddress.locality}
                     <br />
                     {selectedAddress.landmark && (
@@ -391,7 +394,7 @@ const OrderSummary = ({
             <button
               onMouseEnter={handleHoverEnter}
               onMouseLeave={handleHoverLeave}
-              className="w-full bg-banner_2 text-secondary_2 py-3 rounded-xl shadow-2xl transition-transform duration-300 uppercase font-semibold tracking-wider hover:shadow-xl"
+              className="w-full bg-banner_2 text-primary_2 py-3 rounded-xl shadow-2xl transition-transform duration-300 uppercase font-semibold tracking-wider hover:shadow-xl"
               onClick={() => {
                 try {
                   setStep("billing");

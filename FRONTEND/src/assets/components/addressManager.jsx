@@ -192,7 +192,7 @@ const AddressModal = ({
             </button>
             <button
               type="submit"
-              className="bg-banner_2 text-secondary_2 font-semibold uppercase px-4 py-2 rounded"
+              className="bg-banner_2 text-primary_2 font-semibold uppercase px-4 py-2 rounded"
             >
               {isEditing ? "Update Address" : "Add Address"}
             </button>
@@ -343,9 +343,9 @@ const AddressManager = ({ selectedAddress, onSelectAddress }) => {
 
   return (
     <ErrorBoundary>
-      <div className="py-5">
-        <h2 className="flex items-center gap-2 justify-center text-2xl font-bold mb-10 uppercase">
-          <p>Shipping</p>
+      <div className="mt-[-2rem]">
+        <h2 className="flex items-center gap-2 justify-center text-2xl font-robert-regular mb-10 uppercase">
+          <p className="font-semibold">Shipping</p>
           <div>
             <LocalShippingIcon />
           </div>
@@ -388,7 +388,7 @@ const AddressManager = ({ selectedAddress, onSelectAddress }) => {
                 }}
                 className="cursor-pointer w-[85%]"
               >
-                <p className="font-semibold">{addr.label}</p>
+                <p className="font-bold text-xl mb-2">{addr.label}</p>
                 <p>
                   {addr.firstname} {addr.lastname}
                 </p>

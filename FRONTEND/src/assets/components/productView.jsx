@@ -43,7 +43,7 @@ const ProductView = () => {
 
   // GSAP refs
   const containerRef = useRef(null); // entire hero container
-  const circleRef = useRef(null); // circle behind product
+  const circleRef = useRef(null); // background circle
   const imageRef = useRef(null); // product image
   const textRef = useRef(null); // text block
   const sectionContentRef = useRef(null); // new ref for section content
@@ -111,7 +111,7 @@ const ProductView = () => {
         { opacity: 0 },
         { opacity: 1, duration: 0.6 }
       );
-      // Scale/fade in the circle
+      // Scale/fade in the background circle
       tl.fromTo(
         circleRef.current,
         { scale: 0, opacity: 0 },
@@ -175,7 +175,12 @@ const ProductView = () => {
   };
 
   return (
-    <section className="min-h-screen bg-[#2f2f2f] text-white relative">
+    <section className="bg-secondary_2 text-white -mt-16 py-20 relative">
+      <div
+        ref={circleRef}
+        className="absolute w-[80rem] h-[70rem] bg-black rounded-full left-[-25rem] top-[-20rem] opacity-20"
+      />
+
       {loading && (
         <div className="absolute left-1/2 top-1/3 transform -translate-x-1/2">
           <Loader />
@@ -193,14 +198,8 @@ const ProductView = () => {
           {/* HERO SECTION */}
           <div
             ref={containerRef}
-            className="opacity-0 w-full h-[70vh] lg:h-[93vh] relative overflow-hidden flex items-center justify-center px-8"
+            className="opacity-0 w-full h-[70vh] lg:h-[90vh] relative overflow-hidden flex items-center justify-center px-8"
           >
-            {/* BACKGROUND CIRCLE */}
-            <div
-              ref={circleRef}
-              className="absolute w-[80rem] h-[70rem] bg-black rounded-full left-[-25rem] top-[-20rem] opacity-20"
-            />
-
             {/* LEFT - PRODUCT IMAGE */}
             <div className="flex-1 flex max-w-[30%]">
               <img
@@ -255,7 +254,7 @@ const ProductView = () => {
                       {product.sizes.map((size, i) => (
                         <button
                           key={i}
-                          className="border border-primary_2 px-3 py-1 text-sm text-primary_2 rounded hover:bg-[#e8e8e8] hover:text-black transition-colors uppercase"
+                          className="border border-primary_2 px-3 py-1 text-sm text-primary_2 rounded hover:bg-primary_2 hover:text-black transition-colors uppercase"
                         >
                           {size}
                         </button>
@@ -279,13 +278,13 @@ const ProductView = () => {
                     product?.rating
                   )}&product_price=${encodeURIComponent(product.price)}`}
                 >
-                  <button className="bg-banner_2 px-6 py-3 w-[13rem] text-lg text-secondary_2 rounded hover:bg-[#616161] hover:text-primary_2 transition-colors">
+                  <button className="bg-banner_2 px-6 py-3 w-[13rem] text-lg text-primary_2 rounded hover:scale-[1.05] hover:shadow-xl transition-all duration-300">
                     Buy Now
                   </button>
                 </Link>
                 <button
                   onClick={handleAddToCart}
-                  className="bg-transparent border px-6 py-3 w-[13rem] text-lg text-primary_2 rounded hover:bg-[#616161] hover:text-primary_2 transition-colors"
+                  className="bg-transparent border px-6 py-3 w-[13rem] text-lg text-primary_2 rounded hover:shadow-xl hover:scale-[1.05] transition-all duration-300"
                 >
                   Add to Cart
                 </button>
