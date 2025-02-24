@@ -3,7 +3,7 @@ import Footer from "../components/footer";
 const ForgorPass = () => {
   return (
     <section>
-      <section className="flex flex-col items-center bg-primary px-20 md:pb-[19.5rem] py-24">
+      <section className="flex flex-col items-center bg-secondary_2 text-primary_2 -mt-[4rem] px-20 md:pb-[19.5rem] py-[10rem]">
         <h1 className="text-4xl font-semibold mb-12">Recover Password</h1>
         <div>
           <form>
@@ -19,7 +19,7 @@ const ForgorPass = () => {
             <div>
               <button
                 type="submit"
-                className="uppercase mt-5 bg-brand py-2 px-6 font-semibold text-lg rounded-md text-primary hover:shadow-lg"
+                className="uppercase mt-5 bg-banner_2 py-2 px-6 font-semibold text-lg rounded-md text-primary hover:shadow-lg"
               >
                 submit
               </button>

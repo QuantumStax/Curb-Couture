@@ -7,8 +7,35 @@ import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
 import ShoppingCartOutlinedIcon from "@mui/icons-material/ShoppingCartOutlined";
 import HamburgerIcon from "./hamburgerIcon";
 import SideMenu from "./navItemComponent";
+import DarkModeIcon from "@mui/icons-material/DarkMode";
+import LightModeIcon from "@mui/icons-material/LightMode";
+import { gsap } from "gsap";
 
 const Nav2 = ({ setIsModalOpen }) => {
+  // Theme toggle state and ref
+  const [isDarkTheme, setIsDarkTheme] = useState(false);
+  const toggleButtonRef = useRef(null);
+
+  const toggleTheme = () => {
+    // Animate the toggle button icon with GSAP
+    gsap.fromTo(
+      toggleButtonRef.current,
+      { scale: 0.8, opacity: 0.5 },
+      { scale: 1, opacity: 1, duration: 0.4, ease: "power3.out" }
+    );
+    setIsDarkTheme((prev) => !prev);
+  };
+
+  // Update body class for theme switching
+  useEffect(() => {
+    if (isDarkTheme) {
+      document.body.classList.add("dark-theme");
+    } else {
+      document.body.classList.remove("dark-theme");
+    }
+  }, [isDarkTheme]);
+
+  // Existing state and refs
   const [isOpen, setIsOpen] = useState(false);
   const navContainerRef = useRef(null);
   const sideMenuRef = useRef(null);
@@ -95,7 +122,22 @@ const Nav2 = ({ setIsModalOpen }) => {
 
         {/* Action Icons */}
         <div className="flex items-center gap-3 sm:gap-4 md:gap-5">
-          <div onClick={() => setIsModalOpen(true)} className="cursor-pointer">
+          {/* Theme Toggle Button - inserted before Search Icon */}
+          <div
+            onClick={toggleTheme}
+            ref={toggleButtonRef}
+            className="cursor-pointer"
+          >
+            {isDarkTheme ? (
+              <LightModeIcon style={{ fontSize: "1.5rem" }} />
+            ) : (
+              <DarkModeIcon style={{ fontSize: "1.5rem" }} />
+            )}
+          </div>
+          <div
+            onClick={() => setIsModalOpen(true)}
+            className="cursor-pointer"
+          >
             <SearchIcon style={{ fontSize: "1.5rem" }} />
           </div>
           {actionIcons.map((icon, i) => (
