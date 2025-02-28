@@ -107,6 +107,7 @@ export const getProducts = async (req, res) => {
         encode(pi.image_3, 'base64') AS image_3
       FROM product_main pm
       LEFT JOIN product_images pi ON pm.product_id = pi.product_id
+      ORDER BY pm.product_id DESC
     `;
     const result = await pool.query(gpQuery);
     const products = result.rows.map((product) => ({

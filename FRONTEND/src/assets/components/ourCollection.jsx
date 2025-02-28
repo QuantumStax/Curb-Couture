@@ -32,7 +32,7 @@ const OurCollection = () => {
     <div className="py-10 px-4 sm:px-6 md:px-8 lg:px-12 xl:px-20">
       <div className="mb-6">
         <div className="flex items-center gap-2">
-          <h1 className="text-3xl font-semibold sm:text-4xl md:text-5xl lg:text-4xl">
+          <h1 className="!text-5xl font-semibold font-robert-regular sm:text-4xl md:text-5xl lg:text-4xl">
             Our Collection
           </h1>
           <div className="relative top-1">

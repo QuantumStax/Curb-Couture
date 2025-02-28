@@ -4,7 +4,7 @@ import NewReleasesIcon from '@mui/icons-material/NewReleases';
 
 const RecentAdditions = () => {
   return (
-    <div className="px-4 sm:px-8 md:px-12 lg:px-20">
+    <div id="recent-additions" className="px-4 sm:px-8 md:px-12 lg:px-20">
       <Carousel
         mainHead="New Arrivals"
         Icon={NewReleasesIcon}
