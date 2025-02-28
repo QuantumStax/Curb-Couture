@@ -66,7 +66,7 @@ const Checkout = () => {
                   console.error("Navigation error:", error);
                 }
               }}
-              className="bg-primary_2 text-secondary_2 px-8 py-2 rounded"
+              className="text-primary_2 px-8 py-2 rounded"
             >
               <ArrowBackIcon style={{ fontSize: "1.5rem" }} />
             </button>
@@ -102,7 +102,7 @@ const Checkout = () => {
           <div className="flex justify-between mt-4">
             <button
               onClick={() => setStep("address")}
-              className="bg-primary_2 text-secondary_2 px-8 py-2 rounded"
+              className="text-primary_2 px-8 py-2 rounded"
             >
               <ArrowBackIcon style={{ fontSize: "1.5rem" }} />
             </button>
@@ -130,7 +130,7 @@ const Checkout = () => {
           <div className="flex justify-between mt-4">
             <button
               onClick={() => setStep("orderSummary")}
-              className="bg-primary_2 text-secondary_2 px-8 py-2 rounded"
+              className="text-primary_2 px-8 py-2 rounded"
             >
               <ArrowBackIcon style={{ fontSize: "1.5rem" }} />
             </button>
