@@ -17,7 +17,6 @@ const OrderSummary = ({
   product_image,
   product_name,
   product_price,
-  product_rating,
   product_size
 }) => {
   // Always call hooks at the top.
@@ -40,14 +39,12 @@ const OrderSummary = ({
   // Determine if a valid address is provided.
   const hasAddress = Boolean(selectedAddress);
 
-  // Ensure product_price is treated as a number.
-  const price = Number(product_price);
   const products = [
     {
       id: 1,
       image: product_image,
       name: product_name,
-      price: price,
+      price: Number(product_price),
       color: "Red",
       size: product_size,
       shippingAmount: 75,

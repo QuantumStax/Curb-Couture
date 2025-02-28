@@ -1,7 +1,7 @@
 /* eslint-disable no-unused-vars */
 /* eslint-disable react/prop-types */
 import { useState, useEffect, useRef } from "react";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import CloseIcon from "@mui/icons-material/Close";
 import axios from "axios";
 import { gsap } from "gsap";
@@ -130,7 +130,7 @@ const SearchModal = ({ setIsModalOpen }) => {
       setSelectedIndex((prev) => (prev - 1 + results.length) % results.length);
     } else if (e.key === "Enter") {
       if (selectedIndex >= 0) {
-        navigate(`/products/${results[selectedIndex].product_id}`);
+        navigate(`/view/${results[selectedIndex].product_id}`);
         setIsModalOpen(false);
       }
     } else if (e.key === "Escape") {
@@ -145,7 +145,7 @@ const SearchModal = ({ setIsModalOpen }) => {
   };
 
   const handleResultClick = (product) => {
-    navigate(`/products/${product.product_id}`);
+    navigate(`/view/${product.product_id}`);
     setIsModalOpen(false);
   };
 
@@ -218,7 +218,7 @@ const SearchModal = ({ setIsModalOpen }) => {
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               {results.map((product, i) => (
                 <div
-                  key={product.product_id}
+                  key={i}
                   className={`search-result-item flex gap-4 items-center bg-gray-100 p-4 rounded-lg shadow-sm hover:shadow-md cursor-pointer transition-transform duration-200 hover:scale-[1.02] ${
                     selectedIndex === i ? "bg-blue-100" : ""
                   }`}
