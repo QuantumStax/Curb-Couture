@@ -21,6 +21,8 @@ const Checkout = () => {
   const product_name = searchParams.get("product_name");
   const product_rating = searchParams.get("product_rating");
   const product_price = searchParams.get("product_price");
+  const product_size = searchParams.get("product_size");
+  
 
   useEffect(() => {
     let width = "33%";
@@ -121,6 +123,7 @@ const Checkout = () => {
             product_name={product_name}
             product_price={product_price}
             product_rating={product_rating}
+            product_size={product_size}
           />
         </section>
       )}

@@ -18,6 +18,7 @@ const OrderSummary = ({
   product_name,
   product_price,
   product_rating,
+  product_size
 }) => {
   // Always call hooks at the top.
   const containerRef = useRef(null);
@@ -26,6 +27,9 @@ const OrderSummary = ({
   const sliderRef = useRef(null);
   const leftArrowRef = useRef(null);
   const rightArrowRef = useRef(null);
+
+  console.log(product_size);
+  
 
   // Coupon state for submission handling.
   const [couponCode, setCouponCode] = useState("");
@@ -45,7 +49,7 @@ const OrderSummary = ({
       name: product_name,
       price: price,
       color: "Red",
-      size: "M",
+      size: product_size,
       shippingAmount: 75,
     },
   ];
@@ -258,7 +262,7 @@ const OrderSummary = ({
                             <div className="flex gap-3 text-md text-gray-600 my-3">
                               <p>
                                 Size:{" "}
-                                <span className="font-medium">
+                                <span className="font-medium uppercase">
                                   {product.size}
                                 </span>
                               </p>

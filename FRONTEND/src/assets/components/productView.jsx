@@ -36,6 +36,7 @@ const ProductView = () => {
   const [relatedProducts, setRelatedProducts] = useState([]);
   const [showToast, setShowToast] = useState(false);
   const [currentSection, setCurrentSection] = useState("product-info");
+  const [selectedSize, setSelectedSize] = useState("large"); // updated variable name
 
   // Main product image
   const [mainImage, setMainImage] = useState("");
@@ -258,7 +259,12 @@ const ProductView = () => {
                       {product.sizes.map((size, i) => (
                         <button
                           key={i}
-                          className="border border-primary_2 px-3 py-1 text-sm text-primary_2 rounded hover:bg-primary_2 hover:text-black transition-colors uppercase"
+                          className={`border border-primary_2 px-3 py-1 text-sm rounded transition-colors uppercase ${
+                            selectedSize === size
+                              ? "bg-primary_2 text-black"
+                              : "text-primary_2 hover:bg-primary_2 hover:text-black"
+                          }`}
+                          onClick={() => setSelectedSize(size)}
                         >
                           {size}
                         </button>
@@ -280,7 +286,9 @@ const ProductView = () => {
                     product?.name
                   )}&product_rating=${encodeURIComponent(
                     product?.rating
-                  )}&product_price=${encodeURIComponent(product.price)}`}
+                  )}&product_price=${encodeURIComponent(product.price)}&product_size=${encodeURIComponent(
+                    selectedSize
+                  )}`}
                 >
                   <button className="bg-banner_2 px-6 py-3 w-[13rem] text-lg text-primary_2 rounded hover:scale-[1.05] hover:shadow-xl transition-all duration-300">
                     Buy Now
