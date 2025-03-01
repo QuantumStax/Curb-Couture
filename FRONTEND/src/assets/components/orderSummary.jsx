@@ -353,11 +353,11 @@ const OrderSummary = ({
                         placeholder="Enter Coupon Code"
                         value={couponCode}
                         onChange={(e) => setCouponCode(e.target.value)}
-                        className="w-[70%] py-2 px-4 rounded-l-xl focus:outline-none"
+                        className="w-[85%] py-2 px-4 rounded-l-xl focus:outline-none text-secondary_light_os"
                       />
                       <button
                         type="submit"
-                        className="py-2 px-6 border border-gray-300 rounded-r-xl uppercase bg-gray-100 hover:bg-gray-200 text-gray-700 font-semibold tracking-wider transition-colors"
+                        className="py-2 px-6 rounded-r-xl uppercase bg-banner_2 font-semibold tracking-wider transition-colors text-primary_2"
                       >
                         Apply
                       </button>

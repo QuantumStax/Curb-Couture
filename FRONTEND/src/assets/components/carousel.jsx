@@ -7,6 +7,8 @@ import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
 import CarouselCard from "./carouselCard";
 
 const ProductCarouselWithDetails = ({ mainHead, subPara, itemList, Icon }) => {
+  console.log("Item List : ", itemList);
+
   // rotateInt controls the carousel rotation (positive for Prev clicks, negative for Next)
   const [rotateInt, setRotateInt] = useState(0);
   const innerCarouselRef = useRef(null);
@@ -108,6 +110,11 @@ const ProductCarouselWithDetails = ({ mainHead, subPara, itemList, Icon }) => {
   const activeIndex =
     ((-rotateInt % itemList.length) + itemList.length) % itemList.length;
 
+  // Check if itemList is empty to avoid errors
+  if (!itemList || itemList.length === 0) {
+    return <div>No products available.</div>;
+  }
+
   return (
     <div
       className="flex flex-col bg-bg-main py-[5rem]"
@@ -168,11 +175,13 @@ const ProductCarouselWithDetails = ({ mainHead, subPara, itemList, Icon }) => {
                   className={`absolute p-5 w-[18rem] h-[20rem] px-2 rounded-lg shadow-xl ${extraClasses}`}
                 >
                   <CarouselCard
-                    imgSrc={card.imgSrc}
-                    brand={card.badge}
-                    title={card.title}
+                    imgSrc={
+                      card.images?.length > 0
+                        ? card.images[0]
+                        : "/images/placeholder.jpg"
+                    }
+                    title={card.name}
                     price={card.price}
-                    discount={card.discount}
                     rating={card.rating}
                   />
                 </div>
@@ -192,7 +201,7 @@ const ProductCarouselWithDetails = ({ mainHead, subPara, itemList, Icon }) => {
           style={{ width: "30rem", minHeight: "25rem" }}
           ref={detailsRef}
         >
-          <h1 className="text-4xl font-bold">{itemList[activeIndex].title}</h1>
+          <h1 className="text-4xl font-bold">{itemList[activeIndex].name}</h1>
           <p className="text-primary_2 py-4 opacity-80">
             {itemList[activeIndex].description}
           </p>

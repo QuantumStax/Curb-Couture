@@ -206,12 +206,12 @@ const ProductView = () => {
             className="opacity-0 w-full h-[70vh] lg:h-[90vh] relative overflow-hidden flex items-center justify-center px-8"
           >
             {/* LEFT - PRODUCT IMAGE */}
-            <div className="flex-1 flex max-w-[30%]">
+            <div className="flex-1 flex max-w-[40%]">
               <img
                 ref={imageRef}
                 src={mainImage}
                 alt={product?.name || "Product Image"}
-                className="max-h-[30rem] object-cover shadow-lg transition-transform duration-300 hover:scale-[1.01] rounded-lg"
+                className="max-h-[30rem] w-full object-cover shadow-lg transition-transform duration-300 hover:scale-[1.01] rounded-lg"
               />
             </div>
 
