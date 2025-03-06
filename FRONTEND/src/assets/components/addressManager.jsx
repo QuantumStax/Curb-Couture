@@ -5,6 +5,7 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import LocalShippingIcon from "@mui/icons-material/LocalShipping";
 import gsap from "gsap";
 import React from "react";
+import axios from "axios";
 
 class ErrorBoundary extends React.Component {
   constructor(props) {
@@ -91,17 +92,7 @@ const AddressModal = ({
               className="w-full border p-2 rounded"
               required
             />
-            <input
-              type="text"
-              name="country"
-              disabled
-              placeholder="India"
-              value="India"
-              onChange={onChange}
-              className="w-full border p-2 rounded text-primary_2"
-              required
-            />
-            <div className="flex items-center gap-4">
+            <div className="flex gap-4">
               <input
                 type="text"
                 name="firstname"
@@ -109,6 +100,7 @@ const AddressModal = ({
                 value={addressData.firstname}
                 onChange={onChange}
                 className="w-full border p-2 rounded"
+                required
               />
               <input
                 type="text"
@@ -117,13 +109,31 @@ const AddressModal = ({
                 value={addressData.lastname}
                 onChange={onChange}
                 className="w-full border p-2 rounded"
+                required
               />
             </div>
             <input
               type="text"
-              name="house"
-              placeholder="House Number / Flat Number / Building Name"
-              value={addressData.house}
+              name="country"
+              disabled
+              placeholder="Country"
+              value="India"
+              className="w-full border p-2 rounded text-primary_2"
+            />
+            <input
+              type="text"
+              name="state"
+              placeholder="State / Union Territory"
+              value={addressData.state}
+              onChange={onChange}
+              className="w-full border p-2 rounded"
+              required
+            />
+            <input
+              type="text"
+              name="district"
+              placeholder="District"
+              value={addressData.district}
               onChange={onChange}
               className="w-full border p-2 rounded"
               required
@@ -131,7 +141,7 @@ const AddressModal = ({
             <input
               type="text"
               name="locality"
-              placeholder="Street Name / Locality / Area"
+              placeholder="Locality / Area"
               value={addressData.locality}
               onChange={onChange}
               className="w-full border p-2 rounded"
@@ -139,37 +149,8 @@ const AddressModal = ({
             />
             <input
               type="text"
-              name="landmark"
-              placeholder="Landmark"
-              value={addressData.landmark}
-              onChange={onChange}
-              className="w-full border p-2 rounded"
-              required
-            />
-            <div className="flex items-center gap-4">
-              <input
-                type="text"
-                name="city"
-                placeholder="City / Town / Village"
-                value={addressData.city}
-                onChange={onChange}
-                className="w-full border p-2 rounded"
-                required
-              />
-              <input
-                type="text"
-                name="state"
-                placeholder="State / Union Territory"
-                value={addressData.state}
-                onChange={onChange}
-                className="w-full border p-2 rounded"
-                required
-              />
-            </div>
-            <input
-              type="text"
               name="pincode"
-              placeholder="PIN Code (Postal Code) 6-digit"
+              placeholder="PIN Code (6-digit)"
               value={addressData.pincode}
               onChange={onChange}
               className="w-full border p-2 rounded"
@@ -204,48 +185,42 @@ const AddressModal = ({
 };
 
 const AddressManager = ({ selectedAddress, onSelectAddress }) => {
-  const [addresses, setAddresses] = useState([
-    {
-      id: 1,
-      label: "Home",
-      firstname: "Gopikrishnan",
-      lastname: "S",
-      house: "Green Bay Appartments",
-      locality: "Church Street",
-      landmark: "Near Apollo Hospital",
-      city: "Koramangala",
-      state: "Karnataka",
-      pincode: "554433",
-    },
-    {
-      id: 2,
-      label: "Office",
-      firstname: "Gopikrishnan",
-      lastname: "S",
-      house: "Green Bay Appartments",
-      locality: "Church Street",
-      landmark: "Near Apollo Hospital",
-      city: "Koramangala",
-      state: "Karnataka",
-      pincode: "554433",
-    },
-  ]);
-
+  const [addresses, setAddresses] = useState([]);
+  console.log("Addresses : ", addresses);
   const [editingAddress, setEditingAddress] = useState(null);
   const [modalAddress, setModalAddress] = useState({
     label: "",
     firstname: "",
     lastname: "",
-    house: "",
-    locality: "",
-    landmark: "",
-    city: "",
     state: "",
+    district: "",
+    locality: "",
     pincode: "",
   });
   const [showModal, setShowModal] = useState(false);
-
   const addressesContainerRef = useRef(null);
+
+  // FIX: Update the endpoint to target the backend server with absolute URL and include credentials.
+  const fetchAddresses = async () => {
+    try {
+      const response = await axios.get("http://localhost:3000/addresses", {
+        withCredentials: true,
+      });
+      console.log("Response : ", response.data);
+      if (Array.isArray(response.data)) {
+        setAddresses(response.data);
+      } else {
+        console.error("Unexpected response data:", response.data);
+        setAddresses([]);
+      }
+    } catch (error) {
+      console.error("Error fetching addresses:", error);
+    }
+  };
+
+  useEffect(() => {
+    fetchAddresses();
+  }, []);
 
   useEffect(() => {
     if (addressesContainerRef.current) {
@@ -267,11 +242,9 @@ const AddressManager = ({ selectedAddress, onSelectAddress }) => {
         label: "",
         firstname: "",
         lastname: "",
-        house: "",
-        locality: "",
-        landmark: "",
-        city: "",
         state: "",
+        district: "",
+        locality: "",
         pincode: "",
       });
       setEditingAddress(null);
@@ -309,31 +282,45 @@ const AddressManager = ({ selectedAddress, onSelectAddress }) => {
     }
   };
 
-  const handleModalSubmit = (e) => {
+  const handleModalSubmit = async (e) => {
     e.preventDefault();
     try {
+      const addressPayload = {
+        label: modalAddress.label,
+        firstname: modalAddress.firstname,
+        lastname: modalAddress.lastname,
+        country: "India",
+        state: modalAddress.state,
+        district: modalAddress.district,
+        locality: modalAddress.locality,
+        pincode: modalAddress.pincode,
+      };
+
       if (editingAddress) {
-        const updatedAddresses = addresses.map((addr) =>
-          addr.id === editingAddress.id ? modalAddress : addr
+        await axios.put(
+          `http://localhost:3000/edit-address/${editingAddress.addR_id}`,
+          addressPayload,
+          { withCredentials: true }
         );
-        setAddresses(updatedAddresses);
       } else {
-        const nextId = addresses.length
-          ? Math.max(...addresses.map((a) => a.id)) + 1
-          : 1;
-        const newAddr = { ...modalAddress, id: nextId };
-        setAddresses([...addresses, newAddr]);
+        await axios.post("http://localhost:3000/add-address", addressPayload, {
+          withCredentials: true,
+        });
       }
       closeModal();
+      fetchAddresses();
     } catch (error) {
       console.error("Error handling modal submit:", error);
     }
   };
 
-  const handleDeleteAddress = (addressId) => {
+  const handleDeleteAddress = async (addressId) => {
     try {
-      setAddresses(addresses.filter((addr) => addr.id !== addressId));
-      if (selectedAddress && selectedAddress.id === addressId) {
+      await axios.delete(`http://localhost:3000/delete-address/${addressId}`, {
+        withCredentials: true,
+      });
+      setAddresses(addresses.filter((addr) => addr.addR_id !== addressId));
+      if (selectedAddress && selectedAddress.addR_id === addressId) {
         onSelectAddress(null);
       }
     } catch (error) {
@@ -353,16 +340,16 @@ const AddressManager = ({ selectedAddress, onSelectAddress }) => {
         <div ref={addressesContainerRef} className="space-y-4">
           {addresses.map((addr) => (
             <div
-              key={addr.id}
-              id={`address-${addr.id}`}
+              key={addr.addR_id}
+              id={`address-${addr.addR_id}`}
               className={`p-4 border rounded flex justify-between items-center ${
-                selectedAddress && selectedAddress.id === addr.id
+                selectedAddress && selectedAddress.addR_id === addr.addR_id
                   ? "border-2 border-primary_2"
                   : "border-gray-500"
               }`}
               onMouseEnter={() => {
                 try {
-                  gsap.to(`#address-${addr.id}`, {
+                  gsap.to(`#address-${addr.addR_id}`, {
                     scale: 1.02,
                     duration: 0.2,
                   });
@@ -372,7 +359,10 @@ const AddressManager = ({ selectedAddress, onSelectAddress }) => {
               }}
               onMouseLeave={() => {
                 try {
-                  gsap.to(`#address-${addr.id}`, { scale: 1, duration: 0.2 });
+                  gsap.to(`#address-${addr.addR_id}`, {
+                    scale: 1,
+                    duration: 0.2,
+                  });
                 } catch (error) {
                   console.error("Address hover error:", error);
                 }
@@ -393,9 +383,8 @@ const AddressManager = ({ selectedAddress, onSelectAddress }) => {
                   {addr.firstname} {addr.lastname}
                 </p>
                 <p>
-                  {addr.house}, <br /> {addr.locality} <br /> {addr.landmark}{" "}
-                  <br />
-                  {addr.city}, {addr.state} <br /> {addr.pincode}
+                  {addr.locality}, {addr.district} <br /> {addr.state},{" "}
+                  {addr.pincode}
                 </p>
               </div>
               <div className="space-x-10">
@@ -407,7 +396,7 @@ const AddressManager = ({ selectedAddress, onSelectAddress }) => {
                 </button>
                 <button
                   className="text-primary_2 hover:text-red-600"
-                  onClick={() => handleDeleteAddress(addr.id)}
+                  onClick={() => handleDeleteAddress(addr.addR_id)}
                 >
                   <DeleteIcon />
                 </button>
@@ -416,11 +405,11 @@ const AddressManager = ({ selectedAddress, onSelectAddress }) => {
           ))}
         </div>
         <button
-          className={`${
-            !addresses || addresses.length === 0
-              ? "absolute top-[50%] left-[50%] translate-x-[-50%] !bg-banner_2 !text-primary_2 text-xl hover:scale-[1.05]"
+          className={`mt-6 bg-primary_2 text-secondary_2 px-4 py-2 rounded transition-all duration-200 ${
+            addresses.length === 0
+              ? "absolute top-[50%] left-[50%] translate-x-[-50%]"
               : ""
-          } mt-6 bg-primary_2 text-secondary_2 px-4 py-2 rounded transition-all duration-200`}
+          }`}
           onClick={openModalForAdd}
         >
           Add New Address
