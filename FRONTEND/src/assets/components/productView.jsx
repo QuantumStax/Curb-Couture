@@ -1,15 +1,13 @@
 /* eslint-disable no-unused-vars */
 import { useState, useEffect, useRef, useMemo } from "react";
 import { gsap } from "gsap";
-import { Link, useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import axios from "axios";
 
 import Footer from "./footer";
 import Loader from "./loader";
 import ReviewModal from "./reviewModal";
-import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import AccessTimeIcon from "@mui/icons-material/AccessTime";
-import UndoIcon from "@mui/icons-material/Undo";
 
 const usePrefersReducedMotion = () => {
   const [reducedMotion, setReducedMotion] = useState(false);
@@ -25,6 +23,7 @@ const usePrefersReducedMotion = () => {
 
 const ProductView = () => {
   const { id } = useParams();
+  const navigate = useNavigate();
 
   // State
   const [product, setProduct] = useState(null);
@@ -36,19 +35,39 @@ const ProductView = () => {
   const [relatedProducts, setRelatedProducts] = useState([]);
   const [showToast, setShowToast] = useState(false);
   const [currentSection, setCurrentSection] = useState("product-info");
-  const [selectedSize, setSelectedSize] = useState("large"); // updated variable name
-
-  // Main product image
+  const [selectedSize, setSelectedSize] = useState(null);
   const [mainImage, setMainImage] = useState("");
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
 
   // GSAP refs
-  const containerRef = useRef(null); // entire hero container
-  const circleRef = useRef(null); // background element with clip-path
-  const imageRef = useRef(null); // product image
-  const textRef = useRef(null); // text block
-  const sectionContentRef = useRef(null); // new ref for section content
+  const containerRef = useRef(null);
+  const circleRef = useRef(null);
+  const imageRef = useRef(null);
+  const textRef = useRef(null);
+  const sectionContentRef = useRef(null);
 
   const prefersReducedMotion = usePrefersReducedMotion();
+
+  // Validate user on mount
+  useEffect(() => {
+    const validateUser = async () => {
+      try {
+        const res = await fetch("http://localhost:3000/validate", {
+          method: "GET",
+          credentials: "include",
+        });
+        if (res.ok) {
+          const data = await res.json();
+          setIsLoggedIn(data.isAuthenticated);
+        } else {
+          setIsLoggedIn(false);
+        }
+      } catch (error) {
+        setIsLoggedIn(false);
+      }
+    };
+    validateUser();
+  }, []);
 
   // Fetch product
   useEffect(() => {
@@ -104,28 +123,23 @@ const ProductView = () => {
   useEffect(() => {
     if (!loading && containerRef.current && !prefersReducedMotion) {
       const tl = gsap.timeline({ defaults: { ease: "power2.out" } });
-
-      // Fade in the entire container
       tl.fromTo(
         containerRef.current,
         { opacity: 0 },
         { opacity: 1, duration: 0.6 }
       );
-      // Animate the background element using clip-path
       tl.fromTo(
         circleRef.current,
         { scale: 0, opacity: 0 },
         { scale: 1, opacity: 0.15, duration: 0.6 },
         "-=0.3"
       );
-      // Slide product image from the left
       tl.fromTo(
         imageRef.current,
         { x: -100, opacity: 0 },
         { x: 0, opacity: 1, duration: 0.7 },
         "-=0.3"
       );
-      // Slide text from the right
       tl.fromTo(
         textRef.current,
         { x: 100, opacity: 0 },
@@ -174,9 +188,29 @@ const ProductView = () => {
     // TODO - add to cart logic
   };
 
+  // Handler for Buy Now
+  const handleBuyNow = () => {
+    if (!isLoggedIn) {
+      navigate("/login");
+    } else {
+      navigate(
+        `/checkout?product_id=${encodeURIComponent(
+          id
+        )}&product_image=${encodeURIComponent(
+          product?.images?.[0] || "/images/placeholder.jpg"
+        )}&product_name=${encodeURIComponent(
+          product?.name
+        )}&product_rating=${encodeURIComponent(
+          product?.rating
+        )}&product_price=${encodeURIComponent(
+          product.price
+        )}&product_size=${encodeURIComponent(selectedSize)}`
+      );
+    }
+  };
+
   return (
     <section className="bg-secondary_2 text-white -mt-16 py-20 relative">
-      {/* Background element with clip-path instead of a circle */}
       <div
         ref={circleRef}
         className="absolute w-[80rem] h-[70rem] bg-black left-[-25rem] top-[-20rem] opacity-20"
@@ -223,23 +257,17 @@ const ProductView = () => {
               <p className="text-sm uppercase text-primary_2 opacity-50 tracking-wide">
                 {product?.type || ""}
               </p>
-
               <h1 className="text-[3rem] font-bold text-primary_2 leading-tight">
                 {product?.name || "Gunmetal Black"}
               </h1>
-
-              {/* Short description */}
               <p className="text-gray-300 mt-2 text-sm leading-relaxed">
                 {product?.description ||
                   "Lorem ipsum is simply dummy text of the printing and typesetting industry."}
               </p>
-
-              {/* Price + Rating */}
               <div className="flex items-center gap-5 mt-3">
                 <h2 className="text-2xl text-green-600 font-semibold">
                   ₹{product?.price || ""}
                 </h2>
-                {/* Star Rating (or numeric) */}
                 <div className="flex items-center gap-1">
                   <p className="text-[#cfcfcf] font-bold">
                     {product?.rating || 5}⭐
@@ -247,7 +275,6 @@ const ProductView = () => {
                   <p className="text-[#7f7f7f]">(from 15 Reviews)</p>
                 </div>
               </div>
-
               {/* Sizes */}
               <div className="flex items-center gap-6 mt-6">
                 {product?.sizes?.length > 0 && (
@@ -273,27 +300,14 @@ const ProductView = () => {
                   </div>
                 )}
               </div>
-
-              {/* Add to Cart + Buy Now */}
+              {/* Buy Now & Add to Cart */}
               <div className="flex items-center gap-4 mt-6">
-                <Link
-                  replace
-                  to={`/checkout?product_id=${encodeURIComponent(
-                    id
-                  )}&product_image=${encodeURIComponent(
-                    product?.images?.[0] || "/images/placeholder.jpg"
-                  )}&product_name=${encodeURIComponent(
-                    product?.name
-                  )}&product_rating=${encodeURIComponent(
-                    product?.rating
-                  )}&product_price=${encodeURIComponent(product.price)}&product_size=${encodeURIComponent(
-                    selectedSize
-                  )}`}
+                <button
+                  onClick={handleBuyNow}
+                  className="bg-banner_2 px-6 py-3 w-[13rem] text-lg text-primary_2 rounded hover:scale-[1.05] hover:shadow-xl transition-all duration-300"
                 >
-                  <button className="bg-banner_2 px-6 py-3 w-[13rem] text-lg text-primary_2 rounded hover:scale-[1.05] hover:shadow-xl transition-all duration-300">
-                    Buy Now
-                  </button>
-                </Link>
+                  Buy Now
+                </button>
                 <button
                   onClick={handleAddToCart}
                   className="bg-transparent border px-6 py-3 w-[13rem] text-lg text-primary_2 rounded hover:shadow-xl hover:scale-[1.05] transition-all duration-300"
@@ -301,7 +315,6 @@ const ProductView = () => {
                   Add to Cart
                 </button>
               </div>
-
               <div className="mt-5 text-primary_2">
                 <div className="flex items-center gap-2">
                   <AccessTimeIcon fontSize="small" />
@@ -314,7 +327,7 @@ const ProductView = () => {
               </div>
             </div>
           </div>
-
+          {/* Section for product info, reviews, and related products */}
           <section className="mt-16">
             <div className="relative left-[5%] flex justify-between w-[90%] px-20 py-10">
               <button
@@ -339,7 +352,6 @@ const ProductView = () => {
             <div ref={sectionContentRef}>
               {currentSection === "product-info" ? (
                 <section className="px-10 pb-8">
-                  {/* Additional Product Info with improved typography, spacing, and visual hierarchy */}
                   <div className="rounded p-6 text-gray-300 space-y-4 leading-relaxed">
                     <h2 className="text-2xl font-bold text-white mb-2">
                       Product Info
@@ -380,7 +392,6 @@ const ProductView = () => {
                 </section>
               ) : currentSection === "product-reviews" ? (
                 <section className="px-10 pb-8">
-                  {/* Reviews with improved typography, spacing, and readability */}
                   <div className="rounded p-6 text-gray-300 space-y-4 leading-relaxed">
                     <div className="flex items-center justify-between">
                       <h2 className="text-2xl font-bold text-white mb-2">
@@ -396,10 +407,7 @@ const ProductView = () => {
                     {isReviewOpen && (
                       <ReviewModal setIsReviewOpen={setIsReviewOpen} id={id} />
                     )}
-
                     <hr className="my-3 border-[#5f5f5f]" />
-
-                    {/* Sorting */}
                     <div className="flex items-center gap-4 mt-3">
                       <label
                         htmlFor="sortReviews"
@@ -424,7 +432,6 @@ const ProductView = () => {
                         </option>
                       </select>
                     </div>
-
                     <div className="mt-5 space-y-6">
                       {sortedReviews.map((review, i) => (
                         <div key={i}>
@@ -461,7 +468,6 @@ const ProductView = () => {
                 </section>
               ) : currentSection === "related-products" ? (
                 <section className="px-10 pb-8">
-                  {/* Recommended Products */}
                   {relatedProducts.length > 0 && (
                     <div className="rounded p-6 text-gray-300 space-y-4">
                       <h2 className="text-2xl font-bold text-white mb-2">
