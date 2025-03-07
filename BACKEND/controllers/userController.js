@@ -102,8 +102,6 @@ export const login = async (req, res) => {
 
     const privateKey = getPrivateKey();
     const token = await V2.sign(payload, privateKey);
-    console.log("Login token : ", token);
-    
 
     res.cookie("token", token, {
       httpOnly: true,

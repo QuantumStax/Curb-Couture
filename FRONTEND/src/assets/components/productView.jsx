@@ -25,7 +25,7 @@ const ProductView = () => {
   const { id } = useParams();
   const navigate = useNavigate();
 
-  // State
+  // State declarations
   const [product, setProduct] = useState(null);
   const [loading, setLoading] = useState(true);
   const [isReviewOpen, setIsReviewOpen] = useState(false);
@@ -38,6 +38,8 @@ const ProductView = () => {
   const [selectedSize, setSelectedSize] = useState(null);
   const [mainImage, setMainImage] = useState("");
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [sizeError, setSizeError] = useState("");
+  const [showThumbnails, setShowThumbnails] = useState(false); // controls thumbnail visibility
 
   // GSAP refs
   const containerRef = useRef(null);
@@ -69,12 +71,13 @@ const ProductView = () => {
     validateUser();
   }, []);
 
-  // Fetch product
+  // Fetch product data
   useEffect(() => {
     const fetchProduct = async () => {
       try {
         const res = await fetch(`http://localhost:3000/get-product/${id}`);
         const data = await res.json();
+        console.log("Data : ", data);
         setProduct(data);
         setMainImage(
           data?.images?.length > 0 ? data.images[0] : "/images/placeholder.jpg"
@@ -87,7 +90,7 @@ const ProductView = () => {
     fetchProduct();
   }, [id]);
 
-  // Fetch reviews
+  // Fetch reviews data
   useEffect(() => {
     const fetchReview = async () => {
       try {
@@ -119,7 +122,7 @@ const ProductView = () => {
     ]);
   }, [id]);
 
-  // Animate the hero layout
+  // Animate the hero layout with GSAP
   useEffect(() => {
     if (!loading && containerRef.current && !prefersReducedMotion) {
       const tl = gsap.timeline({ defaults: { ease: "power2.out" } });
@@ -137,7 +140,12 @@ const ProductView = () => {
       tl.fromTo(
         imageRef.current,
         { x: -100, opacity: 0 },
-        { x: 0, opacity: 1, duration: 0.7 },
+        {
+          x: 0,
+          opacity: 1,
+          duration: 0.7,
+          onComplete: () => setShowThumbnails(true), // show thumbnails after animation
+        },
         "-=0.3"
       );
       tl.fromTo(
@@ -149,7 +157,7 @@ const ProductView = () => {
     }
   }, [loading, prefersReducedMotion]);
 
-  // Animate section content when switching tabs using GSAP
+  // Animate section content when switching tabs
   useEffect(() => {
     if (sectionContentRef.current && !prefersReducedMotion) {
       gsap.fromTo(
@@ -160,7 +168,7 @@ const ProductView = () => {
     }
   }, [currentSection, prefersReducedMotion]);
 
-  // Sort reviews
+  // Sort reviews based on sortOption
   const sortedReviews = useMemo(() => {
     const sorted = [...reviews];
     if (sortOption === "Newest") {
@@ -185,11 +193,16 @@ const ProductView = () => {
   const handleAddToCart = () => {
     setShowToast(true);
     setTimeout(() => setShowToast(false), 2000);
-    // TODO - add to cart logic
+    // TODO: add to cart logic
   };
 
   // Handler for Buy Now
   const handleBuyNow = () => {
+    if (!selectedSize) {
+      setSizeError("Please select a size to continue");
+      return;
+    }
+    setSizeError("");
     if (!isLoggedIn) {
       navigate("/login");
     } else {
@@ -239,14 +252,31 @@ const ProductView = () => {
             ref={containerRef}
             className="opacity-0 w-full h-[70vh] lg:h-[90vh] relative overflow-hidden flex items-center justify-center px-8"
           >
-            {/* LEFT - PRODUCT IMAGE */}
-            <div className="flex-1 flex max-w-[40%]">
-              <img
-                ref={imageRef}
-                src={mainImage}
-                alt={product?.name || "Product Image"}
-                className="max-h-[30rem] w-full object-cover shadow-lg transition-transform duration-300 hover:scale-[1.01] rounded-lg"
-              />
+            {/* LEFT - Thumbnails & Main Image */}
+            <div className="flex gap-4 max-w-[40%]">
+              {showThumbnails && (
+                <div className="flex flex-col gap-2">
+                  {product?.images &&
+                    product.images.map((img, index) => (
+                      <img
+                        key={index}
+                        src={img}
+                        alt={`Thumbnail ${index + 1}`}
+                        onClick={() => setMainImage(img)}
+                        className="w-16 h-16 object-cover cursor-pointer hover:scale-105 transition-transform duration-300 rounded-md border"
+                      />
+                    ))}
+                </div>
+              )}
+              {/* Main Image Container */}
+              <div className="flex-[2]">
+                <img
+                  ref={imageRef}
+                  src={mainImage}
+                  alt={product?.name || "Product Image"}
+                  className="max-h-[30rem] w-[30rem] object-cover shadow-lg transition-transform duration-300 hover:scale-[1.01] rounded-lg"
+                />
+              </div>
             </div>
 
             {/* RIGHT - TEXT CONTENT */}
@@ -275,6 +305,18 @@ const ProductView = () => {
                   <p className="text-[#7f7f7f]">(from 15 Reviews)</p>
                 </div>
               </div>
+              {/* Dynamic Colors Rendering */}
+              {product?.colors && (
+                <div className="flex gap-4 mt-4">
+                  {product.colors.map((color, index) => (
+                    <div
+                      key={index}
+                      className="w-8 h-8 rounded-full"
+                      style={{ backgroundColor: color }}
+                    ></div>
+                  ))}
+                </div>
+              )}
               {/* Sizes */}
               <div className="flex items-center gap-6 mt-6">
                 {product?.sizes?.length > 0 && (
@@ -291,12 +333,18 @@ const ProductView = () => {
                               ? "bg-primary_2 text-black"
                               : "text-primary_2 hover:bg-primary_2 hover:text-black"
                           }`}
-                          onClick={() => setSelectedSize(size)}
+                          onClick={() => {
+                            setSelectedSize(size);
+                            setSizeError("");
+                          }}
                         >
                           {size}
                         </button>
                       ))}
                     </div>
+                    {sizeError && (
+                      <p className="text-red-500 text-sm mt-2">{sizeError}</p>
+                    )}
                   </div>
                 )}
               </div>
