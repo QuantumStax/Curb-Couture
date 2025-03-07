@@ -22,6 +22,7 @@ const Checkout = () => {
   const product_rating = searchParams.get("product_rating");
   const product_price = searchParams.get("product_price");
   const product_size = searchParams.get("product_size");
+  const product_color = searchParams.get("product_color");
   
 
   useEffect(() => {
@@ -124,6 +125,7 @@ const Checkout = () => {
             product_price={product_price}
             product_rating={product_rating}
             product_size={product_size}
+            product_color={product_color}
           />
         </section>
       )}

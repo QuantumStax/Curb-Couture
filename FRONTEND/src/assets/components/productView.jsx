@@ -36,9 +36,11 @@ const ProductView = () => {
   const [showToast, setShowToast] = useState(false);
   const [currentSection, setCurrentSection] = useState("product-info");
   const [selectedSize, setSelectedSize] = useState(null);
+  const [selectedColor, setSelectedColor] = useState(null); // new state for color
   const [mainImage, setMainImage] = useState("");
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [sizeError, setSizeError] = useState("");
+  const [colorError, setColorError] = useState(""); // new state for color error
   const [showThumbnails, setShowThumbnails] = useState(false); // controls thumbnail visibility
 
   // GSAP refs
@@ -196,13 +198,18 @@ const ProductView = () => {
     // TODO: add to cart logic
   };
 
-  // Handler for Buy Now
+  // Handler for Buy Now: check for both size and color selection
   const handleBuyNow = () => {
     if (!selectedSize) {
       setSizeError("Please select a size to continue");
       return;
     }
+    if (!selectedColor) {
+      setColorError("Please select a color to continue");
+      return;
+    }
     setSizeError("");
+    setColorError("");
     if (!isLoggedIn) {
       navigate("/login");
     } else {
@@ -217,7 +224,9 @@ const ProductView = () => {
           product?.rating
         )}&product_price=${encodeURIComponent(
           product.price
-        )}&product_size=${encodeURIComponent(selectedSize)}`
+        )}&product_size=${encodeURIComponent(
+          selectedSize
+        )}&product_color=${encodeURIComponent(selectedColor)}`
       );
     }
   };
@@ -311,11 +320,22 @@ const ProductView = () => {
                   {product.colors.map((color, index) => (
                     <div
                       key={index}
-                      className="w-8 h-8 rounded-full"
+                      className={`w-8 h-8 rounded-full cursor-pointer border ${
+                        selectedColor === color
+                          ? "border-white"
+                          : "border-transparent"
+                      }`}
                       style={{ backgroundColor: color }}
+                      onClick={() => {
+                        setSelectedColor(color);
+                        setColorError("");
+                      }}
                     ></div>
                   ))}
                 </div>
+              )}
+              {colorError && (
+                <p className="text-red-500 text-sm mt-2">{colorError}</p>
               )}
               {/* Sizes */}
               <div className="flex items-center gap-6 mt-6">

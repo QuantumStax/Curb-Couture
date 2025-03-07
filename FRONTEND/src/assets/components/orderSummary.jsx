@@ -17,7 +17,8 @@ const OrderSummary = ({
   product_image,
   product_name,
   product_price,
-  product_size
+  product_size,
+  product_color
 }) => {
   // Always call hooks at the top.
   const containerRef = useRef(null);
@@ -45,7 +46,7 @@ const OrderSummary = ({
       image: product_image,
       name: product_name,
       price: Number(product_price),
-      color: "Red",
+      color: product_color,
       size: product_size,
       shippingAmount: 75,
     },
