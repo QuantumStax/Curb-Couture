@@ -59,7 +59,6 @@ const OrderSummary = ({
       : products.reduce((sum, product) => sum + product.shippingAmount, 0);
   const finalPrice = subtotal - discountValue + totalShipping;
 
-  // Use effect for animations.
   useEffect(() => {
     try {
       if (containerRef.current) {
@@ -153,22 +152,6 @@ const OrderSummary = ({
     }
   };
 
-  const handleHoverEnter = (e) => {
-    try {
-      gsap.to(e.currentTarget, { scale: 1.05, duration: 0.2 });
-    } catch (error) {
-      console.error("Hover enter error:", error);
-    }
-  };
-
-  const handleHoverLeave = (e) => {
-    try {
-      gsap.to(e.currentTarget, { scale: 1, duration: 0.2 });
-    } catch (error) {
-      console.error("Hover leave error:", error);
-    }
-  };
-
   // Coupon submission handler with error handling.
   const handleCouponSubmit = (e) => {
     e.preventDefault();
@@ -230,17 +213,15 @@ const OrderSummary = ({
                 ))}
               </div>
               <div className="md:w-1/2 flex flex-col gap-6 overflow-y-auto hide-scrollbar">
-                <div className="rounded-xl p-8 shadow-2xl bg-[#4E535A]">
-                  <h3 className="text-2xl font-bold mb-6 text-primary_2 tracking-wide">
+                <div className="rounded-xl p-8 shadow-2xl">
+                  {/* <h3 className="text-2xl font-bold mb-6 text-primary_2 tracking-wide">
                     Order Info
-                  </h3>
+                  </h3> */}
                   {products.length > 1 ? (
                     <div className="relative">
                       <button
                         ref={leftArrowRef}
                         onClick={scrollLeft}
-                        onMouseEnter={handleHoverEnter}
-                        onMouseLeave={handleHoverLeave}
                         className="absolute left-0 top-1/2 transform -translate-y-1/2 bg-primary_2 hover:bg-gray-300 rounded-full p-3 shadow-md z-10"
                       >
                         <ArrowBackIosIcon fontSize="small" />
@@ -252,21 +233,21 @@ const OrderSummary = ({
                         {products.map((product) => (
                           <div
                             key={product.id}
-                            className="min-w-[280px] flex-shrink-0 border rounded-xl p-6 bg-gray-50 shadow-md transition-transform duration-300 hover:scale-105"
+                            className="min-w-[280px] flex-shrink-0 border rounded-xl p-6 shadow-md transition-transform duration-300 hover:scale-105"
                           >
-                            <h4 className="text-xl font-semibold uppercase tracking-wider text-secondary_2">
+                            <h4 className="text-xl font-semibold uppercase tracking-wider text-primary_2">
                               {product.name}
                             </h4>
                             <div className="flex gap-3 text-md text-gray-600 my-3">
-                              <p>
+                              <p className="uppercase">
                                 Size:{" "}
-                                <span className="font-medium uppercase">
+                                <span className="font-medium">
                                   {product.size}
                                 </span>
                               </p>
                               <p>
                                 Color:{" "}
-                                <span className="font-medium">
+                                <span className="font-medium !uppercase">
                                   {product.color}
                                 </span>
                               </p>
@@ -283,19 +264,17 @@ const OrderSummary = ({
                       <button
                         ref={rightArrowRef}
                         onClick={scrollRight}
-                        onMouseEnter={handleHoverEnter}
-                        onMouseLeave={handleHoverLeave}
                         className="absolute right-0 top-1/2 transform -translate-y-1/2 bg-gray-200 hover:bg-gray-300 rounded-full p-3 shadow-md z-10"
                       >
                         <ArrowForwardIosIcon fontSize="small" />
                       </button>
                     </div>
                   ) : (
-                    <div className="border rounded-xl p-6 bg-gray-50 shadow-md transition-transform duration-300 hover:scale-105">
-                      <h4 className="text-xl font-semibold uppercase tracking-wider text-secondary_2">
+                    <div className="rounded-xl shadow-md transition-transform duration-300 hover:scale-105">
+                      <h4 className="text-xl font-semibold uppercase tracking-wider text-primary_2">
                         {products[0].name}
                       </h4>
-                      <div className="flex gap-3 text-md text-gray-600 my-3">
+                      <div className="flex gap-3 text-md text-gray-300 my-3">
                         <p>
                           Size:{" "}
                           <span className="font-medium">
@@ -309,7 +288,7 @@ const OrderSummary = ({
                           </span>
                         </p>
                       </div>
-                      <div className="flex justify-between text-gray-700">
+                      <div className="flex justify-between text-gray-300">
                         <span className="font-medium">Price</span>
                         <span className="font-medium">
                           ₹ {products[0].price}
@@ -394,8 +373,6 @@ const OrderSummary = ({
           </div>
           <div className="py-6 px-6 md:px-8 lg:px-10 max-w-7xl mx-auto">
             <button
-              onMouseEnter={handleHoverEnter}
-              onMouseLeave={handleHoverLeave}
               className="w-full bg-banner_2 text-primary_2 py-3 rounded-xl shadow-2xl transition-transform duration-300 uppercase font-semibold tracking-wider hover:shadow-xl"
               onClick={() => {
                 try {

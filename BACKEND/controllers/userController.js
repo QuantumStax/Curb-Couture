@@ -153,7 +153,6 @@ export const fetchAddress = async (req, res) => {
   try {
     const query = `SELECT * FROM user_address WHERE user_id = $1 ORDER BY created_at DESC`;
     const { rows } = await pool.query(query, [user_id]);
-    console.log("Result Rows - fetch Address : ", rows);
 
     res.status(200).json(rows);
   } catch (error) {
