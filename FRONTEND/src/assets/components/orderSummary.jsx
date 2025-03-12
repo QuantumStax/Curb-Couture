@@ -181,7 +181,7 @@ const OrderSummary = ({
       ) : (
         <div>
           <div className="md:px-8 lg:px-10 max-w-7xl mx-auto font-robert-regular mt-[-2rem]">
-            <h2 className="flex items-center justify-center gap-2 text-3xl font-bold mb-12 tracking-wider text-primary_2 uppercase">
+            <h2 className="flex items-center justify-center gap-2 text-3xl font-bold mb-8 tracking-wider text-primary_2 uppercase">
               Order Summary
               <LocalShippingIcon fontSize="large" />
             </h2>
@@ -212,10 +212,7 @@ const OrderSummary = ({
                 ))}
               </div>
               <div className="md:w-1/2 flex flex-col gap-6 overflow-y-auto hide-scrollbar">
-                <div className="rounded-xl p-8">
-                  {/* <h3 className="text-2xl font-bold mb-6 text-primary_2 tracking-wide">
-                    Order Info
-                  </h3> */}
+                <div className="rounded-xl">
                   {products.length > 1 ? (
                     <div className="relative">
                       <button
@@ -251,9 +248,9 @@ const OrderSummary = ({
                                 </span>
                               </p>
                             </div>
-                            <div className="flex justify-between text-gray-700">
-                              <span className="font-medium">Price</span>
-                              <span className="font-medium">
+                            <div className="text-gray-700">
+                              {/* <span className="font-medium">Price</span> */}
+                              <span className="font-semibold text-xl">
                                 ₹ {product.price}
                               </span>
                             </div>
@@ -346,7 +343,7 @@ const OrderSummary = ({
                     )}
                   </form>
                 </div>
-                <div className="rounded-xl px-8 pb-16">
+                <div className="rounded-xl pb-16">
                   <h3 className="text-2xl font-bold font font-robert-regular mb-6 text-primary_2 tracking-wide">
                     Delivering to :
                   </h3>
