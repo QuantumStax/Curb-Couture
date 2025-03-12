@@ -44,9 +44,9 @@ const Checkout = () => {
   }, [step]);
 
   return (
-    <section className="px-32 py-[8rem] -mt-16 bg-secondary_2 text-primary_2">
+    <section className="px-32 pt-[8rem] pb-[2rem] -mt-16 bg-secondary_2 text-primary_2">
       {/* Horizontal Progress Bar */}
-      <div className="py-4">
+      <div className="">
         <div className="w-full bg-primary_2 h-2 rounded">
           <div
             ref={progressBarRef}

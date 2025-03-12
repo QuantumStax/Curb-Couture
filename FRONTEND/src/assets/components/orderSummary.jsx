@@ -18,7 +18,7 @@ const OrderSummary = ({
   product_name,
   product_price,
   product_size,
-  product_color
+  product_color,
 }) => {
   // Always call hooks at the top.
   const containerRef = useRef(null);
@@ -29,7 +29,6 @@ const OrderSummary = ({
   const rightArrowRef = useRef(null);
 
   console.log(product_size);
-  
 
   // Coupon state for submission handling.
   const [couponCode, setCouponCode] = useState("");
@@ -213,7 +212,7 @@ const OrderSummary = ({
                 ))}
               </div>
               <div className="md:w-1/2 flex flex-col gap-6 overflow-y-auto hide-scrollbar">
-                <div className="rounded-xl p-8 shadow-2xl">
+                <div className="rounded-xl p-8">
                   {/* <h3 className="text-2xl font-bold mb-6 text-primary_2 tracking-wide">
                     Order Info
                   </h3> */}
@@ -233,7 +232,7 @@ const OrderSummary = ({
                         {products.map((product) => (
                           <div
                             key={product.id}
-                            className="min-w-[280px] flex-shrink-0 border rounded-xl p-6 shadow-md transition-transform duration-300 hover:scale-105"
+                            className="min-w-[280px] flex-shrink-0 border rounded-xl p-6 transition-transform duration-300 hover:scale-105"
                           >
                             <h4 className="text-xl font-semibold uppercase tracking-wider text-primary_2">
                               {product.name}
@@ -270,18 +269,18 @@ const OrderSummary = ({
                       </button>
                     </div>
                   ) : (
-                    <div className="rounded-xl shadow-md transition-transform duration-300 hover:scale-105">
+                    <div className="rounded-xl">
                       <h4 className="text-xl font-semibold uppercase tracking-wider text-primary_2">
                         {products[0].name}
                       </h4>
                       <div className="flex gap-3 text-md text-gray-300 my-3">
-                        <p>
+                        <p className="uppercase">
                           Size:{" "}
                           <span className="font-medium">
                             {products[0].size}
                           </span>
                         </p>
-                        <p>
+                        <p className="uppercase">
                           Color:{" "}
                           <span className="font-medium">
                             {products[0].color}
@@ -347,9 +346,9 @@ const OrderSummary = ({
                     )}
                   </form>
                 </div>
-                <div className="rounded-xl p-8 shadow-2xl bg-secondary_light_os">
-                  <h3 className="text-2xl font-bold mb-6 text-primary_2 tracking-wide">
-                    Shipping Address
+                <div className="rounded-xl px-8 pb-16">
+                  <h3 className="text-2xl font-bold font font-robert-regular mb-6 text-primary_2 tracking-wide">
+                    Delivering to :
                   </h3>
                   <p className="text-md font-semibold text-primary_2 mb-2">
                     {selectedAddress.firstname} {selectedAddress.lastname}
@@ -371,20 +370,23 @@ const OrderSummary = ({
               </div>
             </div>
           </div>
-          <div className="py-6 px-6 md:px-8 lg:px-10 max-w-7xl mx-auto">
-            <button
-              className="w-full bg-banner_2 text-primary_2 py-3 rounded-xl shadow-2xl transition-transform duration-300 uppercase font-semibold tracking-wider hover:shadow-xl"
-              onClick={() => {
-                try {
-                  setStep("billing");
-                } catch (error) {
-                  console.error("Confirm order error:", error);
-                }
-              }}
-            >
-              Confirm Order
-            </button>
+          <div className="fixed bottom-0 left-0 right-0 bg-secondary_2 mb-5 px-6 md:px-8 lg:px-10 z-50">
+            <div className="max-w-7xl mx-auto">
+              <button
+                className="w-full bg-banner_2 text-primary_2 py-3 rounded-xl shadow-2xl transition-transform duration-300 uppercase font-semibold tracking-wider hover:shadow-xl"
+                onClick={() => {
+                  try {
+                    setStep("billing");
+                  } catch (error) {
+                    console.error("Confirm order error:", error);
+                  }
+                }}
+              >
+                Confirm Order
+              </button>
+            </div>
           </div>
+
           <style jsx="true" global="true">{`
             .hide-scrollbar::-webkit-scrollbar {
               display: none;

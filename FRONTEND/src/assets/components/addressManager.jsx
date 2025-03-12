@@ -330,7 +330,7 @@ const AddressManager = ({ selectedAddress, onSelectAddress }) => {
 
   return (
     <ErrorBoundary>
-      <div className="mt-[-2rem] min-h-[60vh]">
+      <div className="mt-[-2rem] pb-[11.8rem] min-h-[60vh]">
         <h2 className="flex items-center gap-2 justify-center text-2xl font-robert-regular mb-10 uppercase">
           <p className="font-semibold">Shipping</p>
           <div>
