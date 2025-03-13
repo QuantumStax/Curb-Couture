@@ -5,12 +5,18 @@ import crypto from "crypto";
 import ms from "ms";
 import dotenv from "dotenv";
 import { validationResult } from "express-validator";
+
 dotenv.config();
 
 const TOKEN_EXPIRY = process.env.TOKEN_EXPIRY || "3h";
 const SALT_ROUNDS = Number(process.env.SALT_ROUNDS) || 10;
 
-// Helper to obtain the Ed25519 private key for signing tokens
+/**
+ * Retrieves the Ed25519 private key from the environment variables for signing tokens.
+ *
+ * @returns {crypto.KeyObject} The private key object.
+ * @throws {Error} If the PRIVATE_KEY environment variable is not defined.
+ */
 const getPrivateKey = () => {
   const privateKeyPEM = process.env.PRIVATE_KEY;
   if (!privateKeyPEM) {
@@ -20,6 +26,13 @@ const getPrivateKey = () => {
   return crypto.createPrivateKey(formattedKey);
 };
 
+/**
+ * Registers a new user by validating input, ensuring uniqueness, hashing the password,
+ * and inserting the user into the database.
+ *
+ * @param {object} req - Express request object containing user registration details.
+ * @param {object} res - Express response object.
+ */
 export const register = async (req, res) => {
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
@@ -59,6 +72,13 @@ export const register = async (req, res) => {
   }
 };
 
+/**
+ * Authenticates a user by validating credentials, generating a signed token,
+ * and setting an HTTP-only cookie for session management.
+ *
+ * @param {object} req - Express request object containing login credentials.
+ * @param {object} res - Express response object.
+ */
 export const login = async (req, res) => {
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
@@ -87,7 +107,6 @@ export const login = async (req, res) => {
       return res.status(400).json({ message: "Invalid email or password" });
     }
 
-    // Compute expiration as an ISO string
     const expiration = new Date(Date.now() + ms(TOKEN_EXPIRY)).toISOString();
 
     const payload = {
@@ -127,6 +146,12 @@ export const login = async (req, res) => {
   }
 };
 
+/**
+ * Logs out the current user by clearing the authentication token cookie.
+ *
+ * @param {object} req - Express request object.
+ * @param {object} res - Express response object.
+ */
 export const logout = async (req, res) => {
   try {
     res.clearCookie("token", {
@@ -144,8 +169,10 @@ export const logout = async (req, res) => {
 };
 
 /**
- * Fetch addresses for the current logged in user.
- * Requires tokenMiddleware to set req.user.
+ * Retrieves the addresses associated with the authenticated user.
+ *
+ * @param {object} req - Express request object containing authenticated user information.
+ * @param {object} res - Express response object.
  */
 export const fetchAddress = async (req, res) => {
   const user_id = req.user.user_id;
@@ -162,8 +189,11 @@ export const fetchAddress = async (req, res) => {
 };
 
 /**
- * Add a new address for the current logged in user.
- * Expects address fields in the request body.
+ * Adds a new address for the authenticated user by validating input fields
+ * and inserting the address record into the database.
+ *
+ * @param {object} req - Express request object containing address details.
+ * @param {object} res - Express response object.
  */
 export const addAddress = async (req, res) => {
   if (!req.user || !req.user.user_id) {
@@ -223,8 +253,11 @@ export const addAddress = async (req, res) => {
 };
 
 /**
- * Edit an address for the current logged in user.
- * Expects the addressId as a route parameter and updated fields in the request body.
+ * Updates an existing address for the authenticated user by validating input and
+ * modifying the corresponding address record.
+ *
+ * @param {object} req - Express request object containing updated address details and addressId as a route parameter.
+ * @param {object} res - Express response object.
  */
 export const editAddress = async (req, res) => {
   const user_id = req.user.id;
@@ -295,8 +328,10 @@ export const editAddress = async (req, res) => {
 };
 
 /**
- * Delete an address for the current logged in user.
- * Expects the addressId as a route parameter.
+ * Deletes an address associated with the authenticated user.
+ *
+ * @param {object} req - Express request object with addressId as a route parameter.
+ * @param {object} res - Express response object.
  */
 export const deleteAddress = async (req, res) => {
   const user_id = req.user.id;

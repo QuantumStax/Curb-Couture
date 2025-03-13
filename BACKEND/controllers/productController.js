@@ -1,11 +1,22 @@
-/* productController.js */
+/**
+ * @file Product Controller
+ * @description Provides endpoints for managing products, including fetching product details,
+ * adding new products, handling product images, sizes, colors, and processing product reviews.
+ */
+
 import pool from "../config/db.js";
 import multer from "multer";
 
 const storage = multer.memoryStorage();
 export const upload = multer({ storage });
 
-// Get column names from the "color_variants" table
+/**
+ * Retrieves the column names from the "color_variants" table excluding "color_id" and "product_id".
+ *
+ * @param {object} req - The Express request object.
+ * @param {object} res - The Express response object.
+ * @returns {Promise<void>} A JSON response containing the filtered column names.
+ */
 export const getColumnNames = async (req, res) => {
   try {
     const query = `
@@ -24,7 +35,13 @@ export const getColumnNames = async (req, res) => {
   }
 };
 
-// Get a single product by its ID
+/**
+ * Retrieves a single product by its ID, including its images, sizes, colors, and additional information.
+ *
+ * @param {object} req - The Express request object containing the product ID in req.params.
+ * @param {object} res - The Express response object.
+ * @returns {Promise<void>} A JSON response containing the product details or an error message.
+ */
 export const getProductById = async (req, res) => {
   const { product_id } = req.params;
   try {
@@ -91,7 +108,13 @@ export const getProductById = async (req, res) => {
   }
 };
 
-// Get list of products
+/**
+ * Retrieves a list of products along with their associated images.
+ *
+ * @param {object} req - The Express request object.
+ * @param {object} res - The Express response object.
+ * @returns {Promise<void>} A JSON response containing an array of products.
+ */
 export const getProducts = async (req, res) => {
   try {
     const gpQuery = `
@@ -124,7 +147,14 @@ export const getProducts = async (req, res) => {
   }
 };
 
-// Add a new product using a transaction to group related inserts
+/**
+ * Adds a new product with its images, size variants, color variants, and additional product information.
+ * Executes the operation within a database transaction.
+ *
+ * @param {object} req - The Express request object containing product details and image files.
+ * @param {object} res - The Express response object.
+ * @returns {Promise<void>} A JSON response indicating success or failure.
+ */
 export const addProduct = async (req, res) => {
   const {
     product_name,
@@ -256,12 +286,16 @@ export const addProduct = async (req, res) => {
   }
 };
 
-// Submit a product review
+/**
+ * Submits a product review from an authenticated user.
+ *
+ * @param {object} req - The Express request object containing the product ID in req.params and review details in req.body.
+ * @param {object} res - The Express response object.
+ * @returns {Promise<void>} A JSON response with the submitted review or an error message.
+ */
 export const submitReview = async (req, res) => {
   const { id } = req.params;
-
   const { rating, title, review, termsAccepted } = req.body;
-
   const { user_id } = req.user || {};
 
   if (!id || !rating || !title || !review) {
@@ -291,7 +325,13 @@ export const submitReview = async (req, res) => {
   }
 };
 
-// Get reviews for a given product by its ID
+/**
+ * Retrieves reviews for a specific product by its ID.
+ *
+ * @param {object} req - The Express request object containing the product ID in req.params.
+ * @param {object} res - The Express response object.
+ * @returns {Promise<void>} A JSON response containing an array of reviews.
+ */
 export const getReviewsByProductId = async (req, res) => {
   const { id } = req.params;
   try {
@@ -308,6 +348,13 @@ export const getReviewsByProductId = async (req, res) => {
   }
 };
 
+/**
+ * Searches for products based on a query string provided in the request.
+ *
+ * @param {object} req - The Express request object containing the search query in req.query.
+ * @param {object} res - The Express response object.
+ * @returns {Promise<void>} A JSON response containing an array of products matching the search criteria.
+ */
 export const searchProducts = async (req, res) => {
   try {
     const { query } = req.query;

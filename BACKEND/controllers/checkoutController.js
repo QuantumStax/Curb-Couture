@@ -1,11 +1,24 @@
-// checkoutController.js
 import pool from "../config/db.js";
 import { validationResult } from "express-validator";
 
 /**
- * Save shipping details selected by the user.
- * Expected req.body: { address: { label, addressLine1, addressLine2, city, state, zipCode } }
- * Assumes req.user is set (from tokenMiddleware) with the current user's id.
+ * Saves shipping details for the authenticated user.
+ *
+ * Expected request body format:
+ * {
+ *   address: {
+ *     label: string,
+ *     addressLine1: string,
+ *     addressLine2: string,
+ *     city: string,
+ *     state: string,
+ *     zipCode: string
+ *   }
+ * }
+ *
+ * @param {object} req - Express request object (must include req.user).
+ * @param {object} res - Express response object.
+ * @returns {Promise<void>} JSON response with the saved shipping details or an error message.
  */
 export const addShippingDetails = async (req, res) => {
   const errors = validationResult(req);
@@ -45,15 +58,22 @@ export const addShippingDetails = async (req, res) => {
 };
 
 /**
- * Validate a coupon code for a given product.
- * Expected req.body: { coupon, productId }
- * (This is a simple example; you can integrate more advanced logic or database lookups.)
+ * Validates a coupon code for a specific product.
+ *
+ * Expected request body format:
+ * {
+ *   coupon: string,
+ *   productId: any
+ * }
+ *
+ * @param {object} req - Express request object.
+ * @param {object} res - Express response object.
+ * @returns {Promise<void>} JSON response with the discount amount.
  */
 export const validateCoupon = async (req, res) => {
   const { coupon, productId } = req.body;
   try {
     let discount = 0;
-    // Example logic: if coupon equals "SAVE50", provide a ₹50 discount.
     if (coupon === "SAVE50") {
       discount = 50;
     }
@@ -67,10 +87,19 @@ export const validateCoupon = async (req, res) => {
 };
 
 /**
- * Process billing details after a successful payment.
- * Expected req.body: { paymentId, orderId, product, finalPrice }
- * - product is an object that includes at least an 'id' and 'name'
- * This function stores the billing details and creates a receipt record.
+ * Processes billing information following a successful payment and generates a receipt.
+ *
+ * Expected request body format:
+ * {
+ *   paymentId: string,
+ *   orderId: string,
+ *   product: { id: any, name: string, ... },
+ *   finalPrice: number
+ * }
+ *
+ * @param {object} req - Express request object (must include req.user).
+ * @param {object} res - Express response object.
+ * @returns {Promise<void>} JSON response with the generated receipt or an error message.
  */
 export const processBilling = async (req, res) => {
   const { paymentId, orderId, product, finalPrice } = req.body;
@@ -80,7 +109,6 @@ export const processBilling = async (req, res) => {
       .json({ message: "Missing required billing/payment details." });
   }
   try {
-    // Insert billing details (assuming a table 'billing_details' exists)
     const billingResult = await pool.query(
       `INSERT INTO billing_details 
          (user_id, product_id, payment_id, order_id, final_price)
@@ -88,8 +116,6 @@ export const processBilling = async (req, res) => {
        RETURNING *`,
       [req.user.id, product.id, paymentId, orderId, finalPrice]
     );
-
-    // Use the returned billing id to create a receipt record
     const billingId = billingResult.rows[0].id;
     const receiptData = {
       orderId,
@@ -98,7 +124,6 @@ export const processBilling = async (req, res) => {
       finalPrice,
       date: new Date(),
     };
-
     const receiptResult = await pool.query(
       `INSERT INTO receipts 
          (user_id, billing_id, receipt_data)
@@ -106,7 +131,6 @@ export const processBilling = async (req, res) => {
        RETURNING *`,
       [req.user.id, billingId, JSON.stringify(receiptData)]
     );
-
     res.status(201).json({
       message: "Billing processed and receipt generated successfully",
       receipt: receiptResult.rows[0],
@@ -120,8 +144,16 @@ export const processBilling = async (req, res) => {
 };
 
 /**
- * Retrieve a receipt by its ID.
- * Expected req.params: { receiptId }
+ * Retrieves a receipt by its identifier.
+ *
+ * Expected request parameters:
+ * {
+ *   receiptId: string
+ * }
+ *
+ * @param {object} req - Express request object.
+ * @param {object} res - Express response object.
+ * @returns {Promise<void>} JSON response with the receipt data or an error message.
  */
 export const getReceipt = async (req, res) => {
   const { receiptId } = req.params;
