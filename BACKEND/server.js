@@ -1,3 +1,10 @@
+/**
+ * @file server.js
+ * @description Entry point for the Express application. This server configures middleware for CORS,
+ * cookie parsing, and request body parsing. It registers product and user routes, then starts listening
+ * on the defined port.
+ */
+
 import express from "express";
 import cors from "cors";
 import dotenv from "dotenv";
